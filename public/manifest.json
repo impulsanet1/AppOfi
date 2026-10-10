@@ -1,0 +1,18 @@
+{
+  "name": "ImpulsaNet - Agencia Digital & Tarjetas Interactivas",
+  "short_name": "ImpulsaNet",
+  "description": "Tarjetas virtuales profesionales con código QR y servicios de crecimiento para redes sociales.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5e29c8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

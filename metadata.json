@@ -1,0 +1,6 @@
+{
+  "name": "ImpulsaNet - Agencia Digital & Tarjetas Interactivas",
+  "description": "Agencia de servicios digitales, desarrollo web de alto rendimiento y tarjetas interactivas de negocio con sincronización en tiempo real.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

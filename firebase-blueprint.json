@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "Configuración global de la agencia ImpulsaNet, contacto y títulos dinámicos",
+      "type": "object",
+      "properties": {
+        "agencyName": { "type": "string", "maxLength": 100 },
+        "whatsappNumber": { "type": "string", "maxLength": 30 },
+        "whatsappDefaultMessage": { "type": "string", "maxLength": 500 },
+        "cardsSectionTitle": { "type": "string", "maxLength": 150 },
+        "cardsSectionSubtitle": { "type": "string", "maxLength": 300 },
+        "cardsPrice": { "type": "string", "maxLength": 50 },
+        "cardsDemoUrl": { "type": "string", "maxLength": 300 },
+        "newsSectionTitle": { "type": "string", "maxLength": 150 },
+        "newsSectionSubtitle": { "type": "string", "maxLength": 300 },
+        "updatedAt": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["whatsappNumber", "cardsSectionTitle"]
+    },
+    "ServiceItem": {
+      "title": "ServiceItem",
+      "description": "Servicio digital y paquete de desarrollo en el catálogo",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "maxLength": 50 },
+        "price": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 500 },
+        "popular": { "type": "boolean" },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "category", "price", "description"]
+    },
+    "NewsItem": {
+      "title": "NewsItem",
+      "description": "Comunicado, lanzamiento o novedad para clientes",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "category": { "type": "string", "maxLength": 50 },
+        "content": { "type": "string", "maxLength": 2000 },
+        "date": { "type": "string", "maxLength": 50 },
+        "badge": { "type": "string", "maxLength": 50 },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "category", "content", "date"]
+    },
+    "SocialServicePack": {
+      "title": "SocialServicePack",
+      "description": "Paquete de seguidores, likes o vistas para redes sociales",
+      "type": "object",
+      "properties": {
+        "platform": { "type": "string", "maxLength": 50 },
+        "type": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 150 },
+        "quantity": { "type": "string", "maxLength": 50 },
+        "price": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["platform", "type", "title", "price"]
+    }
+  },
+  "firestore": {
+    "/settings/{settingId}": {
+      "schema": "AppSettings",
+      "description": "Colección de parámetros configurables y textos dinámicos"
+    },
+    "/social_services/{serviceId}": {
+      "schema": "SocialServicePack",
+      "description": "Paquetes de crecimiento en redes sociales para Facebook, Instagram, TikTok y YouTube"
+    },
+    "/services/{serviceId}": {
+      "schema": "ServiceItem",
+      "description": "Colección de servicios digitales y soluciones interactivas"
+    },
+    "/news/{newsId}": {
+      "schema": "NewsItem",
+      "description": "Feed de noticias, notas y comunicados en tiempo real"
+    }
+  }
+}

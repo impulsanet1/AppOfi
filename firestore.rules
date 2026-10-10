@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return request.auth != null && (
+        (request.auth.token.email == 'estebanruiz.12vrgassergio@gmail.com' && request.auth.token.email_verified == true)
+      );
+    }
+
+    function isValidSettings(data) {
+      return data is map &&
+        (!('agencyName' in data) || (data.agencyName is string && data.agencyName.size() <= 100)) &&
+        (!('whatsappNumber' in data) || (data.whatsappNumber is string && data.whatsappNumber.size() <= 30)) &&
+        (!('whatsappDefaultMessage' in data) || (data.whatsappDefaultMessage is string && data.whatsappDefaultMessage.size() <= 500)) &&
+        (!('cardsSectionTitle' in data) || (data.cardsSectionTitle is string && data.cardsSectionTitle.size() <= 150)) &&
+        (!('cardsSectionSubtitle' in data) || (data.cardsSectionSubtitle is string && data.cardsSectionSubtitle.size() <= 300)) &&
+        (!('cardsPrice' in data) || (data.cardsPrice is string && data.cardsPrice.size() <= 50)) &&
+        (!('cardsDemoUrl' in data) || (data.cardsDemoUrl is string && data.cardsDemoUrl.size() <= 300)) &&
+        (!('newsSectionTitle' in data) || (data.newsSectionTitle is string && data.newsSectionTitle.size() <= 150)) &&
+        (!('newsSectionSubtitle' in data) || (data.newsSectionSubtitle is string && data.newsSectionSubtitle.size() <= 300));
+    }
+
+    function isValidService(data) {
+      return data is map &&
+        data.title is string && data.title.size() <= 100 &&
+        data.category is string && data.category.size() <= 50 &&
+        data.price is string && data.price.size() <= 50 &&
+        data.description is string && data.description.size() <= 500;
+    }
+
+    function isValidNews(data) {
+      return data is map &&
+        data.title is string && data.title.size() <= 150 &&
+        data.category is string && data.category.size() <= 50 &&
+        data.content is string && data.content.size() <= 2000;
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isValidId(settingId) && (isAdmin() || request.resource.data is map);
+    }
+
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isValidId(serviceId) && (isAdmin() || isValidService(request.resource.data));
+    }
+
+    match /social_services/{serviceId} {
+      allow read: if true;
+      allow write: if isValidId(serviceId) && (isAdmin() || request.resource.data is map);
+      allow delete: if isValidId(serviceId);
+    }
+
+    match /news/{newsId} {
+      allow read: if true;
+      allow write: if isValidId(newsId) && (isAdmin() || isValidNews(request.resource.data));
+    }
+  }
+}
