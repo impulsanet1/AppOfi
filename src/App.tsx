@@ -15,6 +15,7 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_SOCIAL_SERVICES,
   convertToColombianPrice,
+  sanitizeAgencySettings,
 } from './firebase';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
@@ -37,7 +38,7 @@ function MainApp() {
         const whatsappNum = (!parsed.whatsappNumber || parsed.whatsappNumber === '573001234567')
           ? '573212515944'
           : parsed.whatsappNumber;
-        return {
+        return sanitizeAgencySettings({
           ...parsed,
           whatsappNumber: whatsappNum,
           cardDemoWhatsapp: (!parsed.cardDemoWhatsapp || parsed.cardDemoWhatsapp === '573001234567') ? '573212515944' : parsed.cardDemoWhatsapp,
@@ -46,7 +47,7 @@ function MainApp() {
           cardsProPrice: convertToColombianPrice(parsed.cardsProPrice || '$119.000 COP'),
           cardsPrice: convertToColombianPrice(parsed.cardsPrice || '$79.000 COP'),
           logoUrl: parsed.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
-        };
+        });
       } catch {
         // fallback
       }
@@ -169,7 +170,8 @@ function MainApp() {
       settingsDocRef,
       async (snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.data() as AgencySettings;
+          const raw = snapshot.data() as AgencySettings;
+          const data = sanitizeAgencySettings(raw);
           setSettings(data);
           localStorage.setItem('impulsanet_settings_v2', JSON.stringify(data));
         } else {
@@ -359,7 +361,7 @@ function MainApp() {
     if (path === '/redes' || path.startsWith('/redes/')) {
       return (
         <SocialPage
-          platformFilter="all"
+          platformFilter="instagram"
           services={socialServices}
           settings={settings}
           onNavigate={handleNavigate}

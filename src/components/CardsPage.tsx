@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import {
-  CreditCard,
-  Download,
-  Phone,
   MessageCircle,
   Check,
   Copy,
@@ -28,7 +25,6 @@ interface CardsPageProps {
 
 export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) => {
   const { showToast } = useToast();
-  const [copiedLink, setCopiedLink] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   const card = DEFAULT_CARDS_DATA;
@@ -43,29 +39,6 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   const facebookUrl = settings.socialLinks?.facebook || 'https://facebook.com';
   const tiktokUrl = settings.socialLinks?.tiktok || 'https://tiktok.com/@impulsanet';
   const officialLogo = settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png';
-
-  const handleDownloadVCard = () => {
-    const vcard = `BEGIN:VCARD
-VERSION:3.0
-N:${demoName};;;;
-FN:${demoName}
-ORG:${demoCompany}
-TITLE:${demoRole}
-TEL;TYPE=CELL,VOICE:${demoPhone.replace(/[^0-9+]/g, '')}
-URL:${demoUrl}
-END:VCARD`;
-
-    const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${demoName.replace(/\s+/g, '_')}_Contacto.vcf`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    showToast('success', 'Contacto descargado (.vcf)');
-  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -86,9 +59,7 @@ END:VCARD`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(demoUrl);
-    setCopiedLink(true);
     showToast('success', 'Enlace de tarjeta copiado');
-    setTimeout(() => setCopiedLink(false), 2000);
   };
 
   const getWhatsAppOrderUrl = (planTitle: string, price: string) => {
@@ -126,7 +97,7 @@ END:VCARD`;
   return (
     <div className="bg-white min-h-[70vh]">
       {/* Sub-Header con Barra de Navegación Clara */}
-      <div className="bg-zinc-50 border-b border-zinc-200 py-3.5 px-4 sm:px-6">
+      <div className="bg-zinc-50 border-b border-zinc-200 py-2 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
             <button
@@ -152,75 +123,71 @@ END:VCARD`;
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
         {/* Encabezado Principal de la Sección */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-6 border-b border-zinc-100">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4 pb-3 border-b border-zinc-100">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-[#5e29c8] mb-2">
-              <CreditCard className="w-3.5 h-3.5" />
-              <span>{settings.cardsSectionBadge || 'TARJETAS VIRTUALES CON QR'}</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight">
               {settings.cardsSectionTitle || 'Tarjetas Virtuales con Código QR & Enlace Web'}
             </h1>
-            <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-600 mt-1 max-w-2xl leading-relaxed">
               {settings.cardsSectionSubtitle ||
                 '100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales ni aplicaciones adicionales.'}
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-            <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+            <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
               {settings.cardsDeliveryTag || '● Entrega en 24 horas'}
             </span>
           </div>
         </div>
 
         {/* Contenido en Cuadrícula: Demo interactivo a la izquierda + Planes a la derecha */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start mb-5">
           
           {/* Columna Izquierda: Vista Previa Interactiva de la Tarjeta Virtual */}
-          <div className="lg:col-span-5 bg-white p-5 sm:p-6 rounded-2xl border border-zinc-200 shadow-xs flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-white p-3.5 sm:p-4 rounded-2xl border border-zinc-200 shadow-xs flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-zinc-100">
+              <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-zinc-100">
                 <span className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-[#5e29c8]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#5e29c8]" />
                   <span>Demostración Interactiva</span>
                 </span>
-                <span className="text-[10px] font-bold uppercase text-[#5e29c8] bg-purple-50 px-2.5 py-1 rounded-md">
+                <span className="text-[10px] font-bold uppercase text-[#5e29c8] bg-purple-50 px-2 py-0.5 rounded-md">
                   100% Online
                 </span>
               </div>
 
               {/* Maqueta Visual de la Tarjeta Interactiva (Estilo Biolink / Screenshot) */}
               <div
-                className="rounded-3xl p-5 sm:p-6 text-white shadow-xl mb-4 relative overflow-hidden border border-purple-500/30"
+                className="rounded-xl p-3.5 sm:p-4 text-white shadow-lg relative overflow-hidden border border-purple-500/30"
                 style={{
                   background:
                     'radial-gradient(circle at 50% 10%, #7c3aed 0%, #581c87 35%, #3b0764 70%, #17042c 100%)',
                 }}
               >
-                {/* Botones Superiores de Acción: Asterisco / Info a la izquierda, Compartir a la derecha */}
-                <div className="flex items-center justify-between mb-5">
+                {/* Botones Superiores de Acción */}
+                <div className="flex items-center justify-between mb-2">
                   <button
                     onClick={() => showToast('info', 'Tarjeta Virtual Interactiva ImpulsaNet')}
-                    className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all cursor-pointer shadow-sm active:scale-95"
                     title="ImpulsaNet"
                   >
-                    <Asterisk className="w-5 h-5 stroke-[2.5]" />
+                    <Asterisk className="w-3.5 h-3.5 stroke-[2.5]" />
                   </button>
 
                   <button
                     onClick={handleShare}
-                    className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                    className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 flex items-center justify-center text-white transition-all cursor-pointer shadow-sm active:scale-95"
                     title="Compartir tarjeta"
                   >
-                    <Share2 className="w-4 h-4" />
+                    <Share2 className="w-3 h-3" />
                   </button>
                 </div>
 
                 {/* Avatar / Logotipo Central */}
-                <div className="w-24 h-24 sm:w-26 sm:h-26 rounded-full bg-white p-1 mx-auto flex items-center justify-center shadow-xl ring-4 ring-white/20 overflow-hidden transition-transform hover:scale-105">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white p-1 mx-auto flex items-center justify-center shadow-lg ring-2 ring-white/20 overflow-hidden transition-transform hover:scale-105">
                   <img
                     src={officialLogo}
                     alt={demoName}
@@ -229,32 +196,32 @@ END:VCARD`;
                 </div>
 
                 {/* Nombre de la Marca o Titular */}
-                <h3 className="text-2xl sm:text-[26px] font-black text-white text-center mt-3 tracking-tight">
+                <h3 className="text-lg sm:text-xl font-black text-white text-center mt-1.5 tracking-tight">
                   {demoName}
                 </h3>
 
                 {/* Cargo / Rol y Empresa */}
                 {(demoRole || demoCompany) && (
-                  <p className="text-xs sm:text-[13px] text-purple-200 text-center font-medium mt-0.5">
+                  <p className="text-[11px] text-purple-200 text-center font-medium mt-0.5">
                     {demoRole}{demoRole && demoCompany ? ' • ' : ''}{demoCompany}
                   </p>
                 )}
 
                 {/* Biografía / Lema de la Marca */}
-                <p className="text-[13px] sm:text-sm text-white/95 text-center font-normal px-2 mt-1.5 max-w-xs mx-auto leading-snug drop-shadow-xs">
+                <p className="text-[11px] sm:text-xs text-white/95 text-center font-normal px-2 mt-1 max-w-xs mx-auto leading-snug drop-shadow-xs">
                   {settings.tagline || 'Aumentamos la visibilidad y el alcance de tus redes sociales. Crecemos contigo. 🚀'}
                 </p>
 
                 {/* Fila de Redes Sociales: Instagram, WhatsApp, Facebook */}
-                <div className="flex items-center justify-center gap-4 mt-4 mb-5">
+                <div className="flex items-center justify-center gap-2.5 mt-2.5 mb-2.5">
                   <a
                     href={instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`Instagram ${demoName}`}
                   >
-                    <Instagram className="w-5 h-5" />
+                    <Instagram className="w-3.5 h-3.5" />
                   </a>
 
                   <a
@@ -263,43 +230,43 @@ END:VCARD`;
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`WhatsApp ${demoName}`}
                   >
-                    <MessageCircle className="w-5 h-5" />
+                    <MessageCircle className="w-3.5 h-3.5" />
                   </a>
 
                   <a
                     href={facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`Facebook ${demoName}`}
                   >
-                    <Facebook className="w-5 h-5" />
+                    <Facebook className="w-3.5 h-3.5" />
                   </a>
                 </div>
 
                 {/* Etiqueta / Encabezado de Sección */}
-                <div className="text-center mt-5 mb-3">
-                  <span className="text-xs font-semibold text-white/90 tracking-wide">
+                <div className="text-center mt-2 mb-1.5">
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-white/90 tracking-wide">
                     {demoCompany || 'Enlaces y Contacto'}
                   </span>
                 </div>
 
                 {/* Botón 1: Tarjeta Principal con Logotipo */}
-                <div className="relative group mb-3">
+                <div className="relative group mb-2">
                   <div
                     onClick={() => {
                       window.open(demoUrl, '_blank');
                       showToast('info', 'Abriendo enlace interactivo');
                     }}
-                    className="w-full py-2.5 px-4 rounded-2xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-md active:scale-[0.99]"
+                    className="w-full py-1.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-sm border border-white/20">
+                    <div className="w-7 h-7 rounded-lg bg-white p-0.5 flex items-center justify-center shrink-0 shadow-sm border border-white/20">
                       <img src={officialLogo} alt={demoName} className="w-full h-full object-contain" />
                     </div>
-                    <span className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                    <span className="text-xs font-semibold text-white tracking-wide">
                       {demoName}
                     </span>
                     <button
@@ -310,7 +277,7 @@ END:VCARD`;
                       className="p-1 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
                       title="Opciones"
                     >
-                      <MoreVertical className="w-4 h-4" />
+                      <MoreVertical className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
@@ -346,12 +313,12 @@ END:VCARD`;
                     onClick={() => {
                       window.open(instagramUrl, '_blank');
                     }}
-                    className="w-full py-2.5 px-4 rounded-2xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-md active:scale-[0.99]"
+                    className="w-full py-1.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center shrink-0 text-white">
-                      <Instagram className="w-5 h-5 text-white" />
+                    <div className="w-7 h-7 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0 text-white">
+                      <Instagram className="w-3.5 h-3.5 text-white" />
                     </div>
-                    <span className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                    <span className="text-xs font-semibold text-white tracking-wide">
                       Instagram
                     </span>
                     <button
@@ -362,7 +329,7 @@ END:VCARD`;
                       className="p-1 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
                       title="Opciones"
                     >
-                      <MoreVertical className="w-4 h-4" />
+                      <MoreVertical className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
@@ -392,37 +359,17 @@ END:VCARD`;
                     </div>
                   )}
                 </div>
-
-                {/* Botón para Guardar Contacto Directo */}
-                <div className="mt-4 flex items-center gap-2">
-                  <button
-                    onClick={handleDownloadVCard}
-                    className="flex-1 py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
-                  >
-                    <Download className="w-3.5 h-3.5 text-purple-200" />
-                    <span>Guardar Contacto (.vcf)</span>
-                  </button>
-
-                  <button
-                    onClick={handleCopyLink}
-                    className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95"
-                    title="Copiar enlace"
-                  >
-                    <Copy className="w-3.5 h-3.5 text-purple-200" />
-                    <span>{copiedLink ? 'Copiado' : 'Copiar'}</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Columna Derecha: Planes Oficiales de Tarjetas Virtuales (Lado a lado en celular y desktop) */}
-          <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-5 items-stretch">
+          {/* Columna Derecha: Planes Oficiales de Tarjetas Virtuales */}
+          <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-4 items-stretch">
             
             {/* Plan 1: Tarjeta Virtual Básica */}
-            <div className="bg-white p-3.5 sm:p-6 rounded-2xl border-2 border-zinc-200 hover:border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs">
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border-2 border-zinc-200 hover:border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs">
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-1 mb-2">
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5">
                   <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8]">
                     {settings.cardPlan1Badge || 'Plan Estándar'}
                   </span>
@@ -431,19 +378,19 @@ END:VCARD`;
                   </span>
                 </div>
                 
-                <h3 className="text-sm sm:text-lg font-black text-zinc-950 mb-1 leading-snug">
+                <h3 className="text-sm sm:text-base font-black text-zinc-950 mb-0.5 leading-snug">
                   {settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
                 </h3>
                 
-                <div className="text-lg sm:text-3xl font-black text-zinc-950 mb-3 sm:mb-4">
+                <div className="text-lg sm:text-2xl font-black text-zinc-950 mb-2 sm:mb-2.5">
                   {settings.cardsBasicPrice || '$79.000 COP'}
                 </div>
 
-                <div className="space-y-2 sm:space-y-2.5 text-[11px] sm:text-xs text-zinc-600 mb-4 sm:mb-6">
+                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-600 mb-3">
                   {plan1Features.map((feat, idx) => (
-                    <div key={idx} className="flex items-start sm:items-center gap-1.5 sm:gap-2">
-                      <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5e29c8] shrink-0 mt-0.5 sm:mt-0" />
-                      <span className="leading-tight sm:leading-normal">{feat}</span>
+                    <div key={idx} className="flex items-start gap-1.5">
+                      <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
+                      <span className="leading-tight">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -456,20 +403,20 @@ END:VCARD`;
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] sm:text-xs font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight"
+                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] sm:text-xs font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight"
               >
                 {settings.cardPlan1ButtonText || 'Pedir Tarjeta'}
               </a>
             </div>
 
             {/* Plan 2: Tarjeta Virtual Pro / Comercial */}
-            <div className="bg-purple-50/40 p-3.5 sm:p-6 rounded-2xl border-2 border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs relative">
+            <div className="bg-purple-50/40 p-3.5 sm:p-4 rounded-2xl border-2 border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs relative">
               <span className="absolute -top-2.5 right-3 sm:-top-3 sm:right-5 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[#5e29c8] text-white">
                 Más Completa
               </span>
 
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-1 mb-2 mt-1 sm:mt-0">
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5 mt-0.5 sm:mt-0">
                   <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1">
                     <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span>{settings.cardPlan2Badge || 'Con Catálogo'}</span>
@@ -479,19 +426,19 @@ END:VCARD`;
                   </span>
                 </div>
 
-                <h3 className="text-sm sm:text-lg font-black text-zinc-950 mb-1 leading-snug">
+                <h3 className="text-sm sm:text-base font-black text-zinc-950 mb-0.5 leading-snug">
                   {settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
                 </h3>
 
-                <div className="text-lg sm:text-3xl font-black text-[#5e29c8] mb-3 sm:mb-4">
+                <div className="text-lg sm:text-2xl font-black text-[#5e29c8] mb-2 sm:mb-2.5">
                   {settings.cardsProPrice || '$119.000 COP'}
                 </div>
 
-                <div className="space-y-2 sm:space-y-2.5 text-[11px] sm:text-xs text-zinc-700 mb-4 sm:mb-6">
+                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-700 mb-3">
                   {plan2Features.map((feat, idx) => (
-                    <div key={idx} className="flex items-start sm:items-center gap-1.5 sm:gap-2">
-                      <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5e29c8] shrink-0 mt-0.5 sm:mt-0" />
-                      <span className="leading-tight sm:leading-normal">{feat}</span>
+                    <div key={idx} className="flex items-start gap-1.5">
+                      <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
+                      <span className="leading-tight">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -504,7 +451,7 @@ END:VCARD`;
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[11px] sm:text-xs font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight"
+                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[11px] sm:text-xs font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight"
               >
                 {settings.cardPlan2ButtonText || 'Pedir Pro'}
               </a>
@@ -514,23 +461,23 @@ END:VCARD`;
         </div>
 
         {/* Sección de Explicación y Preguntas Frecuentes de Tarjetas */}
-        <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200">
-          <h2 className="text-base font-black text-zinc-950 mb-3 flex items-center gap-2">
+        <div className="p-3.5 sm:p-4 rounded-xl bg-zinc-50 border border-zinc-200">
+          <h2 className="text-sm sm:text-base font-black text-zinc-950 mb-2 flex items-center gap-1.5">
             <CheckCircle className="w-4 h-4 text-[#5e29c8]" />
             <span>¿Cómo funciona una Tarjeta Virtual ImpulsaNet?</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-zinc-600 leading-relaxed">
-            <div className="p-3 bg-white rounded-xl border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-1">1. Generación de tu Enlace y QR</strong>
-              Diseñamos tu tarjeta virtual personalizada con tus colores, foto, logotipo, datos de contacto y catálogo.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-zinc-600 leading-relaxed">
+            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
+              <strong className="text-zinc-900 block mb-0.5">1. Enlace y QR personalizados</strong>
+              Diseñamos tu tarjeta virtual con tus colores, foto, logotipo, datos de contacto y catálogo.
             </div>
-            <div className="p-3 bg-white rounded-xl border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-1">2. Cero descargas para el cliente</strong>
-              Cualquier persona que escanee tu QR o toque tu enlace accede al instante sin instalar ninguna app adicional.
+            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
+              <strong className="text-zinc-900 block mb-0.5">2. Cero descargas para el cliente</strong>
+              Cualquiera que escanee el QR o toque el link accede al instante sin instalar aplicaciones.
             </div>
-            <div className="p-3 bg-white rounded-xl border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-1">3. Botón para agendar directo</strong>
-              Tus prospectos tocan un botón y tu contacto se guarda automáticamente en la libreta de su teléfono (.vcf).
+            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
+              <strong className="text-zinc-900 block mb-0.5">3. Botón para agendar directo</strong>
+              Tus clientes tocan un botón y tu contacto se guarda automáticamente en su teléfono (.vcf).
             </div>
           </div>
         </div>

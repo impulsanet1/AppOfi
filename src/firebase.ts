@@ -213,7 +213,7 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   cardsDemoUrl: "https://impulsanet.digital/demo-card",
 
   // 2. Redes Sociales
-  socialSectionBadge: "MÓDULO 2: CRECIMIENTO EN REDES",
+  socialSectionBadge: "CRECIMIENTO EN REDES",
   socialSectionTitle: "Seguidores, Likes y Vistas para tus Redes",
   socialSectionSubtitle: "Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.",
   socialSectionSpeedTag: "Inicio en 15-45 min",
@@ -272,6 +272,35 @@ export function convertToColombianPrice(priceStr?: string): string {
   }
 
   return priceStr;
+}
+
+export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
+  const cleanBadge = (b?: string, def = 'CRECIMIENTO EN REDES') => {
+    if (!b || /^(badge|insignia)\s*redes$/i.test(b.trim())) return def;
+    return b.replace(/MÓDULO\s*\d+:\s*/i, '').trim() || def;
+  };
+  const cleanTitle = (t?: string, def = 'Seguidores, Likes y Vistas para tus Redes') => {
+    if (!t || /^(titulo|título)\s*redes$/i.test(t.trim())) return def;
+    return t.trim() || def;
+  };
+  const cleanSubtitle = (s?: string, def = 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.') => {
+    if (!s || /^(subtitulo|subtítulo)\s*redes$/i.test(s.trim())) return def;
+    return s.trim() || def;
+  };
+
+  const cardsBadge = (b?: string) => {
+    if (!b) return 'TARJETAS VIRTUALES CON QR';
+    return b.replace(/MÓDULO\s*\d+:\s*/i, '').trim() || 'TARJETAS VIRTUALES CON QR';
+  };
+
+  return {
+    ...raw,
+    cardsSectionBadge: cardsBadge(raw.cardsSectionBadge),
+    socialSectionBadge: cleanBadge(raw.socialSectionBadge, 'CRECIMIENTO EN REDES'),
+    socialSectionTitle: cleanTitle(raw.socialSectionTitle, 'Seguidores, Likes y Vistas para tus Redes'),
+    socialSectionSubtitle: cleanSubtitle(raw.socialSectionSubtitle, 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.'),
+    socialSectionSpeedTag: (!raw.socialSectionSpeedTag || /^\d+\s*min$/i.test(raw.socialSectionSpeedTag.trim())) ? 'Inicio en 15-45 min' : raw.socialSectionSpeedTag,
+  };
 }
 
 export const DEFAULT_SOCIAL_SERVICES: SocialServicePack[] = [

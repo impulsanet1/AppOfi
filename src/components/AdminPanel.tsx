@@ -184,7 +184,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // ESTADOS DEL MÓDULO 2: REDES SOCIALES
   // ==========================================
   const [socialHeadersForm, setSocialHeadersForm] = useState({
-    socialSectionBadge: settings.socialSectionBadge || 'MÓDULO 2: CRECIMIENTO EN REDES',
+    socialSectionBadge: settings.socialSectionBadge || 'CRECIMIENTO EN REDES',
     socialSectionTitle: settings.socialSectionTitle || 'Seguidores, Likes y Vistas para tus Redes',
     socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
     socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Inicio en 15-45 min',
@@ -266,7 +266,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     });
 
     setSocialHeadersForm({
-      socialSectionBadge: settings.socialSectionBadge || 'MÓDULO 2: CRECIMIENTO EN REDES',
+      socialSectionBadge: settings.socialSectionBadge || 'CRECIMIENTO EN REDES',
       socialSectionTitle: settings.socialSectionTitle || 'Seguidores, Likes y Vistas para tus Redes',
       socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
       socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Inicio en 15-45 min',
