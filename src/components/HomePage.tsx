@@ -9,7 +9,6 @@ import {
   QrCode,
   Share2,
   Users,
-  Award,
   Layers,
   CheckCircle2,
   BadgePercent,
@@ -38,26 +37,10 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             </span>
           </h1>
 
-          {/* Subtítulo con tamaño de texto normal consistente */}
-          <p className="text-sm sm:text-base text-zinc-700 max-w-2xl mx-auto leading-relaxed mb-6 font-normal">
-            Digitaliza tu negocio con tarjetas interactivas y acelera tus redes sociales. Compra servicios directos o suscríbete para acceder a <span className="font-bold text-zinc-950">tarifas económicas mes a mes</span>.
+          {/* Subtítulo con tamaño ajustado para evitar palabras huérfanas */}
+          <p className="text-[13px] sm:text-base text-zinc-700 max-w-2xl mx-auto leading-snug sm:leading-relaxed font-normal">
+            Digitaliza tu negocio con tarjetas interactivas y acelera tus redes sociales. Compra servicios directos o suscríbete para acceder a <span className="font-bold text-zinc-950">tarifas económicas mes&nbsp;a&nbsp;mes</span>.
           </p>
-
-          {/* Métricas de Confianza en Una Sola Línea */}
-          <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-4 pt-4 border-t border-zinc-200/60 max-w-full overflow-hidden">
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span>0 Contraseñas</span>
-            </div>
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
-              <span>Activación rápida</span>
-            </div>
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
-              <Award className="w-3.5 h-3.5 text-[#8B5CF6] shrink-0" />
-              <span>Precios claros en COP</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -156,7 +139,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </h3>
 
                 <p className="text-sm text-zinc-600 leading-relaxed mb-4">
-                  Perfiles interactivos con código QR permanente, botón de WhatsApp, guardado de contacto directo (.vcf) y enlaces a tus redes sociales.
+                  Perfiles digitales con QR permanente, WhatsApp, redes sociales y guardado de contacto en un toque.
                 </p>
 
                 <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
@@ -205,7 +188,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </h3>
 
                 <p className="text-sm text-zinc-600 leading-relaxed mb-4">
-                  Paquetes de seguidores, likes y reproducciones para Instagram, TikTok, YouTube y Facebook. Incrementa tu autoridad sin contraseñas.
+                  Paquetes de seguidores, likes y reproducciones para Instagram, TikTok, YouTube y Facebook. Sin contraseñas.
                 </p>
 
                 <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
