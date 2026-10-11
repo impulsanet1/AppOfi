@@ -30,30 +30,30 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4xl h-44 bg-gradient-to-r from-purple-400/15 via-[#8B5CF6]/15 to-pink-400/15 blur-3xl pointer-events-none -z-10" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          {/* Título Principal adaptado para móvil */}
-          <h1 className="text-2xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight mb-3">
+          {/* Título Principal adaptado para móvil - Más grande para que resalte sobre todos los demás */}
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight mb-3">
             Potencia tu presencia con{' '}
             <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
               ImpulsaNet
             </span>
           </h1>
 
-          {/* Subtítulo más grande y legible */}
-          <p className="text-base sm:text-xl text-zinc-700 max-w-2xl mx-auto leading-snug sm:leading-relaxed mb-6 font-normal">
+          {/* Subtítulo con tamaño de texto normal consistente */}
+          <p className="text-sm sm:text-base text-zinc-700 max-w-2xl mx-auto leading-relaxed mb-6 font-normal">
             Digitaliza tu negocio con tarjetas interactivas y acelera tus redes sociales. Compra servicios directos o suscríbete para acceder a <span className="font-bold text-zinc-950">tarifas económicas mes a mes</span>.
           </p>
 
           {/* Métricas de Confianza en Una Sola Línea */}
           <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-4 pt-4 border-t border-zinc-200/60 max-w-full overflow-hidden">
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>0 Contraseñas</span>
             </div>
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
               <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
               <span>Activación rápida</span>
             </div>
-            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-xs sm:text-sm font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
               <Award className="w-3.5 h-3.5 text-[#8B5CF6] shrink-0" />
               <span>Precios claros en COP</span>
             </div>
@@ -65,20 +65,20 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
       <section id="como-funciona" className="py-7 sm:py-9 bg-zinc-50/70 border-b border-zinc-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-xl mx-auto mb-6">
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#5e29c8] bg-purple-100/70 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-black uppercase tracking-wider text-[#5e29c8] bg-purple-100/70 px-2.5 py-0.5 rounded-full">
               Paso a Paso
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-zinc-950 tracking-tight mt-1.5">
+            <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight mt-1.5">
               ¿Cómo funciona ImpulsaNet?
             </h2>
-            <p className="text-xs sm:text-base text-zinc-600 mt-1">
+            <p className="text-sm sm:text-base text-zinc-600 mt-1 leading-relaxed">
               Flexibilidad total: compra cuando lo necesites o suscríbete para el máximo ahorro mensual.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
             {/* Paso 1 */}
-            <div className="bg-white rounded-xl p-5 border border-zinc-200/80 shadow-2xs relative">
+            <div className="bg-white rounded-xl p-5 border-2 border-purple-200 shadow-2xs relative">
               <div className="w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center mb-3">
                 01
               </div>
@@ -86,27 +86,27 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 <Layers className="w-4 h-4 text-[#5e29c8]" />
                 <span>Elige tu Solución</span>
               </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+              <p className="text-sm text-zinc-600 leading-relaxed">
                 Elige entre tarjetas digitales interactivas con código QR o paquetes de visibilidad para tus redes sociales favoritas.
               </p>
             </div>
 
             {/* Paso 2 */}
-            <div className="bg-white rounded-xl p-5 border-2 border-purple-200 shadow-2xs relative bg-gradient-to-b from-purple-50/30 via-white to-white">
-              <div className="w-9 h-9 rounded-lg bg-[#5e29c8] text-white font-black text-sm flex items-center justify-center mb-3 shadow-xs">
+            <div className="bg-white rounded-xl p-5 border-2 border-purple-200 shadow-2xs relative">
+              <div className="w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center mb-3">
                 02
               </div>
               <h3 className="text-base sm:text-lg font-black text-zinc-950 mb-1 flex items-center gap-2">
                 <BadgePercent className="w-4 h-4 text-[#5e29c8]" />
                 <span>Compra Directa o Suscríbete</span>
               </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+              <p className="text-sm text-zinc-600 leading-relaxed">
                 Paga de forma individual o activa tu suscripción mensual para desbloquear precios con hasta el 50% de descuento en cada pedido.
               </p>
             </div>
 
             {/* Paso 3 */}
-            <div className="bg-white rounded-xl p-5 border border-zinc-200/80 shadow-2xs relative">
+            <div className="bg-white rounded-xl p-5 border-2 border-purple-200 shadow-2xs relative">
               <div className="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center mb-3">
                 03
               </div>
@@ -114,7 +114,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
                 <span>Resultados y Crecimiento</span>
               </h3>
-              <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
+              <p className="text-sm text-zinc-600 leading-relaxed">
                 Tu tarjeta queda lista 100% online y tus servicios de redes se activan en minutos, con soporte directo vía WhatsApp.
               </p>
             </div>
@@ -126,10 +126,10 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
       <section id="soluciones" className="py-7 sm:py-9">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-6">
-            <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-zinc-950 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
               Nuestras Soluciones Principales
             </h2>
-            <p className="text-xs sm:text-base text-zinc-600 mt-1">
+            <p className="text-sm sm:text-base text-zinc-600 mt-1 leading-relaxed">
               Explora las demostraciones y los catálogos con precios claros en pesos colombianos.
             </p>
           </div>
@@ -142,12 +142,12 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   <div className="w-11 h-11 rounded-xl bg-[#5e29c8] text-white flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
                     <CreditCard className="w-5 h-5" />
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
                     Destacado
                   </span>
                 </div>
 
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#5e29c8] block mb-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#5e29c8] block mb-1">
                   Solución 01
                 </span>
 
@@ -155,11 +155,11 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Tarjetas Digitales Biolink
                 </h3>
 
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-4">
+                <p className="text-sm text-zinc-600 leading-relaxed mb-4">
                   Perfiles interactivos con código QR permanente, botón de WhatsApp, guardado de contacto directo (.vcf) y enlaces a tus redes sociales.
                 </p>
 
-                <div className="space-y-1.5 mb-5 text-xs sm:text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
+                <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
                   <div className="flex items-center gap-2 font-medium">
                     <QrCode className="w-4 h-4 text-[#5e29c8] shrink-0" />
                     <span>Código QR de alta definición permanente</span>
@@ -177,7 +177,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
 
               <button
                 onClick={() => onNavigate('/tarjetas')}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-xs sm:text-sm shadow-md shadow-purple-500/20 transition-all cursor-pointer active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-sm shadow-md shadow-purple-500/20 transition-all cursor-pointer active:scale-95"
               >
                 <span>Ver tarjetas y demo en vivo</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -191,12 +191,12 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   <div className="w-11 h-11 rounded-xl bg-zinc-900 text-white flex items-center justify-center shadow-md shadow-zinc-900/20 group-hover:scale-105 transition-transform">
                     <TrendingUp className="w-5 h-5 text-emerald-400" />
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-zinc-100 text-zinc-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider bg-zinc-100 text-zinc-800">
                     Crecimiento
                   </span>
                 </div>
 
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-600 block mb-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-zinc-600 block mb-1">
                   Solución 02
                 </span>
 
@@ -204,11 +204,11 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Servicios para Redes Sociales
                 </h3>
 
-                <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-4">
+                <p className="text-sm text-zinc-600 leading-relaxed mb-4">
                   Paquetes de seguidores, likes y reproducciones para Instagram, TikTok, YouTube y Facebook. Incrementa tu autoridad sin contraseñas.
                 </p>
 
-                <div className="space-y-1.5 mb-5 text-xs sm:text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
+                <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
                   <div className="flex items-center gap-2 font-medium">
                     <Users className="w-4 h-4 text-[#5e29c8] shrink-0" />
                     <span>Instagram, TikTok, YouTube & Facebook</span>
@@ -226,7 +226,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
 
               <button
                 onClick={() => onNavigate('/redes')}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-sm shadow-md transition-all cursor-pointer active:scale-95"
               >
                 <span>Ver catálogo de redes</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -244,22 +244,22 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               <div className="w-7 h-7 mx-auto mb-1.5 rounded-full bg-purple-50 text-[#5e29c8] flex items-center justify-center">
                 <ShieldCheck className="w-3.5 h-3.5" />
               </div>
-              <p className="text-xs sm:text-sm font-bold text-zinc-900">0 Contraseñas Requeridas</p>
-              <p className="text-[11px] sm:text-xs text-zinc-500 mt-0.5">Solo requerimos tu @usuario público o enlace</p>
+              <p className="text-sm font-bold text-zinc-900">0 Contraseñas Requeridas</p>
+              <p className="text-sm text-zinc-500 mt-1">Solo requerimos tu @usuario público o enlace</p>
             </div>
             <div className="p-3.5 rounded-xl bg-white border border-zinc-200/80 shadow-2xs">
               <div className="w-7 h-7 mx-auto mb-1.5 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center">
                 <Zap className="w-3.5 h-3.5 fill-amber-500" />
               </div>
-              <p className="text-xs sm:text-sm font-bold text-zinc-900">Activación Rápida</p>
-              <p className="text-[11px] sm:text-xs text-zinc-500 mt-0.5">Procesamiento ágil tras confirmar tu orden</p>
+              <p className="text-sm font-bold text-zinc-900">Activación Rápida</p>
+              <p className="text-sm text-zinc-500 mt-1">Procesamiento ágil tras confirmar tu orden</p>
             </div>
             <div className="p-3.5 rounded-xl bg-white border border-zinc-200/80 shadow-2xs">
               <div className="w-7 h-7 mx-auto mb-1.5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <MessageCircle className="w-3.5 h-3.5" />
               </div>
-              <p className="text-xs sm:text-sm font-bold text-zinc-900">Soporte Directo en Colombia</p>
-              <p className="text-[11px] sm:text-xs text-zinc-500 mt-0.5">Canal de atención disponible todos los días por WhatsApp</p>
+              <p className="text-sm font-bold text-zinc-900">Soporte Directo en Colombia</p>
+              <p className="text-sm text-zinc-500 mt-1">Canal de atención disponible todos los días por WhatsApp</p>
             </div>
           </div>
         </div>

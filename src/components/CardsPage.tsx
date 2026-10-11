@@ -160,10 +160,10 @@ END:VCARD`;
               <CreditCard className="w-3.5 h-3.5" />
               <span>{settings.cardsSectionBadge || 'TARJETAS VIRTUALES CON QR'}</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-zinc-950 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
               {settings.cardsSectionTitle || 'Tarjetas Virtuales con Código QR & Enlace Web'}
             </h1>
-            <p className="text-sm text-zinc-600 mt-2 max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-3xl leading-relaxed">
               {settings.cardsSectionSubtitle ||
                 '100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales ni aplicaciones adicionales.'}
             </p>

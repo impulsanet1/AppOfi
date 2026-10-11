@@ -165,10 +165,10 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                   : `SECCIÓN EXCLUSIVA: ${platformFilter.toUpperCase()}`}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-black text-zinc-950 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
               {getPageTitle()}
             </h1>
-            <p className="text-sm text-zinc-600 mt-2 max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-zinc-600 mt-2 max-w-3xl leading-relaxed">
               {getPageSubtitle()}
             </p>
           </div>
