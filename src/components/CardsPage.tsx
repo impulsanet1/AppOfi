@@ -196,7 +196,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 </div>
 
                 {/* Nombre de la Marca o Titular */}
-                <h3 className="text-lg sm:text-xl font-black text-white text-center mt-1.5 tracking-tight">
+                <h3 className="text-lg sm:text-xl font-black text-white text-center mt-1.5 tracking-tight truncate" title={demoName}>
                   {demoName}
                 </h3>
 
@@ -367,26 +367,32 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
           <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-4 items-stretch">
             
             {/* Plan 1: Tarjeta Virtual Básica */}
-            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border-2 border-zinc-200 hover:border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs">
-              <div>
-                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8]">
-                    {settings.cardPlan1Badge || 'Plan Estándar'}
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-zinc-200 hover:border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs">
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between gap-1 mb-1.5 h-5">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1 truncate">
+                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                    <span className="truncate">{settings.cardPlan1Badge || 'Plan Estándar'}</span>
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-zinc-500 bg-zinc-100 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">
                     Pago Único
                   </span>
                 </div>
                 
-                <h3 className="text-sm sm:text-base font-black text-zinc-950 mb-0.5 leading-snug">
-                  {settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
-                </h3>
+                <div className="h-5 sm:h-6 flex items-center mb-0.5 overflow-hidden">
+                  <h3
+                    className="text-xs sm:text-sm md:text-base font-black text-zinc-950 truncate whitespace-nowrap leading-none tracking-tight block w-full"
+                    title={settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
+                  >
+                    {settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
+                  </h3>
+                </div>
                 
-                <div className="text-lg sm:text-2xl font-black text-zinc-950 mb-2 sm:mb-2.5">
+                <div className="text-base sm:text-xl md:text-2xl font-black text-zinc-950 mb-2 sm:mb-2.5 truncate leading-tight">
                   {settings.cardsBasicPrice || '$79.000 COP'}
                 </div>
 
-                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-600 mb-3">
+                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-600 mb-2.5 sm:mb-3">
                   {plan1Features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-1.5">
                       <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
@@ -403,38 +409,43 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] sm:text-xs font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight"
+                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] sm:text-xs font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight mt-auto"
               >
                 {settings.cardPlan1ButtonText || 'Pedir Tarjeta'}
               </a>
             </div>
 
             {/* Plan 2: Tarjeta Virtual Pro / Comercial */}
-            <div className="bg-purple-50/40 p-3.5 sm:p-4 rounded-2xl border-2 border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs relative">
+            <div className="bg-purple-50/40 p-3 sm:p-4 rounded-2xl border-2 border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs relative">
               <span className="absolute -top-2.5 right-3 sm:-top-3 sm:right-5 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[#5e29c8] text-white">
                 Más Completa
               </span>
 
-              <div>
-                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5 mt-0.5 sm:mt-0">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1">
-                    <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    <span>{settings.cardPlan2Badge || 'Con Catálogo'}</span>
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between gap-1 mb-1.5 h-5">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1 truncate">
+                    <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                    <span className="truncate">{settings.cardPlan2Badge || 'Con Catálogo'}</span>
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-purple-900 bg-purple-100 px-2 py-0.5 rounded-full">
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-purple-900 bg-purple-100 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">
                     Comercial
                   </span>
                 </div>
 
-                <h3 className="text-sm sm:text-base font-black text-zinc-950 mb-0.5 leading-snug">
-                  {settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
-                </h3>
+                <div className="h-5 sm:h-6 flex items-center mb-0.5 overflow-hidden">
+                  <h3
+                    className="text-xs sm:text-sm md:text-base font-black text-zinc-950 truncate whitespace-nowrap leading-none tracking-tight block w-full"
+                    title={settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
+                  >
+                    {settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
+                  </h3>
+                </div>
 
-                <div className="text-lg sm:text-2xl font-black text-[#5e29c8] mb-2 sm:mb-2.5">
+                <div className="text-base sm:text-xl md:text-2xl font-black text-[#5e29c8] mb-2 sm:mb-2.5 truncate leading-tight">
                   {settings.cardsProPrice || '$119.000 COP'}
                 </div>
 
-                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-700 mb-3">
+                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-700 mb-2.5 sm:mb-3">
                   {plan2Features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-1.5">
                       <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
@@ -451,7 +462,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[11px] sm:text-xs font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight"
+                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[11px] sm:text-xs font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight mt-auto"
               >
                 {settings.cardPlan2ButtonText || 'Pedir Pro'}
               </a>
@@ -468,15 +479,15 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-zinc-600 leading-relaxed">
             <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5">1. Enlace y QR personalizados</strong>
+              <strong className="text-zinc-900 block mb-0.5 truncate">1. Enlace y QR personalizados</strong>
               Diseñamos tu tarjeta virtual con tus colores, foto, logotipo, datos de contacto y catálogo.
             </div>
             <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5">2. Cero descargas para el cliente</strong>
+              <strong className="text-zinc-900 block mb-0.5 truncate">2. Cero descargas para el cliente</strong>
               Cualquiera que escanee el QR o toque el link accede al instante sin instalar aplicaciones.
             </div>
             <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5">3. Botón para agendar directo</strong>
+              <strong className="text-zinc-900 block mb-0.5 truncate">3. Botón para agendar directo</strong>
               Tus clientes tocan un botón y tu contacto se guarda automáticamente en su teléfono (.vcf).
             </div>
           </div>
