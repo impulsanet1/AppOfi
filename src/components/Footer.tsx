@@ -19,9 +19,9 @@ export const Footer: React.FC<FooterProps> = ({ settings, onNavigate }) => {
   };
 
   return (
-    <footer className="bg-white border-t border-zinc-200 text-zinc-600 text-xs py-6">
+    <footer className="bg-white text-zinc-600 text-xs py-6">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-5 border-b border-zinc-100">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-5">
           {/* Logo y descripción */}
           <div
             onClick={() => onNavigate('/')}

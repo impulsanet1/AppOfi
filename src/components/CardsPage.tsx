@@ -97,7 +97,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   return (
     <div className="bg-white min-h-[70vh]">
       {/* Sub-Header con Barra de Navegación Clara */}
-      <div className="bg-zinc-50 border-b border-zinc-200 py-2 px-4 sm:px-6">
+      <div className="bg-white border-b border-zinc-200 py-2 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
             <button
@@ -147,9 +147,9 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start mb-5">
           
           {/* Columna Izquierda: Vista Previa Interactiva de la Tarjeta Virtual */}
-          <div className="lg:col-span-5 bg-white p-3.5 sm:p-4 rounded-2xl border border-zinc-200 shadow-xs flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-white p-3.5 sm:p-4 rounded-2xl flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-zinc-100">
+              <div className="flex items-center justify-between pb-2 mb-2.5">
                 <span className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-[#5e29c8]" />
                   <span>Demostración Interactiva</span>
@@ -161,7 +161,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
 
               {/* Maqueta Visual de la Tarjeta Interactiva (Estilo Biolink / Screenshot) */}
               <div
-                className="rounded-xl p-3.5 sm:p-4 text-white shadow-lg relative overflow-hidden border border-purple-500/30"
+                className="rounded-xl p-3.5 sm:p-4 text-white shadow-lg relative overflow-hidden"
                 style={{
                   background:
                     'radial-gradient(circle at 50% 10%, #7c3aed 0%, #581c87 35%, #3b0764 70%, #17042c 100%)',
@@ -367,7 +367,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
           <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-4 items-stretch">
             
             {/* Plan 1: Tarjeta Virtual Básica */}
-            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-zinc-200 hover:border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs">
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs">
               <div className="flex-1 flex flex-col">
                 <div className="flex items-center justify-between gap-1 mb-1.5 h-5">
                   <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1 truncate">
@@ -416,7 +416,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
             </div>
 
             {/* Plan 2: Tarjeta Virtual Pro / Comercial */}
-            <div className="bg-purple-50/40 p-3 sm:p-4 rounded-2xl border-2 border-[#5e29c8] transition-all flex flex-col justify-between shadow-xs relative">
+            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs relative">
               <span className="absolute -top-2.5 right-3 sm:-top-3 sm:right-5 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[#5e29c8] text-white">
                 Más Completa
               </span>
@@ -472,22 +472,22 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
         </div>
 
         {/* Sección de Explicación y Preguntas Frecuentes de Tarjetas */}
-        <div className="p-3.5 sm:p-4 rounded-xl bg-zinc-50 border border-zinc-200">
-          <h2 className="text-sm sm:text-base font-black text-zinc-950 mb-2 flex items-center gap-1.5">
-            <CheckCircle className="w-4 h-4 text-[#5e29c8]" />
+        <div className="pt-3 sm:pt-4">
+          <h2 className="text-xs sm:text-sm font-bold text-zinc-900 mb-2.5 flex items-center gap-1.5">
+            <CheckCircle className="w-3.5 h-3.5 text-[#5e29c8]" />
             <span>¿Cómo funciona una Tarjeta Virtual ImpulsaNet?</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-zinc-600 leading-relaxed">
-            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5 truncate">1. Enlace y QR personalizados</strong>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-5 text-xs text-zinc-600 leading-relaxed">
+            <div>
+              <strong className="text-zinc-900 block mb-0.5 font-semibold">1. Enlace y QR personalizados</strong>
               Diseñamos tu tarjeta virtual con tus colores, foto, logotipo, datos de contacto y catálogo.
             </div>
-            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5 truncate">2. Cero descargas para el cliente</strong>
+            <div>
+              <strong className="text-zinc-900 block mb-0.5 font-semibold">2. Cero descargas para el cliente</strong>
               Cualquiera que escanee el QR o toque el link accede al instante sin instalar aplicaciones.
             </div>
-            <div className="p-2.5 bg-white rounded-lg border border-zinc-200/80">
-              <strong className="text-zinc-900 block mb-0.5 truncate">3. Botón para agendar directo</strong>
+            <div>
+              <strong className="text-zinc-900 block mb-0.5 font-semibold">3. Botón para agendar directo</strong>
               Tus clientes tocan un botón y tu contacto se guarda automáticamente en su teléfono (.vcf).
             </div>
           </div>
