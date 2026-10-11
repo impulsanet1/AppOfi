@@ -79,7 +79,7 @@ function MainApp() {
 
   const [adminOpen, setAdminOpen] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
-    return sessionStorage.getItem('impulsanet_admin_auth') === 'true';
+    return sessionStorage.getItem('impulsanet_admin_auth') === 'true' && auth.currentUser?.email === 'estebanruiz.12vrgassergio@gmail.com';
   });
 
   // 1. Manejo de Navegación por Rutas Internas Reales (HTML5 History API)
@@ -151,12 +151,15 @@ function MainApp() {
     };
   }, []);
 
-  // 3. Track Firebase User
+  // 3. Track Firebase User (únicamente el correo autorizado ya definido)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && user.email === 'estebanruiz.12vrgassergio@gmail.com') {
         setIsAdminLoggedIn(true);
         sessionStorage.setItem('impulsanet_admin_auth', 'true');
+      } else {
+        setIsAdminLoggedIn(false);
+        sessionStorage.removeItem('impulsanet_admin_auth');
       }
     });
     return () => unsubscribe();

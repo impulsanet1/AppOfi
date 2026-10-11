@@ -124,7 +124,6 @@ export interface AgencySettings {
   socialSectionSpeedTag?: string;
 
   // Otros
-  adminPassword?: string;
   socialLinks?: {
     instagram?: string;
     tiktok?: string;
@@ -218,7 +217,6 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   socialSectionSubtitle: "Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.",
   socialSectionSpeedTag: "Inicio en 15-45 min",
 
-  adminPassword: "sergio11",
   socialLinks: {
     instagram: "https://instagram.com/impulsanet.digital",
     tiktok: "https://tiktok.com/@impulsanet.digital",
