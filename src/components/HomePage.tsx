@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion, Variants } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   CreditCard,
   TrendingUp,
@@ -13,6 +13,7 @@ import {
   Layers,
   CheckCircle2,
   BadgePercent,
+  ChevronDown,
 } from 'lucide-react';
 import { AgencySettings } from '../firebase';
 
@@ -44,7 +45,35 @@ const itemVariants: Variants = {
   },
 };
 
+const faqs = [
+  {
+    question: '¿Necesitan mi contraseña?',
+    answer:
+      'No. Nunca te pedimos contraseñas ni acceso a tu cuenta. Somos una tienda virtual: solo necesitamos el enlace o el usuario público de tu perfil o publicación.',
+  },
+  {
+    question: '¿Cuánto tardan en llegar los seguidores, likes o vistas?',
+    answer:
+      'El tiempo estimado es de 1 a 4 horas. Normalmente llegan en unos 30 minutos.',
+  },
+  {
+    question: '¿Tienen garantía?',
+    answer:
+      'Sí. La mayoría de nuestros servicios incluyen 30 días de garantía. Si tienes algún problema con tu pedido, escríbenos por WhatsApp y lo revisamos.',
+  },
+  {
+    question: '¿Qué son las tarjetas digitales y cómo funcionan?',
+    answer:
+      'Son tarjetas de presentación virtuales con código QR. Quien la escanea ve tu información y tus enlaces (WhatsApp, redes, ubicación, catálogo) al instante, sin papel y sin imprimir de nuevo cuando cambias algo.',
+  },
+];
+
 export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq((prev) => (prev === index ? null : index));
+  };
   return (
     <div className="bg-white overflow-hidden">
       {/* 1. HERO COMPACTO Y ENFOCADO CON TEXTO MÁS GRANDE */}
@@ -305,7 +334,66 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
         </div>
       </motion.section>
 
-      {/* 4. BANNER DE GARANTÍA Y CONFIANZA */}
+      {/* 4. PREGUNTAS FRECUENTES (DESPLEGABLES SIN RECTÁNGULOS NI FONDOS DE OTRO COLOR) */}
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+        className="py-9 sm:py-12 bg-white"
+      >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-7">
+            <h2 className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
+              Preguntas Frecuentes
+            </h2>
+            <p className="text-sm sm:text-base text-zinc-600 mt-1.5">
+              Todo lo que necesitas saber antes de ordenar tu servicio.
+            </p>
+          </div>
+
+          <div className="divide-y divide-zinc-200/80">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={index} className="py-3.5 sm:py-4">
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    className="w-full flex items-center justify-between text-left gap-4 cursor-pointer group py-1"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="text-base sm:text-lg font-bold text-zinc-900 group-hover:text-[#5e29c8] transition-colors leading-snug">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-zinc-400 shrink-0 transition-transform duration-200 group-hover:text-[#5e29c8] ${
+                        isOpen ? 'rotate-180 text-[#5e29c8]' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pt-2.5 pb-1 text-sm sm:text-[15px] text-zinc-600 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* 5. BANNER DE GARANTÍA Y CONFIANZA */}
       <motion.section
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}

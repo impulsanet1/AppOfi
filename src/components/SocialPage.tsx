@@ -353,13 +353,11 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                       {getPackSubtitle(pack)}
                     </p>
 
-                    {/* Precio destacado tipo la referencia */}
-                    <div className="mb-3.5 pb-3 border-b border-zinc-100">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
-                          {pack.price}
-                        </span>
-                      </div>
+                    {/* Precio destacado */}
+                    <div className="mb-2">
+                      <span className="text-2xl sm:text-3xl font-black text-zinc-950 tracking-tight">
+                        {pack.price}
+                      </span>
                     </div>
 
                     {/* Beneficios directos y concisos */}
