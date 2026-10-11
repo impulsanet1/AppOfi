@@ -138,8 +138,8 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Tarjetas Digitales Biolink
                 </h3>
 
-                <p className="text-sm text-zinc-600 leading-relaxed mb-4">
-                  Perfiles digitales con QR permanente, WhatsApp, redes sociales y guardado de contacto en un toque.
+                <p className="text-sm text-zinc-600 leading-relaxed mb-3">
+                  Perfiles digitales con QR, WhatsApp, redes sociales y guardado de contacto.
                 </p>
 
                 <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
@@ -187,8 +187,8 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Servicios para Redes Sociales
                 </h3>
 
-                <p className="text-sm text-zinc-600 leading-relaxed mb-4">
-                  Paquetes de seguidores, likes y reproducciones para Instagram, TikTok, YouTube y Facebook. Sin contraseñas.
+                <p className="text-sm text-zinc-600 leading-relaxed mb-3">
+                  Seguidores, likes y reproducciones para tus redes sociales. Sin contraseñas.
                 </p>
 
                 <div className="space-y-2 mb-5 text-sm text-zinc-700 bg-white p-3 rounded-xl border border-zinc-100">
