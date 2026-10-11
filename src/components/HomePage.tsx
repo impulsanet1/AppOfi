@@ -22,13 +22,6 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div className="bg-white">
       {/* 1. HERO COMPACTO Y ENFOCADO CON TEXTO MÁS GRANDE */}
@@ -46,41 +39,22 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
           </h1>
 
           {/* Subtítulo más grande y legible */}
-          <p className="text-base sm:text-xl text-zinc-700 max-w-2xl mx-auto leading-snug sm:leading-relaxed mb-5 font-normal">
+          <p className="text-base sm:text-xl text-zinc-700 max-w-2xl mx-auto leading-snug sm:leading-relaxed mb-6 font-normal">
             Digitaliza tu negocio con tarjetas interactivas y acelera tus redes sociales. Compra servicios directos o suscríbete para acceder a <span className="font-bold text-zinc-950">tarifas económicas mes a mes</span>.
           </p>
 
-          {/* ÚNICOS 2 BOTONES DE ACCIÓN */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3.5 max-w-md mx-auto mb-6">
-            <button
-              onClick={() => scrollToSection('soluciones')}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-sm sm:text-base shadow-md shadow-purple-500/25 transition-all cursor-pointer active:scale-95 flex items-center justify-center gap-2"
-            >
-              <span>Explorar Servicios y Tarjetas</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => scrollToSection('como-funciona')}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white hover:bg-zinc-50 text-zinc-900 font-bold text-sm sm:text-base border border-zinc-200 shadow-2xs transition-all cursor-pointer active:scale-95 flex items-center justify-center gap-2"
-            >
-              <BadgePercent className="w-4 h-4 text-[#5e29c8]" />
-              <span>¿Cómo funciona el ahorro?</span>
-            </button>
-          </div>
-
-          {/* Métricas de Confianza Compactas */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-3 border-t border-zinc-200/60 text-xs sm:text-sm text-zinc-600">
-            <div className="flex items-center gap-1.5 font-semibold text-zinc-800">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          {/* Métricas de Confianza en Una Sola Línea */}
+          <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-4 pt-4 border-t border-zinc-200/60 max-w-full overflow-hidden">
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span>0 Contraseñas</span>
             </div>
-            <div className="flex items-center gap-1.5 font-semibold text-zinc-800">
-              <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
               <span>Activación rápida</span>
             </div>
-            <div className="flex items-center gap-1.5 font-semibold text-zinc-800">
-              <Award className="w-4 h-4 text-[#8B5CF6]" />
+            <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-zinc-100/90 border border-zinc-200/80 text-[10px] sm:text-xs font-semibold text-zinc-800 whitespace-nowrap shrink-0 shadow-2xs">
+              <Award className="w-3.5 h-3.5 text-[#8B5CF6] shrink-0" />
               <span>Precios claros en COP</span>
             </div>
           </div>
