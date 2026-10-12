@@ -318,6 +318,58 @@ export function convertToColombianPrice(priceStr?: string): string {
   return priceStr;
 }
 
+export function parseQuantityNumber(pack: { quantity?: string; title?: string; id?: string }): number {
+  const sources = [pack.quantity || '', pack.title || '', pack.id || ''];
+  for (const str of sources) {
+    if (!str) continue;
+    // Check for 'k' notation e.g. 1.5k, 2k, 10k
+    const kMatch = str.match(/(\d+(?:[.,]\d+)?)\s*k/i);
+    if (kMatch) {
+      const val = parseFloat(kMatch[1].replace(',', '.'));
+      if (!isNaN(val) && val > 0) return Math.round(val * 1000);
+    }
+    // Check for 'm' notation e.g. 1m
+    const mMatch = str.match(/(\d+(?:[.,]\d+)?)\s*m/i);
+    if (mMatch) {
+      const val = parseFloat(mMatch[1].replace(',', '.'));
+      if (!isNaN(val) && val > 0) return Math.round(val * 1000000);
+    }
+    // Check for numbers with thousand separator e.g. 1.000, 2.000, 1,500, 10.000
+    const thousandMatch = str.match(/\b(\d{1,3}(?:[.,]\d{3})+)\b/);
+    if (thousandMatch) {
+      const val = parseInt(thousandMatch[1].replace(/[.,]/g, ''), 10);
+      if (!isNaN(val) && val > 0) return val;
+    }
+    // Check for raw digits e.g. 500, 1000, 2500
+    const numMatch = str.match(/\b(\d+)\b/);
+    if (numMatch) {
+      const val = parseInt(numMatch[1], 10);
+      if (!isNaN(val) && val > 0) return val;
+    }
+  }
+  return 0;
+}
+
+export function sortSocialServicePacks(a: SocialServicePack, b: SocialServicePack): number {
+  const typeOrder: Record<string, number> = {
+    seguidores: 1,
+    likes: 2,
+    vistas: 3,
+    tarjeta: 4,
+  };
+  const orderA = typeOrder[a.type] || 99;
+  const orderB = typeOrder[b.type] || 99;
+  if (orderA !== orderB) {
+    return orderA - orderB;
+  }
+  const qtyA = parseQuantityNumber(a);
+  const qtyB = parseQuantityNumber(b);
+  if (qtyA !== qtyB) {
+    return qtyA - qtyB; // Ascendente: 1.000 arriba, luego 1.500 o 2.000 abajo
+  }
+  return a.id.localeCompare(b.id);
+}
+
 export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
   const cleanBadge = (b?: string, def = 'CRECIMIENTO EN REDES') => {
     if (!b || /^(badge|insignia)\s*redes$/i.test(b.trim())) return def;

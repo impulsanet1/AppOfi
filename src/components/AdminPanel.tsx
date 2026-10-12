@@ -31,6 +31,7 @@ import {
   signInWithRedirect,
   getRedirectResult,
   signOut,
+  sortSocialServicePacks,
 } from '../firebase';
 import { useToast } from './Toast';
 
@@ -179,6 +180,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const [servicesList, setServicesList] = useState<SocialServicePack[]>(services);
   const [selectedPlatform, setSelectedPlatform] = useState<SocialPlatform>('instagram');
+  const [adminTypeFilter, setAdminTypeFilter] = useState<'all' | 'seguidores' | 'likes' | 'vistas'>('all');
 
   // Modal para agregar paquete de redes
   const [showAddPackModal, setShowAddPackModal] = useState(false);
@@ -1462,37 +1464,79 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       </div>
 
                       {openSections['social-packs'] && (
-                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-3 bg-white">
-                          {/* Selector de Plataforma con Contador de Paquetes */}
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-4 bg-white">
+                          {/* 1. Selector de Plataforma con Contador */}
                           <div className="flex items-center gap-1.5 p-1 bg-zinc-100 rounded-xl max-w-lg">
-                      {(['instagram', 'tiktok', 'youtube', 'facebook'] as SocialPlatform[]).map((plat) => {
-                        const count = servicesList.filter((p) => p.platform === plat && p.active !== false).length;
-                        return (
-                          <button
-                            key={plat}
-                            onClick={() => setSelectedPlatform(plat)}
-                            className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                              selectedPlatform === plat
-                                ? 'bg-white text-zinc-950 shadow-2xs text-[#5e29c8]'
-                                : 'text-zinc-600 hover:text-zinc-950'
-                            }`}
-                          >
-                            <span>{plat}</span>
-                            <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                              selectedPlatform === plat ? 'bg-purple-100 text-[#5e29c8]' : 'bg-zinc-200 text-zinc-600'
-                            }`}>
-                              {count}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                            {(['instagram', 'tiktok', 'youtube', 'facebook'] as SocialPlatform[]).map((plat) => {
+                              const count = servicesList.filter((p) => p.platform === plat && p.active !== false).length;
+                              return (
+                                <button
+                                  key={plat}
+                                  onClick={() => setSelectedPlatform(plat)}
+                                  className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-bold capitalize transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                                    selectedPlatform === plat
+                                      ? 'bg-white text-zinc-950 shadow-2xs text-[#5e29c8]'
+                                      : 'text-zinc-600 hover:text-zinc-950'
+                                  }`}
+                                >
+                                  <span>{plat}</span>
+                                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                                    selectedPlatform === plat ? 'bg-purple-100 text-[#5e29c8]' : 'bg-zinc-200 text-zinc-600'
+                                  }`}>
+                                    {count}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
 
-                    {/* Lista Completa y Granular de Paquetes de la Red */}
-                    <div className="space-y-3">
-                      {servicesList
-                        .filter((p) => p.platform === selectedPlatform)
-                        .map((pack) => (
+                          {/* 2. Filtro por Tipo de Servicio (Todos, Seguidores, Likes, Vistas) */}
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-1 pb-1">
+                            <div className="flex items-center gap-1.5 p-1 bg-zinc-50 border border-zinc-200 rounded-xl">
+                              {(
+                                [
+                                  { id: 'all', label: 'Todos' },
+                                  { id: 'seguidores', label: 'Seguidores' },
+                                  { id: 'likes', label: 'Likes' },
+                                  { id: 'vistas', label: 'Vistas' },
+                                ] as const
+                              ).map((tf) => {
+                                const count = tf.id === 'all'
+                                  ? servicesList.filter((p) => p.platform === selectedPlatform && p.active !== false).length
+                                  : servicesList.filter((p) => p.platform === selectedPlatform && p.type === tf.id && p.active !== false).length;
+                                return (
+                                  <button
+                                    key={tf.id}
+                                    onClick={() => setAdminTypeFilter(tf.id)}
+                                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                                      adminTypeFilter === tf.id
+                                        ? 'bg-[#5e29c8] text-white shadow-2xs'
+                                        : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                                    }`}
+                                  >
+                                    <span>{tf.label}</span>
+                                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                                      adminTypeFilter === tf.id ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-600'
+                                    }`}>
+                                      {count}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <span className="text-[11px] font-semibold text-zinc-500 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100 text-[#5e29c8]">
+                              ✓ Ordenado por cantidad: 1.000 arriba, luego 1.500 o 2.000
+                            </span>
+                          </div>
+
+                          {/* Lista Completa de Paquetes Ordenados de Menor a Mayor Cantidad */}
+                          <div className="space-y-3">
+                            {servicesList
+                              .filter((p) => p.platform === selectedPlatform)
+                              .filter((p) => adminTypeFilter === 'all' || p.type === adminTypeFilter)
+                              .sort(sortSocialServicePacks)
+                              .map((pack) => (
                           <div
                             key={pack.id}
                             className={`p-4 rounded-2xl border transition-all space-y-3 ${
@@ -1515,6 +1559,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                   <option value="likes">Likes</option>
                                   <option value="vistas">Vistas</option>
                                 </select>
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-[#5e29c8] border border-purple-200">
+                                  {pack.quantity || 'Cantidad'}
+                                </span>
                                 <span className="text-[10px] font-mono text-zinc-400">
                                   {pack.id}
                                 </span>

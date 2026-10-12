@@ -15,7 +15,7 @@ import {
   Facebook,
   Sparkles,
 } from 'lucide-react';
-import { SocialServicePack, SocialPlatform, AgencySettings } from '../firebase';
+import { SocialServicePack, SocialPlatform, AgencySettings, sortSocialServicePacks } from '../firebase';
 
 interface SocialPageProps {
   platformFilter?: SocialPlatform | 'all';
@@ -77,7 +77,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
     },
   ];
 
-  // Paquetes filtrados
+  // Paquetes filtrados ordenados de menor a mayor cantidad (1.000 primero, luego 1.500, 2.000, etc.)
   const filteredPacks = services
     .filter((s) => s.active !== false)
     .filter((s) => {
@@ -87,7 +87,8 @@ export const SocialPage: React.FC<SocialPageProps> = ({
     .filter((s) => {
       if (activeTypeFilter === 'all') return true;
       return s.type === activeTypeFilter;
-    });
+    })
+    .sort(sortSocialServicePacks);
 
   const getWhatsAppUrl = (pack: SocialServicePack) => {
     const phone = (settings.whatsappNumber || '573212515944').replace(/[^0-9]/g, '');
