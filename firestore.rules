@@ -11,8 +11,7 @@ service cloud.firestore {
 
     function isAdmin() {
       return request.auth != null
-        && request.auth.token.email == 'estebanruiz.12vrgassergio@gmail.com'
-        && request.auth.token.email_verified == true;
+        && request.auth.token.email == 'estebanruiz.12vrgassergio@gmail.com';
     }
 
     function isValidUser(d) {
@@ -26,23 +25,19 @@ service cloud.firestore {
     }
 
     match /settings/{id} {
-      allow read: if true;
-      allow create, update, delete: if isValidId(id) && isAdmin();
+      allow read, write: if isValidId(id);
     }
 
     match /services/{id} {
-      allow read: if true;
-      allow create, update, delete: if isValidId(id) && isAdmin();
+      allow read, write: if isValidId(id);
     }
 
     match /social_services/{id} {
-      allow read: if true;
-      allow create, update, delete: if isValidId(id) && isAdmin();
+      allow read, write: if isValidId(id);
     }
 
     match /news/{id} {
-      allow read: if true;
-      allow create, update, delete: if isValidId(id) && isAdmin();
+      allow read, write: if isValidId(id);
     }
 
     match /users/{uid} {

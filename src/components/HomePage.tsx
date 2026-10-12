@@ -74,6 +74,8 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
   const toggleFaq = (index: number) => {
     setOpenFaq((prev) => (prev === index ? null : index));
   };
+
+  const displayedFaqs = settings.faqs && settings.faqs.length > 0 ? settings.faqs : faqs;
   return (
     <div className="bg-white overflow-hidden">
       {/* 1. HERO COMPACTO Y ENFOCADO CON TEXTO MÁS GRANDE */}
@@ -353,7 +355,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
           </div>
 
           <div className="divide-y divide-zinc-200/80">
-            {faqs.map((faq, index) => {
+            {displayedFaqs.map((faq, index) => {
               const isOpen = openFaq === index;
               return (
                 <div key={index} className="py-3.5 sm:py-4">

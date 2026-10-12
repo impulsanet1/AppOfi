@@ -7,6 +7,10 @@ import {
 import {
   getAuth,
   GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import firebaseConfig from '../firebase-applet-config.json';
 
@@ -19,6 +23,13 @@ export const db = getFirestore(app, (firebaseConfig as { firestoreDatabaseId: st
 // Initialize Auth
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
+export {
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+};
 
 export enum OperationType {
   CREATE = 'create',
@@ -123,6 +134,9 @@ export interface AgencySettings {
   socialSectionSubtitle?: string;
   socialSectionSpeedTag?: string;
 
+  // 3. SECCIÓN: Preguntas Frecuentes
+  faqs?: FAQItem[];
+
   // Otros
   socialLinks?: {
     instagram?: string;
@@ -132,6 +146,11 @@ export interface AgencySettings {
   };
   blockedIps?: string[];
   updatedAt?: string;
+}
+
+export interface FAQItem {
+  question: string;
+  answer: string;
 }
 
 export type SocialPlatform = 'instagram' | 'tiktok' | 'youtube' | 'facebook' | 'cards';
@@ -223,6 +242,28 @@ export const DEFAULT_SETTINGS: AgencySettings = {
     youtube: "https://youtube.com/@impulsanet",
     facebook: "https://facebook.com/impulsanet",
   },
+  faqs: [
+    {
+      question: '¿Necesitan mi contraseña?',
+      answer:
+        'No. Nunca te pedimos contraseñas ni acceso a tu cuenta. Somos una tienda virtual: solo necesitamos el enlace o el usuario público de tu perfil o publicación.',
+    },
+    {
+      question: '¿Cuánto tardan en llegar los seguidores, likes o vistas?',
+      answer:
+        'El tiempo estimado es de 1 a 4 horas. Normalmente llegan en unos 30 minutos.',
+    },
+    {
+      question: '¿Tienen garantía?',
+      answer:
+        'Sí. La mayoría de nuestros servicios incluyen 30 días de garantía. Si tienes algún problema con tu pedido, escríbenos por WhatsApp y lo revisamos.',
+    },
+    {
+      question: '¿Qué son las tarjetas digitales y cómo funcionan?',
+      answer:
+        'Son tarjetas de presentación virtuales con código QR. Quien la escanea ve tu información y tus enlaces (WhatsApp, redes, ubicación, catálogo) al instante, sin papel y sin imprimir de nuevo cuando cambias algo.',
+    },
+  ],
   blockedIps: [],
 };
 
@@ -298,6 +339,7 @@ export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
     socialSectionTitle: cleanTitle(raw.socialSectionTitle, 'Seguidores, Likes y Vistas para tus Redes'),
     socialSectionSubtitle: cleanSubtitle(raw.socialSectionSubtitle, 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.'),
     socialSectionSpeedTag: (!raw.socialSectionSpeedTag || /^\d+\s*min$/i.test(raw.socialSectionSpeedTag.trim())) ? 'Inicio en 15-45 min' : raw.socialSectionSpeedTag,
+    faqs: Array.isArray(raw.faqs) && raw.faqs.length > 0 ? raw.faqs : DEFAULT_SETTINGS.faqs,
   };
 }
 

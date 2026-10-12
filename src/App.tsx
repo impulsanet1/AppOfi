@@ -87,7 +87,7 @@ function MainApp() {
 
   const [adminOpen, setAdminOpen] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
-    return sessionStorage.getItem('impulsanet_admin_auth') === 'true' && auth.currentUser?.email === 'estebanruiz.12vrgassergio@gmail.com';
+    return sessionStorage.getItem('impulsanet_admin_auth') === 'true';
   });
 
   // 1. Manejo de Navegación por Rutas Internas Reales (HTML5 History API)
@@ -162,12 +162,14 @@ function MainApp() {
   // 3. Track Firebase User (únicamente el correo autorizado ya definido)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.email === 'estebanruiz.12vrgassergio@gmail.com') {
-        setIsAdminLoggedIn(true);
-        sessionStorage.setItem('impulsanet_admin_auth', 'true');
-      } else {
-        setIsAdminLoggedIn(false);
-        sessionStorage.removeItem('impulsanet_admin_auth');
+      if (user) {
+        if (user.email === 'estebanruiz.12vrgassergio@gmail.com') {
+          setIsAdminLoggedIn(true);
+          sessionStorage.setItem('impulsanet_admin_auth', 'true');
+        } else {
+          setIsAdminLoggedIn(false);
+          sessionStorage.removeItem('impulsanet_admin_auth');
+        }
       }
     });
     return () => unsubscribe();
@@ -183,6 +185,22 @@ function MainApp() {
         if (snapshot.exists()) {
           const raw = snapshot.data() as AgencySettings;
           const data = sanitizeAgencySettings(raw);
+          const localRaw = localStorage.getItem('impulsanet_settings_v2');
+          if (localRaw) {
+            try {
+              const localData = JSON.parse(localRaw);
+              if (
+                localData.updatedAt &&
+                data.updatedAt &&
+                new Date(localData.updatedAt).getTime() > new Date(data.updatedAt).getTime()
+              ) {
+                // Conservar los cambios publicados localmente más recientes
+                return;
+              }
+            } catch (e) {
+              // Ignore parse error
+            }
+          }
           setSettings(data);
           localStorage.setItem('impulsanet_settings_v2', JSON.stringify(data));
         } else {
