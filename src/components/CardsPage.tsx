@@ -97,8 +97,8 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   return (
     <div className="bg-white min-h-[70vh]">
       {/* Sub-Header con Barra de Navegación Clara */}
-      <div className="bg-white border-b border-zinc-200 py-2 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-white border-b border-zinc-200 py-2.5 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3 text-sm">
           <div className="flex items-center gap-2">
             <button
               onClick={() => onNavigate('/')}
@@ -114,30 +114,30 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
           <div className="flex items-center gap-3">
             <button
               onClick={() => onNavigate('/redes')}
-              className="text-zinc-600 hover:text-[#5e29c8] font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-zinc-600 hover:text-[#5e29c8] font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              <TrendingUp className="w-3.5 h-3.5 text-[#5e29c8]" />
+              <TrendingUp className="w-4 h-4 text-[#5e29c8]" />
               <span>Ver servicios de redes</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Encabezado Principal de la Sección */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4 pb-3 border-b border-zinc-100">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5 pb-4 border-b border-zinc-100">
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-zinc-950 tracking-tight">
               {settings.cardsSectionTitle || 'Tarjetas Virtuales con Código QR & Enlace Web'}
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-600 mt-1 max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-zinc-600 mt-1.5 max-w-2xl leading-relaxed">
               {settings.cardsSectionSubtitle ||
                 '100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales ni aplicaciones adicionales.'}
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-            <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+            <span className="text-xs sm:text-sm font-semibold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
               {settings.cardsDeliveryTag || '● Entrega en 24 horas'}
             </span>
           </div>
@@ -196,32 +196,32 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 </div>
 
                 {/* Nombre de la Marca o Titular */}
-                <h3 className="text-lg sm:text-xl font-black text-white text-center mt-1.5 tracking-tight truncate" title={demoName}>
+                <h3 className="text-xl sm:text-2xl font-black text-white text-center mt-2 tracking-tight truncate" title={demoName}>
                   {demoName}
                 </h3>
 
                 {/* Cargo / Rol y Empresa */}
                 {(demoRole || demoCompany) && (
-                  <p className="text-[11px] text-purple-200 text-center font-medium mt-0.5">
+                  <p className="text-xs sm:text-sm text-purple-200 text-center font-medium mt-0.5">
                     {demoRole}{demoRole && demoCompany ? ' • ' : ''}{demoCompany}
                   </p>
                 )}
 
                 {/* Biografía / Lema de la Marca */}
-                <p className="text-[11px] sm:text-xs text-white/95 text-center font-normal px-2 mt-1 max-w-xs mx-auto leading-snug drop-shadow-xs">
+                <p className="text-xs sm:text-sm text-white/95 text-center font-normal px-2 mt-1.5 max-w-xs mx-auto leading-relaxed drop-shadow-xs">
                   {settings.tagline || 'Aumentamos la visibilidad y el alcance de tus redes sociales. Crecemos contigo. 🚀'}
                 </p>
 
                 {/* Fila de Redes Sociales: Instagram, WhatsApp, Facebook */}
-                <div className="flex items-center justify-center gap-2.5 mt-2.5 mb-2.5">
+                <div className="flex items-center justify-center gap-3 mt-3 mb-3">
                   <a
                     href={instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-9 h-9 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`Instagram ${demoName}`}
                   >
-                    <Instagram className="w-3.5 h-3.5" />
+                    <Instagram className="w-4 h-4" />
                   </a>
 
                   <a
@@ -230,43 +230,43 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-9 h-9 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`WhatsApp ${demoName}`}
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <MessageCircle className="w-4 h-4" />
                   </a>
 
                   <a
                     href={facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
+                    className="w-9 h-9 rounded-full border border-white/40 bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-all active:scale-95 shadow-xs"
                     title={`Facebook ${demoName}`}
                   >
-                    <Facebook className="w-3.5 h-3.5" />
+                    <Facebook className="w-4 h-4" />
                   </a>
                 </div>
 
                 {/* Etiqueta / Encabezado de Sección */}
-                <div className="text-center mt-2 mb-1.5">
-                  <span className="text-[10px] sm:text-[11px] font-semibold text-white/90 tracking-wide">
+                <div className="text-center mt-2.5 mb-2">
+                  <span className="text-xs sm:text-sm font-semibold text-white/90 tracking-wide">
                     {demoCompany || 'Enlaces y Contacto'}
                   </span>
                 </div>
 
                 {/* Botón 1: Tarjeta Principal con Logotipo */}
-                <div className="relative group mb-2">
+                <div className="relative group mb-2.5">
                   <div
                     onClick={() => {
                       window.open(demoUrl, '_blank');
                       showToast('info', 'Abriendo enlace interactivo');
                     }}
-                    className="w-full py-1.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
+                    className="w-full py-2 px-3.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-white p-0.5 flex items-center justify-center shrink-0 shadow-sm border border-white/20">
+                    <div className="w-8 h-8 rounded-lg bg-white p-0.5 flex items-center justify-center shrink-0 shadow-sm border border-white/20">
                       <img src={officialLogo} alt={demoName} className="w-full h-full object-contain" />
                     </div>
-                    <span className="text-xs font-semibold text-white tracking-wide">
+                    <span className="text-sm sm:text-base font-bold text-white tracking-wide">
                       {demoName}
                     </span>
                     <button
@@ -274,15 +274,15 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         e.stopPropagation();
                         setActiveMenu(activeMenu === 'impulsa' ? null : 'impulsa');
                       }}
-                      className="p-1 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
                       title="Opciones"
                     >
-                      <MoreVertical className="w-3.5 h-3.5" />
+                      <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
 
                   {activeMenu === 'impulsa' && (
-                    <div className="absolute right-3 top-full mt-1.5 z-20 w-44 rounded-xl bg-zinc-900 border border-zinc-700 p-1.5 shadow-xl text-xs text-white">
+                    <div className="absolute right-3 top-full mt-1.5 z-20 w-48 rounded-xl bg-zinc-900 border border-zinc-700 p-2 shadow-xl text-sm text-white">
                       <button
                         onClick={() => {
                           handleCopyLink();
@@ -290,7 +290,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         }}
                         className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-2 cursor-pointer"
                       >
-                        <Copy className="w-3.5 h-3.5 text-[#a78bfa]" />
+                        <Copy className="w-4 h-4 text-[#a78bfa]" />
                         <span>Copiar enlace</span>
                       </button>
                       <a
@@ -300,7 +300,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         onClick={() => setActiveMenu(null)}
                         className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-2 cursor-pointer text-white"
                       >
-                        <ExternalLink className="w-3.5 h-3.5 text-[#a78bfa]" />
+                        <ExternalLink className="w-4 h-4 text-[#a78bfa]" />
                         <span>Abrir enlace</span>
                       </a>
                     </div>
@@ -313,12 +313,12 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                     onClick={() => {
                       window.open(instagramUrl, '_blank');
                     }}
-                    className="w-full py-1.5 px-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
+                    className="w-full py-2 px-3.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/30 backdrop-blur-md flex items-center justify-between transition-all cursor-pointer shadow-sm active:scale-[0.99]"
                   >
-                    <div className="w-7 h-7 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0 text-white">
-                      <Instagram className="w-3.5 h-3.5 text-white" />
+                    <div className="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center shrink-0 text-white">
+                      <Instagram className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-xs font-semibold text-white tracking-wide">
+                    <span className="text-sm sm:text-base font-bold text-white tracking-wide">
                       Instagram
                     </span>
                     <button
@@ -326,15 +326,15 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         e.stopPropagation();
                         setActiveMenu(activeMenu === 'instagram' ? null : 'instagram');
                       }}
-                      className="p-1 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-white/70 hover:text-white transition-colors cursor-pointer"
                       title="Opciones"
                     >
-                      <MoreVertical className="w-3.5 h-3.5" />
+                      <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
 
                   {activeMenu === 'instagram' && (
-                    <div className="absolute right-3 top-full mt-1.5 z-20 w-44 rounded-xl bg-zinc-900 border border-zinc-700 p-1.5 shadow-xl text-xs text-white">
+                    <div className="absolute right-3 top-full mt-1.5 z-20 w-48 rounded-xl bg-zinc-900 border border-zinc-700 p-2 shadow-xl text-sm text-white">
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(instagramUrl);
@@ -343,7 +343,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         }}
                         className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-2 cursor-pointer"
                       >
-                        <Copy className="w-3.5 h-3.5 text-[#a78bfa]" />
+                        <Copy className="w-4 h-4 text-[#a78bfa]" />
                         <span>Copiar perfil</span>
                       </button>
                       <a
@@ -353,7 +353,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                         onClick={() => setActiveMenu(null)}
                         className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-2 cursor-pointer text-white"
                       >
-                        <ExternalLink className="w-3.5 h-3.5 text-[#a78bfa]" />
+                        <ExternalLink className="w-4 h-4 text-[#a78bfa]" />
                         <span>Ver perfil</span>
                       </a>
                     </div>
@@ -364,39 +364,39 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
           </div>
 
           {/* Columna Derecha: Planes Oficiales de Tarjetas Virtuales */}
-          <div className="lg:col-span-7 grid grid-cols-2 gap-2.5 sm:gap-4 items-stretch">
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 items-stretch">
             
             {/* Plan 1: Tarjeta Virtual Básica */}
-            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs">
+            <div className="bg-white p-4 sm:p-6 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs">
               <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between gap-1 mb-1.5 h-5">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1 truncate">
-                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                <div className="flex items-center justify-between gap-1 mb-2.5">
+                  <span className="text-xs sm:text-sm font-bold uppercase text-[#5e29c8] flex items-center gap-1.5 truncate">
+                    <Sparkles className="w-4 h-4 shrink-0" />
                     <span className="truncate">{settings.cardPlan1Badge || 'Plan Estándar'}</span>
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-zinc-500 bg-zinc-100 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+                  <span className="text-xs font-semibold text-zinc-500 bg-zinc-100 px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">
                     Pago Único
                   </span>
                 </div>
                 
-                <div className="h-5 sm:h-6 flex items-center mb-0.5 overflow-hidden">
+                <div className="mb-1.5 flex items-center">
                   <h3
-                    className="text-xs sm:text-sm md:text-base font-black text-zinc-950 truncate whitespace-nowrap leading-none tracking-tight block w-full"
+                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight block w-full truncate"
                     title={settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
                   >
                     {settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
                   </h3>
                 </div>
                 
-                <div className="text-base sm:text-xl md:text-2xl font-black text-zinc-950 mb-2 sm:mb-2.5 truncate leading-tight">
+                <div className="text-3xl sm:text-4xl font-black text-zinc-950 mb-3 truncate leading-tight">
                   {settings.cardsBasicPrice || '$79.000 COP'}
                 </div>
 
-                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-600 mb-2.5 sm:mb-3">
+                <div className="space-y-2.5 text-sm sm:text-base text-zinc-800 mb-4 sm:mb-5">
                   {plan1Features.map((feat, idx) => (
-                    <div key={idx} className="flex items-start gap-1.5">
-                      <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
-                      <span className="leading-tight">{feat}</span>
+                    <div key={idx} className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-[#5e29c8] shrink-0 mt-0.5" />
+                      <span className="leading-snug font-medium">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -409,47 +409,47 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-[11px] sm:text-xs font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight mt-auto"
+                className="w-full py-3 sm:py-3.5 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-base sm:text-lg font-bold text-center block transition-all shadow-xs cursor-pointer active:scale-95 leading-tight mt-auto"
               >
                 {settings.cardPlan1ButtonText || 'Pedir Tarjeta'}
               </a>
             </div>
 
             {/* Plan 2: Tarjeta Virtual Pro / Comercial */}
-            <div className="bg-white p-3 sm:p-4 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs relative">
-              <span className="absolute -top-2.5 right-3 sm:-top-3 sm:right-5 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[#5e29c8] text-white">
+            <div className="bg-white p-4 sm:p-6 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs relative">
+              <span className="absolute -top-3.5 right-4 px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-[#5e29c8] text-white shadow-sm">
                 Más Completa
               </span>
 
               <div className="flex-1 flex flex-col">
-                <div className="flex items-center justify-between gap-1 mb-1.5 h-5">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase text-[#5e29c8] flex items-center gap-1 truncate">
-                    <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                <div className="flex items-center justify-between gap-1 mb-2.5">
+                  <span className="text-xs sm:text-sm font-bold uppercase text-[#5e29c8] flex items-center gap-1.5 truncate">
+                    <Layers className="w-4 h-4 shrink-0" />
                     <span className="truncate">{settings.cardPlan2Badge || 'Con Catálogo'}</span>
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-semibold text-purple-900 bg-purple-100 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0 whitespace-nowrap">
+                  <span className="text-xs font-semibold text-purple-900 bg-purple-100 px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">
                     Comercial
                   </span>
                 </div>
 
-                <div className="h-5 sm:h-6 flex items-center mb-0.5 overflow-hidden">
+                <div className="mb-1.5 flex items-center">
                   <h3
-                    className="text-xs sm:text-sm md:text-base font-black text-zinc-950 truncate whitespace-nowrap leading-none tracking-tight block w-full"
+                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight block w-full truncate"
                     title={settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
                   >
                     {settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
                   </h3>
                 </div>
 
-                <div className="text-base sm:text-xl md:text-2xl font-black text-[#5e29c8] mb-2 sm:mb-2.5 truncate leading-tight">
+                <div className="text-3xl sm:text-4xl font-black text-[#5e29c8] mb-3 truncate leading-tight">
                   {settings.cardsProPrice || '$119.000 COP'}
                 </div>
 
-                <div className="space-y-1.5 text-[11px] sm:text-xs text-zinc-700 mb-2.5 sm:mb-3">
+                <div className="space-y-2.5 text-sm sm:text-base text-zinc-800 mb-4 sm:mb-5">
                   {plan2Features.map((feat, idx) => (
-                    <div key={idx} className="flex items-start gap-1.5">
-                      <Check className="w-3.5 h-3.5 text-[#5e29c8] shrink-0 mt-0.5" />
-                      <span className="leading-tight">{feat}</span>
+                    <div key={idx} className="flex items-start gap-2">
+                      <Check className="w-5 h-5 text-[#5e29c8] shrink-0 mt-0.5" />
+                      <span className="leading-snug font-medium">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -462,7 +462,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[11px] sm:text-xs font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight mt-auto"
+                className="w-full py-3 sm:py-3.5 px-4 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-base sm:text-lg font-bold text-center block shadow-md shadow-[#5e29c8]/25 transition-all cursor-pointer active:scale-95 leading-tight mt-auto"
               >
                 {settings.cardPlan2ButtonText || 'Pedir Pro'}
               </a>
@@ -472,22 +472,22 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
         </div>
 
         {/* Sección de Explicación y Preguntas Frecuentes de Tarjetas */}
-        <div className="pt-3 sm:pt-4">
-          <h2 className="text-xs sm:text-sm font-bold text-zinc-900 mb-2.5 flex items-center gap-1.5">
-            <CheckCircle className="w-3.5 h-3.5 text-[#5e29c8]" />
+        <div className="pt-5 sm:pt-7">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 mb-3 sm:mb-4 flex items-center gap-2">
+            <CheckCircle className="w-5 h-5 text-[#5e29c8]" />
             <span>¿Cómo funciona una Tarjeta Virtual ImpulsaNet?</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-5 text-xs text-zinc-600 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-sm sm:text-base text-zinc-600 leading-relaxed">
             <div>
-              <strong className="text-zinc-900 block mb-0.5 font-semibold">1. Enlace y QR personalizados</strong>
+              <strong className="text-base sm:text-lg text-zinc-950 block mb-1 font-bold">1. Enlace y QR personalizados</strong>
               Diseñamos tu tarjeta virtual con tus colores, foto, logotipo, datos de contacto y catálogo.
             </div>
             <div>
-              <strong className="text-zinc-900 block mb-0.5 font-semibold">2. Cero descargas para el cliente</strong>
+              <strong className="text-base sm:text-lg text-zinc-950 block mb-1 font-bold">2. Cero descargas para el cliente</strong>
               Cualquiera que escanee el QR o toque el link accede al instante sin instalar aplicaciones.
             </div>
             <div>
-              <strong className="text-zinc-900 block mb-0.5 font-semibold">3. Botón para agendar directo</strong>
+              <strong className="text-base sm:text-lg text-zinc-950 block mb-1 font-bold">3. Botón para agendar directo</strong>
               Tus clientes tocan un botón y tu contacto se guarda automáticamente en su teléfono (.vcf).
             </div>
           </div>

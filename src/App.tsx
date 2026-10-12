@@ -60,7 +60,15 @@ function MainApp() {
     if (cached) {
       try {
         const parsed = JSON.parse(cached) as SocialServicePack[];
-        return parsed.map((item) => ({
+        const hasIg2k = parsed.some((p) => p.id === 'ig_seg_2k');
+        const items = hasIg2k
+          ? parsed
+          : [
+              ...parsed.slice(0, 1),
+              DEFAULT_SOCIAL_SERVICES.find((p) => p.id === 'ig_seg_2k')!,
+              ...parsed.slice(1),
+            ].filter(Boolean);
+        return items.map((item) => ({
           ...item,
           price: convertToColombianPrice(item.price),
         }));
@@ -205,6 +213,18 @@ function MainApp() {
           snapshot.forEach((docSnap) => {
             items.push({ id: docSnap.id, ...docSnap.data() } as SocialServicePack);
           });
+          const hasIg2k = items.some((p) => p.id === 'ig_seg_2k');
+          if (!hasIg2k) {
+            const ig2k = DEFAULT_SOCIAL_SERVICES.find((p) => p.id === 'ig_seg_2k');
+            if (ig2k) {
+              const ig1kIdx = items.findIndex((p) => p.id === 'ig_seg_1k');
+              if (ig1kIdx !== -1) {
+                items.splice(ig1kIdx + 1, 0, ig2k);
+              } else {
+                items.unshift(ig2k);
+              }
+            }
+          }
           setSocialServices(items);
           localStorage.setItem('impulsanet_social_services_v2', JSON.stringify(items));
         } else {

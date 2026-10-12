@@ -316,6 +316,18 @@ export const DEFAULT_SOCIAL_SERVICES: SocialServicePack[] = [
     active: true,
   },
   {
+    id: "ig_seg_2k",
+    platform: "instagram",
+    type: "seguidores",
+    title: "2.000 Seguidores Instagram",
+    quantity: "2.000 Seguidores",
+    price: "$65.000 COP",
+    description: "Duplica tu presencia y alcance en Instagram con entrega segura y directa.",
+    features: ["Sin contraseñas (solo tu @usuario)", "Comienza en 15-45 minutos", "Garantía de reposición 30 días", "Entrega gradual y segura"],
+    popular: false,
+    active: true,
+  },
+  {
     id: "ig_likes_1k",
     platform: "instagram",
     type: "likes",
