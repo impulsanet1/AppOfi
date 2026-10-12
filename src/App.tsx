@@ -185,22 +185,6 @@ function MainApp() {
         if (snapshot.exists()) {
           const raw = snapshot.data() as AgencySettings;
           const data = sanitizeAgencySettings(raw);
-          const localRaw = localStorage.getItem('impulsanet_settings_v2');
-          if (localRaw) {
-            try {
-              const localData = JSON.parse(localRaw);
-              if (
-                localData.updatedAt &&
-                data.updatedAt &&
-                new Date(localData.updatedAt).getTime() > new Date(data.updatedAt).getTime()
-              ) {
-                // Conservar los cambios publicados localmente más recientes
-                return;
-              }
-            } catch (e) {
-              // Ignore parse error
-            }
-          }
           setSettings(data);
           localStorage.setItem('impulsanet_settings_v2', JSON.stringify(data));
         } else {
