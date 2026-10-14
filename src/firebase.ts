@@ -110,6 +110,7 @@ export interface AgencySettings {
   cardsSectionSubtitle: string;
   cardsDeliveryTag?: string;
   cardsPrice?: string;
+  cardsStartingPrice?: string;
 
   // Plan 1: Básica
   cardPlan1Badge?: string;
@@ -138,9 +139,13 @@ export interface AgencySettings {
   socialSectionTitle?: string;
   socialSectionSubtitle?: string;
   socialSectionSpeedTag?: string;
+  socialStartingPrice?: string;
 
   // 3. SECCIÓN: Preguntas Frecuentes
   faqs?: FAQItem[];
+
+  // Pack Negocio
+  packNegocioPrice?: string;
 
   // Otros
   socialLinks?: {
@@ -193,7 +198,7 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   tagline: "Tarjetas Virtuales & Crecimiento en Redes Sociales",
   heroDescription: "Crea tu tarjeta virtual profesional con QR y haz crecer tus redes en Instagram, TikTok, YouTube y Facebook con seguidores, likes y vistas de entrega rápida.",
   whatsappNumber: "573212515944",
-  whatsappDefaultMessage: "¡Hola ImpulsaNet! Me interesa solicitar un servicio de redes o mi tarjeta virtual.",
+  whatsappDefaultMessage: "Hola, vi su web y quiero información",
   logoUrl: "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png",
 
   // 1. Tarjetas Virtuales
@@ -202,28 +207,30 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   cardsSectionSubtitle: "100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales.",
   cardsDeliveryTag: "● Entrega en 24 horas",
   cardsPrice: "$79.000 COP",
+  cardsStartingPrice: "$79.000 COP",
 
-  // Plan 1
+  // Plan 1: Estándar
   cardPlan1Badge: "Plan Estándar",
-  cardPlan1Title: "Tarjeta Virtual Básica",
+  cardPlan1Title: "Tarjeta Virtual Estándar",
   cardsBasicPrice: "$79.000 COP",
   cardPlan1Features: [
-    "Enlace web permanente 100% online",
-    "Código QR de alta definición para compartir",
-    "Botón para guardar contacto en la agenda (.vcf)",
-    "Botones a WhatsApp, llamada y redes"
+    "Tarjeta con tu logo y colores",
+    "Enlace web propio",
+    "QR descargable en PNG y PDF",
+    "Botón de WhatsApp y redes",
+    "Pago único"
   ],
-  cardPlan1ButtonText: "Pedir Tarjeta Virtual",
+  cardPlan1ButtonText: "Pedir Tarjeta",
 
-  // Plan 2
+  // Plan 2: Pro
   cardPlan2Badge: "Comercial / Con Catálogo",
   cardPlan2Title: "Tarjeta Virtual Pro",
   cardsProPrice: "$119.000 COP",
   cardPlan2Features: [
-    "Todo lo de la tarjeta básica",
-    "Catálogo interactivo de servicios o productos",
-    "Botones de datos bancarios para cobrar",
-    "Actualizaciones de datos ilimitadas"
+    "Todo lo del Estándar",
+    "Catálogo de productos o servicios",
+    "Botón para guardar tu contacto",
+    "Cambios de información durante 1 año"
   ],
   cardPlan2ButtonText: "Pedir Tarjeta Pro",
 
@@ -239,7 +246,11 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   socialSectionBadge: "CRECIMIENTO EN REDES",
   socialSectionTitle: "Seguidores, Likes y Vistas para tus Redes",
   socialSectionSubtitle: "Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.",
-  socialSectionSpeedTag: "Inicio en 15-45 min",
+  socialSectionSpeedTag: "Entrega habitual en 30 minutos · máximo 4 horas",
+  socialStartingPrice: "$5.000 COP",
+
+  // Pack Negocio
+  packNegocioPrice: "$80.000 COP",
 
   socialLinks: {
     instagram: "https://instagram.com/impulsanet.digital",
@@ -389,13 +400,43 @@ export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
     return b.replace(/MÓDULO\s*\d+:\s*/i, '').trim() || 'TARJETAS VIRTUALES CON QR';
   };
 
+  const cleanFeatures = (feats: string[] | undefined, fallback: string[]) => {
+    if (!feats || !Array.isArray(feats) || feats.length === 0) return fallback;
+    const hasPlaceholder = feats.some((f) => /^(item|feat|nueva)/i.test(f.trim()));
+    if (hasPlaceholder) return fallback;
+    const filtered = feats.filter((f) => !/^(item|feat\s*\d|nueva)/i.test(f.trim()));
+    return filtered.length >= 3 ? filtered : fallback;
+  };
+
+  const cleanTagline = (t?: string) => {
+    if (!t || /tagline/i.test(t.trim()) || /nueva/i.test(t.trim())) return 'Tarjeta digital con tu WhatsApp, catálogo y ubicación.';
+    return t.trim();
+  };
+
+  const cleanCardDemoName = (n?: string) => {
+    if (!n || /carlos\s*g[oó]mez/i.test(n.trim())) return 'Sergio Vargas';
+    return n.trim();
+  };
+
   return {
     ...raw,
+    tagline: cleanTagline(raw.tagline),
+    cardDemoName: cleanCardDemoName(raw.cardDemoName),
     cardsSectionBadge: cardsBadge(raw.cardsSectionBadge),
+    cardsStartingPrice: raw.cardsStartingPrice || DEFAULT_SETTINGS.cardsStartingPrice,
+    cardPlan1Features: cleanFeatures(raw.cardPlan1Features, DEFAULT_SETTINGS.cardPlan1Features!),
+    cardPlan2Features: cleanFeatures(raw.cardPlan2Features, DEFAULT_SETTINGS.cardPlan2Features!),
     socialSectionBadge: cleanBadge(raw.socialSectionBadge, 'CRECIMIENTO EN REDES'),
     socialSectionTitle: cleanTitle(raw.socialSectionTitle, 'Seguidores, Likes y Vistas para tus Redes'),
     socialSectionSubtitle: cleanSubtitle(raw.socialSectionSubtitle, 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.'),
-    socialSectionSpeedTag: (!raw.socialSectionSpeedTag || /^\d+\s*min$/i.test(raw.socialSectionSpeedTag.trim())) ? 'Inicio en 15-45 min' : raw.socialSectionSpeedTag,
+    socialSectionSpeedTag: (!raw.socialSectionSpeedTag || /15-45/i.test(raw.socialSectionSpeedTag)) ? 'Entrega habitual en 30 minutos · máximo 4 horas' : raw.socialSectionSpeedTag,
+    socialStartingPrice: raw.socialStartingPrice || DEFAULT_SETTINGS.socialStartingPrice,
+    packNegocioPrice: (raw.packNegocioPrice && raw.packNegocioPrice !== '$139.000 COP')
+      ? raw.packNegocioPrice
+      : DEFAULT_SETTINGS.packNegocioPrice,
+    whatsappDefaultMessage: raw.whatsappDefaultMessage && !raw.whatsappDefaultMessage.includes('¡Hola ImpulsaNet!')
+      ? raw.whatsappDefaultMessage
+      : 'Hola, vi su web y quiero información',
     faqs: Array.isArray(raw.faqs) && raw.faqs.length > 0 ? raw.faqs : DEFAULT_SETTINGS.faqs,
   };
 }
@@ -410,7 +451,7 @@ export const DEFAULT_SOCIAL_SERVICES: SocialServicePack[] = [
     quantity: "1.000 Seguidores",
     price: "$36.000 COP",
     description: "Cuentas con foto de perfil y publicaciones. Aumenta la credibilidad de tu perfil al instante.",
-    features: ["Sin contraseñas (solo tu @usuario)", "Comienza en 15-45 minutos", "Garantía de reposición 30 días", "Entrega gradual y segura"],
+    features: ["Sin contraseñas (solo tu @usuario)", "Entrega habitual en 30 minutos · máximo 4 horas", "Garantía de reposición 30 días", "Entrega gradual y segura"],
     popular: true,
     active: true,
   },
@@ -422,7 +463,7 @@ export const DEFAULT_SOCIAL_SERVICES: SocialServicePack[] = [
     quantity: "2.000 Seguidores",
     price: "$65.000 COP",
     description: "Duplica tu presencia y alcance en Instagram con entrega segura y directa.",
-    features: ["Sin contraseñas (solo tu @usuario)", "Comienza en 15-45 minutos", "Garantía de reposición 30 días", "Entrega gradual y segura"],
+    features: ["Sin contraseñas (solo tu @usuario)", "Entrega habitual en 30 minutos · máximo 4 horas", "Garantía de reposición 30 días", "Entrega gradual y segura"],
     popular: false,
     active: true,
   },
@@ -446,7 +487,7 @@ export const DEFAULT_SOCIAL_SERVICES: SocialServicePack[] = [
     quantity: "5.000 Vistas",
     price: "$12.000 COP",
     description: "Haz que tus reels alcancen más audiencia y el algoritmo los recomiende a nuevos usuarios.",
-    features: ["Solo enlace del reel", "Inicio instantáneo", "Impulso algorítmico", "100% seguro para tu cuenta"],
+    features: ["Solo enlace del reel", "Inicio instantáneo", "Impulso algorítmico", "Sin contraseñas para tu cuenta"],
     popular: false,
     active: true,
   },

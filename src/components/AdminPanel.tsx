@@ -134,33 +134,36 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     cardsSectionTitle: settings.cardsSectionTitle || 'Tarjetas Virtuales con Código QR & Enlace Web',
     cardsSectionSubtitle: settings.cardsSectionSubtitle || '100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales.',
     cardsDeliveryTag: settings.cardsDeliveryTag || '● Entrega en 24 horas',
+    cardsStartingPrice: settings.cardsStartingPrice || '$79.000 COP',
+    packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
 
     // Plan 1: Básica
     cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
-    cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Básica',
+    cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Estándar',
     cardsBasicPrice: settings.cardsBasicPrice || '$79.000 COP',
-    cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta Virtual',
-    cardPlan1Features: settings.cardPlan1Features || [
-      'Enlace web permanente 100% online',
-      'Código QR de alta definición para compartir',
-      'Botón para guardar contacto en la agenda (.vcf)',
-      'Botones a WhatsApp, llamada y redes'
-    ],
+    cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta',
+    cardPlan1Features: (!settings.cardPlan1Features || settings.cardPlan1Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
+      'Tarjeta con tu logo y colores',
+      'Enlace web propio',
+      'QR descargable en PNG y PDF',
+      'Botón de WhatsApp y redes',
+      'Pago único'
+    ] : settings.cardPlan1Features,
 
     // Plan 2: Pro
     cardPlan2Badge: settings.cardPlan2Badge || 'Comercial / Con Catálogo',
     cardPlan2Title: settings.cardPlan2Title || 'Tarjeta Virtual Pro',
     cardsProPrice: settings.cardsProPrice || '$119.000 COP',
     cardPlan2ButtonText: settings.cardPlan2ButtonText || 'Pedir Tarjeta Pro',
-    cardPlan2Features: settings.cardPlan2Features || [
-      'Todo lo de la tarjeta básica',
-      'Catálogo interactivo de servicios o productos',
-      'Botones de datos bancarios para cobrar',
-      'Actualizaciones de datos ilimitadas'
-    ],
+    cardPlan2Features: (!settings.cardPlan2Features || settings.cardPlan2Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
+      'Todo lo del Estándar',
+      'Catálogo de productos o servicios',
+      'Botón para guardar tu contacto',
+      'Cambios de información durante 1 año'
+    ] : settings.cardPlan2Features,
 
     // Demo Interactivo
-    cardDemoName: settings.cardDemoName || 'Sergio Vargas',
+    cardDemoName: (!settings.cardDemoName || /carlos\s*g[oó]mez/i.test(settings.cardDemoName)) ? 'Sergio Vargas' : settings.cardDemoName,
     cardDemoRole: settings.cardDemoRole || 'Emprendedor & Asesor Digital',
     cardDemoCompany: settings.cardDemoCompany || 'ImpulsaNet Studio',
     cardDemoPhone: settings.cardDemoPhone || '+57 321 2515944',
@@ -175,7 +178,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     socialSectionBadge: settings.socialSectionBadge || 'CRECIMIENTO EN REDES',
     socialSectionTitle: settings.socialSectionTitle || 'Seguidores, Likes y Vistas para tus Redes',
     socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
-    socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Inicio en 15-45 min',
+    socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Entrega habitual en 30 minutos · máximo 4 horas',
+    socialStartingPrice: settings.socialStartingPrice || '$5.000 COP',
   });
 
   const [servicesList, setServicesList] = useState<SocialServicePack[]>(services);
@@ -202,7 +206,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     price: '',
     description: '',
     feature1: 'Sin contraseñas requeridas',
-    feature2: 'Comienza en 15-45 minutos',
+    feature2: 'Entrega habitual en 30 minutos · máximo 4 horas',
     feature3: 'Garantía activa de reposición',
   });
 
@@ -210,7 +214,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [whatsappForm, setWhatsappForm] = useState({
     agencyName: settings.agencyName || 'ImpulsaNet',
     whatsappNumber: settings.whatsappNumber || '573212515944',
-    whatsappDefaultMessage: settings.whatsappDefaultMessage || '¡Hola ImpulsaNet! Me interesa solicitar información.',
+    whatsappDefaultMessage: settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información',
     logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
   });
 
@@ -221,27 +225,31 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       cardsSectionTitle: settings.cardsSectionTitle || 'Tarjetas Virtuales con Código QR & Enlace Web',
       cardsSectionSubtitle: settings.cardsSectionSubtitle || '100% digitales. Comparte tu contacto, WhatsApp, redes y catálogo en 1 toque. Sin costos mensuales.',
       cardsDeliveryTag: settings.cardsDeliveryTag || '● Entrega en 24 horas',
+      cardsStartingPrice: settings.cardsStartingPrice || '$79.000 COP',
+      packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
+
       cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
-      cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Básica',
+      cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Estándar',
       cardsBasicPrice: settings.cardsBasicPrice || '$79.000 COP',
-      cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta Virtual',
-      cardPlan1Features: settings.cardPlan1Features || [
-        'Enlace web permanente 100% online',
-        'Código QR de alta definición para compartir',
-        'Botón para guardar contacto en la agenda (.vcf)',
-        'Botones a WhatsApp, llamada y redes'
-      ],
+      cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta',
+      cardPlan1Features: (!settings.cardPlan1Features || settings.cardPlan1Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
+        'Tarjeta con tu logo y colores',
+        'Enlace web propio',
+        'QR descargable en PNG y PDF',
+        'Botón de WhatsApp y redes',
+        'Pago único'
+      ] : settings.cardPlan1Features,
       cardPlan2Badge: settings.cardPlan2Badge || 'Comercial / Con Catálogo',
       cardPlan2Title: settings.cardPlan2Title || 'Tarjeta Virtual Pro',
       cardsProPrice: settings.cardsProPrice || '$119.000 COP',
       cardPlan2ButtonText: settings.cardPlan2ButtonText || 'Pedir Tarjeta Pro',
-      cardPlan2Features: settings.cardPlan2Features || [
-        'Todo lo de la tarjeta básica',
-        'Catálogo interactivo de servicios o productos',
-        'Botones de datos bancarios para cobrar',
-        'Actualizaciones de datos ilimitadas'
-      ],
-      cardDemoName: settings.cardDemoName || 'Sergio Vargas',
+      cardPlan2Features: (!settings.cardPlan2Features || settings.cardPlan2Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
+        'Todo lo del Estándar',
+        'Catálogo de productos o servicios',
+        'Botón para guardar tu contacto',
+        'Cambios de información durante 1 año'
+      ] : settings.cardPlan2Features,
+      cardDemoName: (!settings.cardDemoName || /carlos\s*g[oó]mez/i.test(settings.cardDemoName)) ? 'Sergio Vargas' : settings.cardDemoName,
       cardDemoRole: settings.cardDemoRole || 'Emprendedor & Asesor Digital',
       cardDemoCompany: settings.cardDemoCompany || 'ImpulsaNet Studio',
       cardDemoPhone: settings.cardDemoPhone || '+57 321 2515944',
@@ -253,13 +261,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       socialSectionBadge: settings.socialSectionBadge || 'CRECIMIENTO EN REDES',
       socialSectionTitle: settings.socialSectionTitle || 'Seguidores, Likes y Vistas para tus Redes',
       socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
-      socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Inicio en 15-45 min',
+      socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Entrega habitual en 30 minutos · máximo 4 horas',
+      socialStartingPrice: settings.socialStartingPrice || '$5.000 COP',
     });
 
     setWhatsappForm({
       agencyName: settings.agencyName || 'ImpulsaNet',
       whatsappNumber: settings.whatsappNumber || '573212515944',
-      whatsappDefaultMessage: settings.whatsappDefaultMessage || '¡Hola ImpulsaNet! Me interesa solicitar información.',
+      whatsappDefaultMessage: settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información',
       logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
     });
 
@@ -401,6 +410,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         cardsSectionSubtitle: cardsForm.cardsSectionSubtitle,
         cardsDeliveryTag: cardsForm.cardsDeliveryTag,
         cardsPrice: cardsForm.cardsBasicPrice,
+        cardsStartingPrice: cardsForm.cardsStartingPrice,
+        packNegocioPrice: cardsForm.packNegocioPrice,
         cardPlan1Badge: cardsForm.cardPlan1Badge,
         cardPlan1Title: cardsForm.cardPlan1Title,
         cardsBasicPrice: cardsForm.cardsBasicPrice,
@@ -434,8 +445,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         cardsSectionTitle: cardsForm.cardsSectionTitle,
         cardsSectionSubtitle: cardsForm.cardsSectionSubtitle,
         cardsDeliveryTag: cardsForm.cardsDeliveryTag,
+        cardsStartingPrice: cardsForm.cardsStartingPrice,
+        packNegocioPrice: cardsForm.packNegocioPrice,
       });
-      showToast('success', 'Encabezado de Tarjetas Guardado', 'Título y subtítulo actualizados.');
+      showToast('success', 'Encabezado de Tarjetas Guardado', 'Título, subtítulo y precios actualizados.');
     } catch (err) {
       showToast('error', 'Error al guardar encabezado', String(err));
     }
@@ -469,6 +482,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       showToast('success', 'Plan 2 Guardado', 'Tarjeta Pro actualizada.');
     } catch (err) {
       showToast('error', 'Error al guardar Plan 2', String(err));
+    }
+  };
+
+  const handleSavePackNegocio = async () => {
+    try {
+      await onSaveSettings({
+        packNegocioPrice: cardsForm.packNegocioPrice,
+      });
+      showToast('success', 'Pack Negocio Guardado', `Precio de Pack Negocio actualizado a ${cardsForm.packNegocioPrice}.`);
+    } catch (err) {
+      showToast('error', 'Error al guardar Pack Negocio', String(err));
     }
   };
 
@@ -542,6 +566,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         socialSectionTitle: socialHeadersForm.socialSectionTitle,
         socialSectionSubtitle: socialHeadersForm.socialSectionSubtitle,
         socialSectionSpeedTag: socialHeadersForm.socialSectionSpeedTag,
+        socialStartingPrice: socialHeadersForm.socialStartingPrice,
       });
       showToast('success', 'Encabezado de Redes Guardado', 'Título y subtítulo actualizados en la web.');
     } catch (err) {
@@ -664,7 +689,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       price: '',
       description: '',
       feature1: 'Sin contraseñas requeridas',
-      feature2: 'Comienza en 15-45 minutos',
+      feature2: 'Entrega habitual en 30 minutos · máximo 4 horas',
       feature3: 'Garantía activa de reposición',
     });
 
@@ -987,6 +1012,42 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               required
                             />
                           </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">
+                                Precio "Desde" Tarjetas (Inicio)
+                              </label>
+                              <input
+                                type="text"
+                                value={cardsForm.cardsStartingPrice}
+                                onChange={(e) => setCardsForm({ ...cardsForm, cardsStartingPrice: e.target.value })}
+                                placeholder="Ej: $79.000 COP"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold text-[#5e29c8]"
+                                required
+                              />
+                              <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                                Aparece como "desde $___" en Solución 01 de la página principal.
+                              </span>
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">
+                                Precio "Pack Negocio" (Inicio)
+                              </label>
+                              <input
+                                type="text"
+                                value={cardsForm.packNegocioPrice}
+                                onChange={(e) => setCardsForm({ ...cardsForm, packNegocioPrice: e.target.value })}
+                                placeholder="Ej: $80.000 COP"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold text-[#5e29c8]"
+                                required
+                              />
+                              <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                                Precio de Solución 03 (Tarjeta Pro + 1.000 seguidores de Instagram).
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1001,7 +1062,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                           <span className="w-6 h-6 rounded-lg bg-purple-100 text-[#5e29c8] flex items-center justify-center text-xs font-bold font-mono">2</span>
                           <div>
                             <span className="text-xs font-black uppercase text-zinc-900 block">Planes de Precios y Beneficios</span>
-                            <span className="text-[11px] text-zinc-500">Tarjeta Básica ({cardsForm.cardsBasicPrice}) y Tarjeta Pro ({cardsForm.cardsProPrice})</span>
+                            <span className="text-[11px] text-zinc-500">Estándar ({cardsForm.cardsBasicPrice}), Pro ({cardsForm.cardsProPrice}) y Pack Negocio ({cardsForm.packNegocioPrice})</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1208,6 +1269,44 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                       </button>
                                     </div>
                                   ))}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Plan 3 / Pack Negocio: Tarjeta Pro + 1.000 Seguidores IG */}
+                            <div className="lg:col-span-2 p-4 rounded-2xl bg-gradient-to-r from-purple-50/60 via-white to-pink-50/60 border-2 border-purple-300 space-y-3">
+                              <div className="flex items-center justify-between pb-2 border-b border-purple-200">
+                                <div className="flex items-center gap-1.5">
+                                  <Sparkles className="w-4 h-4 text-[#5e29c8]" />
+                                  <span className="text-xs font-black text-zinc-950 uppercase">Pack Negocio: Tarjeta Pro + 1.000 Seguidores Instagram</span>
+                                  <span className="text-[10px] font-bold text-white bg-gradient-to-r from-[#5e29c8] to-pink-600 px-2 py-0.5 rounded">Combo Solución 03</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={handleSavePackNegocio}
+                                  className="px-2.5 py-1 rounded-lg bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                                >
+                                  <Save className="w-3 h-3" />
+                                  <span>Guardar Pack Negocio</span>
+                                </button>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                                <div>
+                                  <label className="block text-[10px] font-bold text-zinc-700 uppercase mb-1">
+                                    Precio del Pack Negocio
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={cardsForm.packNegocioPrice}
+                                    onChange={(e) => setCardsForm({ ...cardsForm, packNegocioPrice: e.target.value })}
+                                    placeholder="Ej: $80.000 COP"
+                                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-black text-[#5e29c8] bg-white shadow-2xs"
+                                    required
+                                  />
+                                </div>
+                                <div className="text-[11px] text-zinc-600 leading-relaxed">
+                                  Configura el precio que se muestra en la <strong>Solución 03</strong> de la página principal. Por defecto: <strong>$80.000 COP</strong>. Puedes guardarlo directamente aquí o con el botón general.
                                 </div>
                               </div>
                             </div>
@@ -1438,6 +1537,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               onChange={(e) => setSocialHeadersForm({ ...socialHeadersForm, socialSectionSubtitle: e.target.value })}
                               className="w-full px-3 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white"
                             />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-zinc-800 mb-0.5">
+                              Precio "Desde" visible en la portada de Inicio
+                            </label>
+                            <input
+                              type="text"
+                              value={socialHeadersForm.socialStartingPrice}
+                              onChange={(e) => setSocialHeadersForm({ ...socialHeadersForm, socialStartingPrice: e.target.value })}
+                              placeholder="Ej: $5.000 COP"
+                              className="w-full px-3 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white font-bold text-[#5e29c8]"
+                            />
+                            <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                              Aparece como "desde $___" en la tarjeta de Servicios para Redes Sociales de la página principal.
+                            </span>
                           </div>
                         </form>
                       )}

@@ -14,7 +14,7 @@ export const Footer: React.FC<FooterProps> = ({ settings, onNavigate }) => {
 
   const getWhatsAppUrl = () => {
     const phone = (settings.whatsappNumber || '573212515944').replace(/[^0-9]/g, '');
-    const message = encodeURIComponent(settings.whatsappDefaultMessage || '¡Hola ImpulsaNet!');
+    const message = encodeURIComponent(settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información');
     return `https://wa.me/${phone}?text=${message}`;
   };
 

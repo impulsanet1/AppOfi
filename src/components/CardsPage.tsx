@@ -32,7 +32,9 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   const agencyName = settings.agencyName || 'ImpulsaNet';
   const demoWhatsapp = (settings.cardDemoWhatsapp || settings.whatsappNumber || card.whatsapp || '573212515944').replace(/[^0-9]/g, '');
   const demoPhone = settings.cardDemoPhone || settings.whatsappNumber || '+57 321 2515944';
-  const demoName = settings.cardDemoName || agencyName;
+  const demoName = (!settings.cardDemoName || /carlos\s*g[oó]mez/i.test(settings.cardDemoName))
+    ? (agencyName || 'ImpulsaNet')
+    : settings.cardDemoName;
   const demoRole = settings.cardDemoRole || 'Asesor Digital & Emprendedor';
   const demoCompany = settings.cardDemoCompany || agencyName;
   const instagramUrl = settings.socialLinks?.instagram || 'https://instagram.com/impulsanet_co';
@@ -71,28 +73,30 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   };
 
   const defaultPlan1Features = [
-    "Enlace web permanente 100% online",
-    "Código QR de alta definición para compartir",
-    "Botón para guardar contacto en la agenda (.vcf)",
-    "Botones directos a WhatsApp, llamada y redes"
+    "Tarjeta con tu logo y colores",
+    "Enlace web propio",
+    "QR descargable en PNG y PDF",
+    "Botón de WhatsApp y redes",
+    "Pago único"
   ];
 
   const defaultPlan2Features = [
-    "Todo lo de la tarjeta básica",
-    "Catálogo interactivo de servicios o productos",
-    "Botones de datos bancarios para cobrar",
-    "Actualizaciones de datos ilimitadas"
+    "Todo lo del Estándar",
+    "Catálogo de productos o servicios",
+    "Botón para guardar tu contacto",
+    "Cambios de información durante 1 año"
   ];
 
-  const plan1Features =
-    settings.cardPlan1Features && settings.cardPlan1Features.length > 0
-      ? settings.cardPlan1Features
-      : defaultPlan1Features;
+  const cleanPlanFeatures = (feats: string[] | undefined, fallback: string[]) => {
+    if (!feats || feats.length === 0) return fallback;
+    const hasPlaceholder = feats.some((f) => /^(item|feat|nueva)/i.test(f.trim()));
+    if (hasPlaceholder) return fallback;
+    const filtered = feats.filter((f) => !/^(item|feat\s*\d|nueva)/i.test(f.trim()));
+    return filtered.length >= 3 ? filtered : fallback;
+  };
 
-  const plan2Features =
-    settings.cardPlan2Features && settings.cardPlan2Features.length > 0
-      ? settings.cardPlan2Features
-      : defaultPlan2Features;
+  const plan1Features = cleanPlanFeatures(settings.cardPlan1Features, defaultPlan1Features);
+  const plan2Features = cleanPlanFeatures(settings.cardPlan2Features, defaultPlan2Features);
 
   return (
     <div className="bg-white min-h-[70vh]">
@@ -159,7 +163,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                 </span>
               </div>
 
-              {/* Maqueta Visual de la Tarjeta Interactiva (Estilo Biolink / Screenshot) */}
+              {/* Maqueta Visual de la Tarjeta Interactiva (Estilo Tarjeta Digital con QR / Screenshot) */}
               <div
                 className="rounded-xl p-3.5 sm:p-4 text-white shadow-lg relative overflow-hidden"
                 style={{
@@ -207,10 +211,15 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                   </p>
                 )}
 
-                {/* Biografía / Lema de la Marca */}
-                <p className="text-xs sm:text-sm text-white/95 text-center font-normal px-2 mt-1.5 max-w-xs mx-auto leading-relaxed drop-shadow-xs">
-                  {settings.tagline || 'Aumentamos la visibilidad y el alcance de tus redes sociales. Crecemos contigo. 🚀'}
-                </p>
+                {/* Biografía / Lema de la Marca (sin texto de prueba) */}
+                {settings.tagline &&
+                  !/tagline/i.test(settings.tagline) &&
+                  !/nueva/i.test(settings.tagline) &&
+                  settings.tagline !== 'Tarjeta digital con tu WhatsApp, catálogo y ubicación.' && (
+                  <p className="text-xs sm:text-sm text-white/95 text-center font-normal px-2 mt-1.5 max-w-xs mx-auto leading-relaxed drop-shadow-xs">
+                    {settings.tagline}
+                  </p>
+                )}
 
                 {/* Fila de Redes Sociales: Instagram, WhatsApp, Facebook */}
                 <div className="flex items-center justify-center gap-3 mt-3 mb-3">
@@ -267,7 +276,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                       <img src={officialLogo} alt={demoName} className="w-full h-full object-contain" />
                     </div>
                     <span className="text-sm sm:text-base font-bold text-white tracking-wide">
-                      {demoName}
+                      Catálogo y Servicios
                     </span>
                     <button
                       onClick={(e) => {

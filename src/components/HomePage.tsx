@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   BadgePercent,
   ChevronDown,
+  Sparkles,
 } from 'lucide-react';
 import { AgencySettings } from '../firebase';
 
@@ -76,6 +77,13 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
   };
 
   const displayedFaqs = settings.faqs && settings.faqs.length > 0 ? settings.faqs : faqs;
+
+  const whatsappPhone = (settings.whatsappNumber || '573212515944').replace(/[^0-9]/g, '');
+  const whatsappMsg = encodeURIComponent(
+    settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información'
+  );
+  const whatsappHeroUrl = `https://wa.me/${whatsappPhone}?text=${whatsappMsg}`;
+
   return (
     <div className="bg-white overflow-hidden">
       {/* 1. HERO COMPACTO Y ENFOCADO CON TEXTO MÁS GRANDE */}
@@ -83,34 +91,71 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-        className="relative overflow-hidden pt-5 pb-6 sm:pt-8 sm:pb-8 bg-white"
+        className="relative overflow-hidden pt-6 pb-8 sm:pt-10 sm:pb-12 bg-white"
       >
         {/* Glow de fondo suave */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4xl h-44 bg-gradient-to-r from-purple-400/15 via-[#8B5CF6]/15 to-pink-400/15 blur-3xl pointer-events-none -z-10" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          {/* Título Principal adaptado para móvil - Más grande para que resalte sobre todos los demás */}
+          {/* Título Principal adaptado para móvil con degradados en QR y en crecimiento */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08, ease: [0.25, 1, 0.5, 1] }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight mb-3"
+            className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight mb-3"
           >
-            Potencia tu presencia con{' '}
+            Tu negocio en un{' '}
             <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
-              ImpulsaNet
+              QR
             </span>
+            . Tus redes,{' '}
+            <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
+              en crecimiento
+            </span>
+            .
           </motion.h1>
 
-          {/* Subtítulo con tamaño ajustado para evitar palabras huérfanas */}
+          {/* Subtítulo adaptado */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16, ease: [0.25, 1, 0.5, 1] }}
             className="text-base sm:text-lg md:text-xl text-zinc-700 max-w-2xl mx-auto leading-relaxed font-normal"
           >
-            Digitaliza tu negocio con tarjetas interactivas y acelera tus redes sociales. Compra servicios directos o suscríbete para acceder a <span className="font-bold text-zinc-950">tarifas económicas mes&nbsp;a&nbsp;mes</span>.
+            Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.
           </motion.p>
+
+          {/* Tres botones de acción: columna en celular, fila en sm+ */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.24, ease: [0.25, 1, 0.5, 1] }}
+            className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-3.5 max-w-2xl mx-auto"
+          >
+            <button
+              onClick={() => onNavigate('/tarjetas')}
+              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <span>Ver tarjetas</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigate('/redes')}
+              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#5e29c8] border-2 border-purple-200 font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <TrendingUp className="w-4 h-4 text-[#5e29c8]" />
+              <span>Servicios para redes</span>
+            </button>
+            <a
+              href={whatsappHeroUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+            >
+              <MessageCircle className="w-5 h-5 fill-white text-[#25D366]" />
+              <span>Escribir por WhatsApp</span>
+            </a>
+          </motion.div>
         </div>
       </motion.section>
 
@@ -132,7 +177,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               ¿Cómo funciona ImpulsaNet?
             </h2>
             <p className="text-base sm:text-lg text-zinc-600 mt-1.5 leading-relaxed">
-              Flexibilidad total: compra cuando lo necesites o suscríbete para el máximo ahorro mensual.
+              3 pasos simples para potenciar tu negocio y tus redes de forma rápida y segura.
             </p>
           </div>
 
@@ -151,14 +196,14 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
                   <Layers className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Elige tu Solución</span>
+                  <span>Elige lo que necesitas</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   01
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Elige entre tarjetas digitales interactivas con código QR o paquetes de visibilidad para tus redes sociales favoritas.
+                Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.
               </p>
             </motion.div>
 
@@ -169,15 +214,15 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             >
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
-                  <BadgePercent className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Compra Directa o Suscríbete</span>
+                  <Share2 className="w-5 h-5 text-[#5e29c8] shrink-0" />
+                  <span>Nos envías tus datos</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   02
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Paga de forma individual o activa tu suscripción mensual para desbloquear precios con hasta el 50% de descuento en cada pedido.
+                Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi, transferencia o link de pago.
               </p>
             </motion.div>
 
@@ -188,15 +233,15 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             >
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Resultados y Crecimiento</span>
+                  <CheckCircle2 className="w-5 h-5 text-[#5e29c8] shrink-0" />
+                  <span>Lo recibes</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   03
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Tu tarjeta queda lista 100% online y tus servicios de redes se activan en minutos, con soporte directo vía WhatsApp.
+                Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas (normalmente en unos 30 minutos), con garantía de 30 días.
               </p>
             </motion.div>
           </motion.div>
@@ -227,12 +272,12 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.15 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto"
           >
-            {/* SOLUCIÓN 1: Tarjetas digitales interactivas */}
+            {/* SOLUCIÓN 1: Tarjetas digitales interactivas (DESTACADO) */}
             <motion.div
               variants={itemVariants}
-              className="rounded-2xl border-2 border-purple-200 bg-white p-6 sm:p-7 flex flex-col justify-between hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 group"
+              className="rounded-2xl border-2 border-[#8B5CF6] ring-2 ring-[#8B5CF6]/20 bg-white p-6 sm:p-7 flex flex-col justify-between hover:shadow-lg transition-all duration-200 group relative"
             >
               <div>
                 <div className="flex items-center justify-between mb-3.5">
@@ -248,15 +293,22 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Solución 01
                 </span>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 mb-2">
-                  Tarjetas Digitales Biolink
+                <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1">
+                  Tarjeta Digital con QR
                 </h3>
 
-                <p className="text-base sm:text-lg text-zinc-600 leading-relaxed mb-4">
-                  Perfiles interactivos con QR permanente, WhatsApp y redes sociales.
+                <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
+                  {(() => {
+                    const lowest = settings.cardsBasicPrice || settings.cardsPrice || '$79.000 COP';
+                    return /^desde/i.test(lowest.trim()) ? lowest : `desde ${lowest.startsWith('$') ? lowest : `$${lowest}`}`;
+                  })()}
                 </p>
 
-                <div className="space-y-3 mb-6 text-base sm:text-lg text-zinc-800">
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
+                  Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.
+                </p>
+
+                <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
                   <div className="flex items-center gap-2.5 font-medium">
                     <QrCode className="w-5 h-5 text-[#5e29c8] shrink-0" />
                     <span>Código QR de alta definición permanente</span>
@@ -274,10 +326,10 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
 
               <button
                 onClick={() => onNavigate('/tarjetas')}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-base sm:text-lg shadow-sm transition-all cursor-pointer active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-sm sm:text-base shadow-sm transition-all cursor-pointer active:scale-95"
               >
-                <span>Ver tarjetas y demo en vivo</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span>Ver tarjetas y demo</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
 
@@ -300,37 +352,107 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                   Solución 02
                 </span>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-zinc-950 mb-2">
+                <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1">
                   Servicios para Redes Sociales
                 </h3>
 
-                <p className="text-base sm:text-lg text-zinc-600 leading-relaxed mb-4">
+                <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
+                  {(() => {
+                    const val = settings.socialStartingPrice || '$5.000 COP';
+                    return /^desde/i.test(val.trim()) ? val : `desde ${val.startsWith('$') ? val : `$${val}`}`;
+                  })()}
+                </p>
+
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
                   Seguidores, likes y reproducciones para tus redes sin contraseñas.
                 </p>
 
-                <div className="space-y-3 mb-6 text-base sm:text-lg text-zinc-800">
+                <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
                   <div className="flex items-center gap-2.5 font-medium">
                     <Users className="w-5 h-5 text-[#5e29c8] shrink-0" />
                     <span>Instagram, TikTok, YouTube & Facebook</span>
                   </div>
                   <div className="flex items-center gap-2.5 font-medium">
                     <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
-                    <span>100% seguro (solo tu @usuario o link)</span>
+                    <span>Sin contraseñas, solo tu usuario o enlace</span>
                   </div>
                   <div className="flex items-center gap-2.5 font-medium">
                     <Zap className="w-5 h-5 text-amber-500 shrink-0" />
-                    <span>Entrega rápida con tarifas mayoristas</span>
+                    <span>Entrega habitual en 30 min · máx 4h</span>
                   </div>
                 </div>
               </div>
 
               <button
                 onClick={() => onNavigate('/redes')}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-base sm:text-lg shadow-sm transition-all cursor-pointer active:scale-95"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-sm sm:text-base shadow-sm transition-all cursor-pointer active:scale-95"
               >
                 <span>Ver catálogo de redes</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
+            </motion.div>
+
+            {/* SOLUCIÓN 3: Pack Negocio (Tarjeta Pro + 1.000 seguidores IG) */}
+            <motion.div
+              variants={itemVariants}
+              className="rounded-2xl border-2 border-purple-300 bg-gradient-to-b from-purple-50/50 to-white p-6 sm:p-7 flex flex-col justify-between hover:border-[#8B5CF6] hover:shadow-lg transition-all duration-200 group"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3.5">
+                  <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[#5e29c8] to-pink-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <Sparkles className="w-5 h-5 text-amber-300" />
+                  </div>
+                  <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-gradient-to-r from-[#5e29c8] to-pink-600 text-white shadow-2xs">
+                    Pack Negocio
+                  </span>
+                </div>
+
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#5e29c8] block mb-1">
+                  Solución 03
+                </span>
+
+                <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1 leading-snug">
+                  Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram
+                </h3>
+
+                <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
+                  {(() => {
+                    const val = settings.packNegocioPrice || '$80.000 COP';
+                    return val.startsWith('$') ? val : `$${val}`;
+                  })()}
+                </p>
+
+                <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
+                  El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.
+                </p>
+
+                <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
+                  <div className="flex items-center gap-2.5 font-medium">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>Tarjeta Pro con catálogo y QR</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 font-medium">
+                    <Users className="w-5 h-5 text-[#5e29c8] shrink-0" />
+                    <span>1.000 seguidores para Instagram</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 font-medium">
+                    <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <span>Garantía activa de 30 días</span>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
+                  'Hola, vi su web y quiero información del Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-sm sm:text-base shadow-sm transition-all cursor-pointer active:scale-95"
+              >
+                <MessageCircle className="w-4 h-4 text-[#25D366] fill-[#25D366]" />
+                <span>Pedir Pack Negocio</span>
+              </a>
             </motion.div>
           </motion.div>
         </div>

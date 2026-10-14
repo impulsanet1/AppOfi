@@ -252,7 +252,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
           <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 mt-0.5 sm:mt-0">
             <span className="text-xs sm:text-sm font-bold text-purple-900 bg-purple-50 px-3 py-1.5 rounded-lg border border-purple-200 flex items-center gap-1.5 shadow-2xs">
               <Zap className="w-4 h-4 fill-[#5e29c8] text-[#5e29c8]" />
-              <span>{settings.socialSectionSpeedTag || 'Inicio en 15-45 min'}</span>
+              <span>{settings.socialSectionSpeedTag || 'Entrega habitual en 30 minutos · máximo 4 horas'}</span>
             </span>
           </div>
         </div>
@@ -331,14 +331,6 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                       : 'border-purple-200 hover:border-[#8B5CF6]'
                   }`}
                 >
-                  {/* Badge superior estilo referencia sin recorte */}
-                  {isPopular && (
-                    <span className="absolute -top-3.5 right-4 z-10 px-3.5 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-[#5e29c8] text-white shadow-sm flex items-center gap-1.5 border border-white">
-                      <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
-                      <span>Más vendido</span>
-                    </span>
-                  )}
-
                   <div className="min-w-0">
                     {/* Header del Card: Avatar/Métrica visual + Etiqueta de plataforma */}
                     <div className="flex items-center justify-between mb-3 min-w-0">
@@ -378,7 +370,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                       </div>
                       <div className="flex items-center gap-2.5 min-w-0">
                         <Check className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                        <span className="font-semibold truncate">Entrega en 15-45 minutos</span>
+                        <span className="font-semibold truncate">Entrega habitual en 30 minutos · máximo 4 horas</span>
                       </div>
                       <div className="flex items-center gap-2.5 min-w-0">
                         <Check className="w-5 h-5 text-[#5e29c8] shrink-0" />
@@ -392,11 +384,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                     href={getWhatsAppUrl(pack)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-full py-3.5 sm:py-4 px-4 rounded-xl text-base sm:text-lg font-bold flex items-center justify-center gap-2.5 transition-all text-center cursor-pointer active:scale-95 shadow-sm ${
-                      isPopular
-                        ? 'bg-[#5e29c8] hover:bg-[#4f21ab] text-white'
-                        : 'bg-zinc-900 hover:bg-zinc-800 text-white'
-                    }`}
+                    className="w-full py-3.5 sm:py-4 px-4 rounded-xl text-base sm:text-lg font-bold flex items-center justify-center gap-2.5 transition-all text-center cursor-pointer active:scale-95 shadow-sm bg-[#5e29c8] hover:bg-[#4f21ab] text-white"
                   >
                     <MessageCircle className="w-5 h-5 shrink-0" />
                     <span className="truncate">Pedir por WhatsApp</span>
@@ -415,7 +403,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <strong className="text-base sm:text-lg text-zinc-950 block font-bold">100% Seguro</strong>
+                <strong className="text-base sm:text-lg text-zinc-950 block font-bold">Sin contraseñas</strong>
                 <span>Cero contraseñas requeridas</span>
               </div>
             </div>
@@ -424,8 +412,8 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                 <Zap className="w-5 h-5" />
               </div>
               <div>
-                <strong className="text-base sm:text-lg text-zinc-950 block font-bold">Inicio Rápido</strong>
-                <span>Entrega en 15-45 minutos</span>
+                <strong className="text-base sm:text-lg text-zinc-950 block font-bold">Entrega Ágil</strong>
+                <span>Entrega habitual en 30 minutos · máximo 4 horas</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
