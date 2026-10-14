@@ -211,7 +211,7 @@ export const DEFAULT_SETTINGS: AgencySettings = {
 
   // Plan 1: Estándar
   cardPlan1Badge: "Plan Estándar",
-  cardPlan1Title: "Tarjeta Virtual Estándar",
+  cardPlan1Title: "Tarjeta Básica",
   cardsBasicPrice: "$79.000 COP",
   cardPlan1Features: [
     "Tarjeta con tu logo y colores",

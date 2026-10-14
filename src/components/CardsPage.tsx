@@ -98,6 +98,14 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
   const plan1Features = cleanPlanFeatures(settings.cardPlan1Features, defaultPlan1Features);
   const plan2Features = cleanPlanFeatures(settings.cardPlan2Features, defaultPlan2Features);
 
+  const plan1Title = (!settings.cardPlan1Title || /tarjeta (digital|virtual) b[aá]sica/i.test(settings.cardPlan1Title.trim()))
+    ? 'Tarjeta Básica'
+    : settings.cardPlan1Title;
+
+  const plan2Title = (!settings.cardPlan2Title || /tarjeta virtual pro/i.test(settings.cardPlan2Title.trim()))
+    ? 'Tarjeta Pro'
+    : settings.cardPlan2Title;
+
   return (
     <div className="bg-white min-h-[70vh]">
       {/* Sub-Header con Barra de Navegación Clara */}
@@ -388,12 +396,12 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                   </span>
                 </div>
                 
-                <div className="mb-1.5 flex items-center">
+                <div className="mb-2 min-h-[3rem] flex items-center">
                   <h3
-                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight block w-full truncate"
-                    title={settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
+                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-snug block w-full break-words"
+                    title={plan1Title}
                   >
-                    {settings.cardPlan1Title || 'Tarjeta Virtual Básica'}
+                    {plan1Title}
                   </h3>
                 </div>
                 
@@ -413,7 +421,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
 
               <a
                 href={getWhatsAppOrderUrl(
-                  settings.cardPlan1Title || 'Tarjeta Virtual Básica',
+                  plan1Title,
                   settings.cardsBasicPrice || '$79.000 COP'
                 )}
                 target="_blank"
@@ -424,7 +432,7 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
               </a>
             </div>
 
-            {/* Plan 2: Tarjeta Virtual Pro / Comercial */}
+            {/* Plan 2: Tarjeta Pro */}
             <div className="bg-white p-4 sm:p-6 rounded-2xl border-2 border-purple-200 hover:border-[#8B5CF6] hover:shadow-md transition-all duration-200 flex flex-col justify-between shadow-xs relative">
               <span className="absolute -top-3.5 right-4 px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-[#5e29c8] text-white shadow-sm">
                 Más Completa
@@ -441,12 +449,12 @@ export const CardsPage: React.FC<CardsPageProps> = ({ settings, onNavigate }) =>
                   </span>
                 </div>
 
-                <div className="mb-1.5 flex items-center">
+                <div className="mb-2 min-h-[3rem] flex items-center">
                   <h3
-                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-tight block w-full truncate"
-                    title={settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
+                    className="text-xl sm:text-2xl font-black text-zinc-950 leading-snug block w-full break-words"
+                    title={plan2Title}
                   >
-                    {settings.cardPlan2Title || 'Tarjeta Virtual Pro'}
+                    {plan2Title}
                   </h3>
                 </div>
 

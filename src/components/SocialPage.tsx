@@ -281,12 +281,12 @@ export const SocialPage: React.FC<SocialPageProps> = ({
             })}
           </div>
 
-          {/* Filtro por Servicio: Seguidores por defecto, Likes, Vistas (Sin palabra 'TIPO') */}
+          {/* Filtro por Servicio: Seguidores por defecto, Me gusta, Vistas (Sin palabra 'TIPO') */}
           <div className="grid grid-cols-3 sm:flex items-center gap-1.5 w-full md:w-auto shrink-0 border-t md:border-t-0 pt-2 md:pt-0 border-zinc-200/60">
             {(
               [
                 { id: 'seguidores', label: 'Seguidores', icon: <Users className="w-3.5 h-3.5" /> },
-                { id: 'likes', label: 'Likes', icon: <Heart className="w-3.5 h-3.5 text-rose-500" /> },
+                { id: 'likes', label: 'Me gusta', icon: <Heart className="w-3.5 h-3.5 text-rose-500" /> },
                 { id: 'vistas', label: 'Vistas', icon: <Eye className="w-3.5 h-3.5 text-blue-500" /> },
               ] as const
             ).map((t) => (
@@ -337,7 +337,7 @@ export const SocialPage: React.FC<SocialPageProps> = ({
                       <div className="flex items-center gap-2 min-w-0">
                         {renderVisualMetric(pack)}
                         <span className="text-sm sm:text-base font-extrabold uppercase tracking-wider text-zinc-700 truncate">
-                          {pack.type}
+                          {pack.type === 'likes' ? 'Me gusta' : pack.type}
                         </span>
                       </div>
                       <span className="text-xs sm:text-sm uppercase font-mono font-bold text-zinc-700 bg-zinc-100 px-3 py-1 rounded-md shrink-0">

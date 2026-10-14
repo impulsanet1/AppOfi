@@ -139,7 +139,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
     // Plan 1: Básica
     cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
-    cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Estándar',
+    cardPlan1Title: (settings.cardPlan1Title && !/tarjeta (virtual|digital) (est[aá]ndar|b[aá]sica)/i.test(settings.cardPlan1Title.trim())) ? settings.cardPlan1Title : 'Tarjeta Básica',
     cardsBasicPrice: settings.cardsBasicPrice || '$79.000 COP',
     cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta',
     cardPlan1Features: (!settings.cardPlan1Features || settings.cardPlan1Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
@@ -229,7 +229,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
 
       cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
-      cardPlan1Title: settings.cardPlan1Title || 'Tarjeta Virtual Estándar',
+      cardPlan1Title: (settings.cardPlan1Title && !/tarjeta (virtual|digital) (est[aá]ndar|b[aá]sica)/i.test(settings.cardPlan1Title.trim())) ? settings.cardPlan1Title : 'Tarjeta Básica',
       cardsBasicPrice: settings.cardsBasicPrice || '$79.000 COP',
       cardPlan1ButtonText: settings.cardPlan1ButtonText || 'Pedir Tarjeta',
       cardPlan1Features: (!settings.cardPlan1Features || settings.cardPlan1Features.some(f => /^(item|feat|nueva)/i.test(f.trim()))) ? [
@@ -1612,7 +1612,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                 [
                                   { id: 'all', label: 'Todos' },
                                   { id: 'seguidores', label: 'Seguidores' },
-                                  { id: 'likes', label: 'Likes' },
+                                  { id: 'likes', label: 'Me gusta' },
                                   { id: 'vistas', label: 'Vistas' },
                                 ] as const
                               ).map((tf) => {
@@ -1671,7 +1671,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                   className="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 text-zinc-800 border border-zinc-200 uppercase cursor-pointer"
                                 >
                                   <option value="seguidores">Seguidores</option>
-                                  <option value="likes">Likes</option>
+                                  <option value="likes">Me gusta</option>
                                   <option value="vistas">Vistas</option>
                                 </select>
                                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-100 text-[#5e29c8] border border-purple-200">
@@ -2222,7 +2222,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white"
                   >
                     <option value="seguidores">Seguidores</option>
-                    <option value="likes">Likes</option>
+                    <option value="likes">Me gusta</option>
                     <option value="vistas">Vistas</option>
                   </select>
                 </div>

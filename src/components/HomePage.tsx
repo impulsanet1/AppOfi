@@ -106,13 +106,12 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
           >
             Tu negocio en un{' '}
             <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
-              QR
-            </span>
-            . Tus redes,{' '}
+              QR.
+            </span>{' '}
+            Tus redes,{' '}
             <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
-              en crecimiento
+              en crecimiento.
             </span>
-            .
           </motion.h1>
 
           {/* Subtítulo adaptado */}
@@ -311,7 +310,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
                   <div className="flex items-center gap-2.5 font-medium">
                     <QrCode className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                    <span>Código QR de alta definición permanente</span>
+                    <span>Código QR descargable en alta definición</span>
                   </div>
                   <div className="flex items-center gap-2.5 font-medium">
                     <Share2 className="w-5 h-5 text-[#5e29c8] shrink-0" />
