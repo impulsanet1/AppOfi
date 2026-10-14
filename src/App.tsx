@@ -25,6 +25,7 @@ import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
 import { PwaPrompt } from './components/PwaPrompt';
 import { ToastProvider, useToast } from './components/Toast';
+import { SeoMeta } from './components/SeoMeta';
 
 function MainApp() {
   const { showToast } = useToast();
@@ -406,6 +407,9 @@ function MainApp() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-950 flex flex-col font-sans selection:bg-[#5e29c8] selection:text-white">
+      {/* Componente dinámico de SEO alimentado de Firestore */}
+      <SeoMeta settings={settings} currentPath={currentPath} />
+
       {/* Encabezado Compartido de ImpulsaNet */}
       <Navbar
         settings={settings}

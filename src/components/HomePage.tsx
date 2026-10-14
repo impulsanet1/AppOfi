@@ -79,13 +79,17 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
   const displayedFaqs = settings.faqs && settings.faqs.length > 0 ? settings.faqs : faqs;
 
   const whatsappPhone = (settings.whatsappNumber || '573212515944').replace(/[^0-9]/g, '');
-  const whatsappMsg = encodeURIComponent(
-    settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información'
-  );
-  const whatsappHeroUrl = `https://wa.me/${whatsappPhone}?text=${whatsappMsg}`;
 
   return (
     <div className="bg-white overflow-hidden">
+      {/* Banner de Aviso Opcional Dinámico */}
+      {settings.bannerNotice && (
+        <aside aria-label="Aviso destacado" className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-[#ec4899] text-white py-2 px-4 text-center text-xs sm:text-sm font-bold shadow-2xs flex items-center justify-center gap-2">
+          <Sparkles className="w-3.5 h-3.5 shrink-0 text-amber-300" />
+          <span>{settings.bannerNotice}</span>
+        </aside>
+      )}
+
       {/* 1. HERO COMPACTO Y ENFOCADO CON TEXTO MÁS GRANDE */}
       <motion.section
         initial={{ opacity: 0, y: 24 }}
@@ -97,6 +101,19 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4xl h-44 bg-gradient-to-r from-purple-400/15 via-[#8B5CF6]/15 to-pink-400/15 blur-3xl pointer-events-none -z-10" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          {/* Badge superior opcional del hero */}
+          {settings.heroBadge && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-100 text-[#5e29c8] text-xs font-black uppercase tracking-wider mb-3 shadow-2xs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#5e29c8]" />
+              <span>{settings.heroBadge}</span>
+            </motion.div>
+          )}
+
           {/* Título Principal adaptado para móvil con degradados en QR y en crecimiento */}
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -104,14 +121,20 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             transition={{ duration: 0.55, delay: 0.08, ease: [0.25, 1, 0.5, 1] }}
             className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-950 leading-tight mb-3"
           >
-            Tu negocio en un{' '}
-            <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
-              QR.
-            </span>{' '}
-            Tus redes,{' '}
-            <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
-              en crecimiento.
-            </span>
+            {settings.heroTitle && settings.heroTitle !== 'Tu negocio en un QR. Tus redes, en crecimiento.' ? (
+              <span>{settings.heroTitle}</span>
+            ) : (
+              <>
+                Tu negocio en un{' '}
+                <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
+                  QR.
+                </span>{' '}
+                Tus redes,{' '}
+                <span className="bg-gradient-to-r from-[#5e29c8] via-[#8B5CF6] to-pink-600 bg-clip-text text-transparent">
+                  en crecimiento.
+                </span>
+              </>
+            )}
           </motion.h1>
 
           {/* Subtítulo adaptado */}
@@ -121,39 +144,31 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
             transition={{ duration: 0.55, delay: 0.16, ease: [0.25, 1, 0.5, 1] }}
             className="text-base sm:text-lg md:text-xl text-zinc-700 max-w-2xl mx-auto leading-relaxed font-normal"
           >
-            Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.
+            {settings.heroDescription ||
+              'Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.'}
           </motion.p>
 
-          {/* Tres botones de acción: columna en celular, fila en sm+ */}
+          {/* Dos botones de acción: columna en celular, fila en sm+ */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.24, ease: [0.25, 1, 0.5, 1] }}
-            className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-3.5 max-w-2xl mx-auto"
+            className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 max-w-xl mx-auto"
           >
             <button
               onClick={() => onNavigate('/tarjetas')}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
-              <span>Ver tarjetas</span>
+              <span>{settings.heroPrimaryBtnText || 'Ver tarjetas'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => onNavigate('/redes')}
-              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#5e29c8] border-2 border-purple-200 font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-[#5e29c8] border-2 border-purple-200 font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
               <TrendingUp className="w-4 h-4 text-[#5e29c8]" />
-              <span>Servicios para redes</span>
+              <span>{settings.heroSecondaryBtnText || 'Servicios para redes'}</span>
             </button>
-            <a
-              href={whatsappHeroUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-5 sm:px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
-            >
-              <MessageCircle className="w-5 h-5 fill-white text-[#25D366]" />
-              <span>Escribir por WhatsApp</span>
-            </a>
           </motion.div>
         </div>
       </motion.section>
@@ -173,7 +188,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               Paso a Paso
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-zinc-950 tracking-tight mt-2">
-              ¿Cómo funciona ImpulsaNet?
+              ¿Cómo funciona {settings.agencyName || 'ImpulsaNet'}?
             </h2>
             <p className="text-base sm:text-lg text-zinc-600 mt-1.5 leading-relaxed">
               3 pasos simples para potenciar tu negocio y tus redes de forma rápida y segura.
@@ -195,14 +210,15 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
                   <Layers className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Elige lo que necesitas</span>
+                  <span>{settings.step1Title || 'Elige lo que necesitas'}</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   01
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.
+                {settings.step1Description ||
+                  'Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.'}
               </p>
             </motion.div>
 
@@ -214,14 +230,15 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
                   <Share2 className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Nos envías tus datos</span>
+                  <span>{settings.step2Title || 'Nos envías tus datos'}</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   02
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi, transferencia o link de pago.
+                {settings.step2Description ||
+                  'Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi, transferencia o link de pago.'}
               </p>
             </motion.div>
 
@@ -233,14 +250,15 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
               <div className="flex items-start justify-between gap-3 mb-2.5">
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-[#5e29c8] shrink-0" />
-                  <span>Lo recibes</span>
+                  <span>{settings.step3Title || 'Lo recibes'}</span>
                 </h3>
                 <span className="shrink-0 w-9 h-9 rounded-lg bg-purple-100 text-[#5e29c8] font-black text-sm flex items-center justify-center">
                   03
                 </span>
               </div>
               <p className="text-base sm:text-lg text-zinc-700 leading-relaxed">
-                Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas (normalmente en unos 30 minutos), con garantía de 30 días.
+                {settings.step3Description ||
+                  'Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas (normalmente en unos 30 minutos), con garantía de 30 días.'}
               </p>
             </motion.div>
           </motion.div>
@@ -259,10 +277,10 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-6">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-zinc-950 tracking-tight">
-              Nuestras Soluciones Principales
+              {settings.solutionsSectionTitle || 'Nuestras Soluciones Principales'}
             </h2>
             <p className="text-base sm:text-lg text-zinc-600 mt-1.5 leading-relaxed">
-              Explora las demostraciones y los catálogos con precios claros en pesos colombianos.
+              {settings.solutionsSectionSubtitle || 'Explora las demostraciones y los catálogos con precios claros en pesos colombianos.'}
             </p>
           </div>
 
@@ -284,7 +302,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
-                    Destacado
+                    {settings.solution1Badge || 'Destacado'}
                   </span>
                 </div>
 
@@ -293,7 +311,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </span>
 
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1">
-                  Tarjeta Digital con QR
+                  {settings.solution1Title || 'Tarjeta Digital con QR'}
                 </h3>
 
                 <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
@@ -304,7 +322,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </p>
 
                 <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
-                  Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.
+                  {settings.solution1Description || 'Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.'}
                 </p>
 
                 <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
@@ -343,7 +361,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
-                    Crecimiento
+                    {settings.solution2Badge || 'Crecimiento'}
                   </span>
                 </div>
 
@@ -352,7 +370,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </span>
 
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1">
-                  Servicios para Redes Sociales
+                  {settings.solution2Title || 'Servicios para Redes Sociales'}
                 </h3>
 
                 <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
@@ -363,7 +381,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </p>
 
                 <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
-                  Seguidores, likes y reproducciones para tus redes sin contraseñas.
+                  {settings.solution2Description || 'Seguidores, likes y reproducciones para tus redes sin contraseñas.'}
                 </p>
 
                 <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">
@@ -402,7 +420,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                     <Sparkles className="w-5 h-5 text-amber-300" />
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider bg-gradient-to-r from-[#5e29c8] to-pink-600 text-white shadow-2xs">
-                    Pack Negocio
+                    {settings.solution3Badge || 'Pack Negocio'}
                   </span>
                 </div>
 
@@ -411,7 +429,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </span>
 
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-950 mb-1 leading-snug">
-                  Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram
+                  {settings.solution3Title || 'Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram'}
                 </h3>
 
                 <p className="text-sm sm:text-base font-extrabold text-[#5e29c8] mb-3">
@@ -422,7 +440,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
                 </p>
 
                 <p className="text-sm sm:text-base text-zinc-600 leading-relaxed mb-4">
-                  El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.
+                  {settings.solution3Description || 'El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.'}
                 </p>
 
                 <div className="space-y-2.5 mb-6 text-sm sm:text-base text-zinc-800">

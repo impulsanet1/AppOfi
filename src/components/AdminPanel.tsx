@@ -19,6 +19,16 @@ import {
   HelpCircle,
   AlertCircle,
   Sparkles,
+  Globe,
+  Search,
+  ExternalLink,
+  Eye,
+  Activity,
+  Layout,
+  Share2,
+  MapPin,
+  AtSign,
+  Layers,
 } from 'lucide-react';
 import {
   AgencySettings,
@@ -50,7 +60,7 @@ interface AdminPanelProps {
   onLogout: () => void;
 }
 
-type AdminSection = 'cards' | 'social' | 'faqs' | 'whatsapp' | 'security';
+type AdminSection = 'brand' | 'cards' | 'social' | 'solutions' | 'seo' | 'faqs' | 'whatsapp' | 'security';
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
   isOpen,
@@ -66,17 +76,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 }) => {
   const { showToast } = useToast();
 
-  const [activeSection, setActiveSection] = useState<AdminSection>('cards');
+  const [activeSection, setActiveSection] = useState<AdminSection>('brand');
   const [clientIp, setClientIp] = useState<string>('Detectando...');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Acordeón para desplegar / contraer secciones dentro de cada módulo
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    'brand-identity': true,
+    'brand-hero': true,
+    'brand-steps': false,
     'cards-header': true,
     'cards-plans': false,
     'cards-demo': false,
     'social-header': false,
     'social-packs': true,
+    'contact-wa': true,
+    'contact-social': true,
     'whatsapp-config': true,
     'security-status': true,
   });
@@ -136,6 +151,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     cardsDeliveryTag: settings.cardsDeliveryTag || '● Entrega en 24 horas',
     cardsStartingPrice: settings.cardsStartingPrice || '$79.000 COP',
     packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
+    solution1Title: settings.solution1Title || 'Tarjeta Digital con QR',
 
     // Plan 1: Básica
     cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
@@ -180,11 +196,40 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
     socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Entrega habitual en 30 minutos · máximo 4 horas',
     socialStartingPrice: settings.socialStartingPrice || '$5.000 COP',
+    solution2Title: settings.solution2Title || 'Servicios para Redes Sociales',
   });
+
+  // ==========================================
+  // ESTADOS DE SOLUCIONES PRINCIPALES (INICIO)
+  // ==========================================
+  const [solutionsForm, setSolutionsForm] = useState({
+    solutionsSectionTitle: settings.solutionsSectionTitle || 'Nuestras Soluciones Principales',
+    solutionsSectionSubtitle: settings.solutionsSectionSubtitle || 'Explora las demostraciones y los catálogos con precios claros en pesos colombianos.',
+    solution1Title: settings.solution1Title || 'Tarjeta Digital con QR',
+    solution1Badge: settings.solution1Badge || 'Destacado',
+    solution1Description: settings.solution1Description || 'Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.',
+    solution2Title: settings.solution2Title || 'Servicios para Redes Sociales',
+    solution2Badge: settings.solution2Badge || 'Crecimiento',
+    solution2Description: settings.solution2Description || 'Seguidores, likes y reproducciones para tus redes sin contraseñas.',
+    solution3Title: settings.solution3Title || 'Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram',
+    solution3Badge: settings.solution3Badge || 'Pack Negocio',
+    solution3Description: settings.solution3Description || 'El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.',
+    packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
+  });
+  const [savingSolutions, setSavingSolutions] = useState(false);
+
+  // 5. Configuración SEO Dinámica
+  const [seoForm, setSeoForm] = useState({
+    seoBusinessName: settings.seoBusinessName || 'ImpulsaNet - Agencia Digital & Tarjetas Interactivas',
+    seoDescription: settings.seoDescription || 'Agencia de servicios digitales en Colombia. Tarjetas interactivas con QR de pago único y servicios de crecimiento para redes sociales con entrega rápida.',
+    seoKeywords: settings.seoKeywords || 'tarjetas digitales con QR Colombia, comprar seguidores instagram colombia, tarjetas interactivas nfc, servicios para redes sociales, impulsanet',
+  });
+  const [savingSeo, setSavingSeo] = useState(false);
 
   const [servicesList, setServicesList] = useState<SocialServicePack[]>(services);
   const [selectedPlatform, setSelectedPlatform] = useState<SocialPlatform>('instagram');
   const [adminTypeFilter, setAdminTypeFilter] = useState<'all' | 'seguidores' | 'likes' | 'vistas'>('all');
+  const [adminSearchQuery, setAdminSearchQuery] = useState('');
 
   // Modal para agregar paquete de redes
   const [showAddPackModal, setShowAddPackModal] = useState(false);
@@ -210,13 +255,40 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     feature3: 'Garantía activa de reposición',
   });
 
-  // Configuración WhatsApp
-  const [whatsappForm, setWhatsappForm] = useState({
+  // 1. Configuración Inicio & Marca
+  const [brandForm, setBrandForm] = useState({
+    agencyName: settings.agencyName || 'ImpulsaNet',
+    tagline: settings.tagline || 'Tarjetas Virtuales & Crecimiento en Redes Sociales',
+    logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
+    heroTitle: settings.heroTitle || 'Tu negocio en un QR. Tus redes, en crecimiento.',
+    heroDescription: settings.heroDescription || 'Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.',
+    heroBadge: settings.heroBadge || 'Agencia Digital Colombia · Pagos Seguros',
+    heroPrimaryBtnText: settings.heroPrimaryBtnText || 'Ver tarjetas',
+    heroSecondaryBtnText: settings.heroSecondaryBtnText || 'Servicios para redes',
+    bannerNotice: settings.bannerNotice || '⚡ Entregas el mismo día en Colombia · Pagos con Nequi, Daviplata y Bancolombia',
+    step1Title: settings.step1Title || 'Elige lo que necesitas',
+    step1Description: settings.step1Description || 'Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.',
+    step2Title: settings.step2Title || 'Nos envías tus datos',
+    step2Description: settings.step2Description || 'Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi o transferencia.',
+    step3Title: settings.step3Title || 'Lo recibes',
+    step3Description: settings.step3Description || 'Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas con garantía de 30 días.',
+  });
+  const [savingBrand, setSavingBrand] = useState(false);
+
+  // Configuración Contacto & Canales Oficiales
+  const [contactForm, setContactForm] = useState({
     agencyName: settings.agencyName || 'ImpulsaNet',
     whatsappNumber: settings.whatsappNumber || '573212515944',
     whatsappDefaultMessage: settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información',
+    contactEmail: settings.contactEmail || 'contacto@impulsanet.digital',
+    contactLocation: settings.contactLocation || 'Colombia · Envíos digitales a todo el país',
     logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
+    instagram: settings.socialLinks?.instagram || 'https://instagram.com/impulsanet.digital',
+    tiktok: settings.socialLinks?.tiktok || 'https://tiktok.com/@impulsanet.digital',
+    youtube: settings.socialLinks?.youtube || 'https://youtube.com/@impulsanet',
+    facebook: settings.socialLinks?.facebook || 'https://facebook.com/impulsanet',
   });
+  const [savingContact, setSavingContact] = useState(false);
 
   // Sincronizar datos al cambiar settings
   useEffect(() => {
@@ -227,6 +299,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       cardsDeliveryTag: settings.cardsDeliveryTag || '● Entrega en 24 horas',
       cardsStartingPrice: settings.cardsStartingPrice || '$79.000 COP',
       packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
+      solution1Title: settings.solution1Title || 'Tarjeta Digital con QR',
 
       cardPlan1Badge: settings.cardPlan1Badge || 'Plan Estándar',
       cardPlan1Title: (settings.cardPlan1Title && !/tarjeta (virtual|digital) (est[aá]ndar|b[aá]sica)/i.test(settings.cardPlan1Title.trim())) ? settings.cardPlan1Title : 'Tarjeta Básica',
@@ -263,13 +336,59 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       socialSectionSubtitle: settings.socialSectionSubtitle || 'Impulsa tus métricas, credibilidad y alcance algorítmico sin compartir contraseñas.',
       socialSectionSpeedTag: settings.socialSectionSpeedTag || 'Entrega habitual en 30 minutos · máximo 4 horas',
       socialStartingPrice: settings.socialStartingPrice || '$5.000 COP',
+      solution2Title: settings.solution2Title || 'Servicios para Redes Sociales',
     });
 
-    setWhatsappForm({
+    setSolutionsForm({
+      solutionsSectionTitle: settings.solutionsSectionTitle || 'Nuestras Soluciones Principales',
+      solutionsSectionSubtitle: settings.solutionsSectionSubtitle || 'Explora las demostraciones y los catálogos con precios claros en pesos colombianos.',
+      solution1Title: settings.solution1Title || 'Tarjeta Digital con QR',
+      solution1Badge: settings.solution1Badge || 'Destacado',
+      solution1Description: settings.solution1Description || 'Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.',
+      solution2Title: settings.solution2Title || 'Servicios para Redes Sociales',
+      solution2Badge: settings.solution2Badge || 'Crecimiento',
+      solution2Description: settings.solution2Description || 'Seguidores, likes y reproducciones para tus redes sin contraseñas.',
+      solution3Title: settings.solution3Title || 'Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram',
+      solution3Badge: settings.solution3Badge || 'Pack Negocio',
+      solution3Description: settings.solution3Description || 'El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.',
+      packNegocioPrice: (settings.packNegocioPrice && settings.packNegocioPrice !== '$139.000 COP') ? settings.packNegocioPrice : '$80.000 COP',
+    });
+
+    setBrandForm({
+      agencyName: settings.agencyName || 'ImpulsaNet',
+      tagline: settings.tagline || 'Tarjetas Virtuales & Crecimiento en Redes Sociales',
+      logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
+      heroTitle: settings.heroTitle || 'Tu negocio en un QR. Tus redes, en crecimiento.',
+      heroDescription: settings.heroDescription || 'Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.',
+      heroBadge: settings.heroBadge || 'Agencia Digital Colombia · Pagos Seguros',
+      heroPrimaryBtnText: settings.heroPrimaryBtnText || 'Ver tarjetas',
+      heroSecondaryBtnText: settings.heroSecondaryBtnText || 'Servicios para redes',
+      bannerNotice: settings.bannerNotice || '⚡ Entregas el mismo día en Colombia · Pagos con Nequi, Daviplata y Bancolombia',
+      step1Title: settings.step1Title || 'Elige lo que necesitas',
+      step1Description: settings.step1Description || 'Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.',
+      step2Title: settings.step2Title || 'Nos envías tus datos',
+      step2Description: settings.step2Description || 'Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi o transferencia.',
+      step3Title: settings.step3Title || 'Lo recibes',
+      step3Description: settings.step3Description || 'Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas con garantía de 30 días.',
+    });
+
+    setContactForm({
       agencyName: settings.agencyName || 'ImpulsaNet',
       whatsappNumber: settings.whatsappNumber || '573212515944',
       whatsappDefaultMessage: settings.whatsappDefaultMessage || 'Hola, vi su web y quiero información',
+      contactEmail: settings.contactEmail || 'contacto@impulsanet.digital',
+      contactLocation: settings.contactLocation || 'Colombia · Envíos digitales a todo el país',
       logoUrl: settings.logoUrl || 'https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png',
+      instagram: settings.socialLinks?.instagram || 'https://instagram.com/impulsanet.digital',
+      tiktok: settings.socialLinks?.tiktok || 'https://tiktok.com/@impulsanet.digital',
+      youtube: settings.socialLinks?.youtube || 'https://youtube.com/@impulsanet',
+      facebook: settings.socialLinks?.facebook || 'https://facebook.com/impulsanet',
+    });
+
+    setSeoForm({
+      seoBusinessName: settings.seoBusinessName || 'ImpulsaNet - Agencia Digital & Tarjetas Interactivas',
+      seoDescription: settings.seoDescription || 'Agencia de servicios digitales en Colombia. Tarjetas interactivas con QR de pago único y servicios de crecimiento para redes sociales con entrega rápida.',
+      seoKeywords: settings.seoKeywords || 'tarjetas digitales con QR Colombia, comprar seguidores instagram colombia, tarjetas interactivas nfc, servicios para redes sociales, impulsanet',
     });
 
     if (settings.faqs && Array.isArray(settings.faqs) && settings.faqs.length > 0) {
@@ -412,6 +531,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         cardsPrice: cardsForm.cardsBasicPrice,
         cardsStartingPrice: cardsForm.cardsStartingPrice,
         packNegocioPrice: cardsForm.packNegocioPrice,
+        solution1Title: cardsForm.solution1Title || undefined,
         cardPlan1Badge: cardsForm.cardPlan1Badge,
         cardPlan1Title: cardsForm.cardPlan1Title,
         cardsBasicPrice: cardsForm.cardsBasicPrice,
@@ -447,6 +567,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         cardsDeliveryTag: cardsForm.cardsDeliveryTag,
         cardsStartingPrice: cardsForm.cardsStartingPrice,
         packNegocioPrice: cardsForm.packNegocioPrice,
+        solution1Title: cardsForm.solution1Title || undefined,
       });
       showToast('success', 'Encabezado de Tarjetas Guardado', 'Título, subtítulo y precios actualizados.');
     } catch (err) {
@@ -567,12 +688,64 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         socialSectionSubtitle: socialHeadersForm.socialSectionSubtitle,
         socialSectionSpeedTag: socialHeadersForm.socialSectionSpeedTag,
         socialStartingPrice: socialHeadersForm.socialStartingPrice,
+        solution2Title: socialHeadersForm.solution2Title || undefined,
       });
       showToast('success', 'Encabezado de Redes Guardado', 'Título y subtítulo actualizados en la web.');
     } catch (err) {
       showToast('error', 'Error al guardar encabezados', String(err));
     } finally {
       setSavingSocialHeaders(false);
+    }
+  };
+
+  // ==========================================
+  // GUARDAR: SOLUCIONES PRINCIPALES (INICIO)
+  // ==========================================
+  const handleSaveSolutions = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setSavingSolutions(true);
+    try {
+      await onSaveSettings({
+        solutionsSectionTitle: solutionsForm.solutionsSectionTitle,
+        solutionsSectionSubtitle: solutionsForm.solutionsSectionSubtitle,
+        solution1Title: solutionsForm.solution1Title,
+        solution1Badge: solutionsForm.solution1Badge,
+        solution1Description: solutionsForm.solution1Description,
+        solution2Title: solutionsForm.solution2Title,
+        solution2Badge: solutionsForm.solution2Badge,
+        solution2Description: solutionsForm.solution2Description,
+        solution3Title: solutionsForm.solution3Title,
+        solution3Badge: solutionsForm.solution3Badge,
+        solution3Description: solutionsForm.solution3Description,
+        packNegocioPrice: solutionsForm.packNegocioPrice,
+      });
+      showToast('success', 'Soluciones Actualizadas', 'Los títulos y contenidos de todas las soluciones se guardaron correctamente.');
+    } catch (err) {
+      console.error(err);
+      showToast('error', 'Error al Guardar', 'No se pudieron guardar las soluciones.');
+    } finally {
+      setSavingSolutions(false);
+    }
+  };
+
+  // ==========================================
+  // GUARDAR: SEO & METADATOS DINÁMICOS
+  // ==========================================
+  const handleSaveSeo = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setSavingSeo(true);
+    try {
+      await onSaveSettings({
+        seoBusinessName: seoForm.seoBusinessName,
+        seoDescription: seoForm.seoDescription,
+        seoKeywords: seoForm.seoKeywords,
+      });
+      showToast('success', 'SEO Actualizado', 'Las etiquetas meta dinámicas y datos estructurados se sincronizaron con éxito.');
+    } catch (err) {
+      console.error(err);
+      showToast('error', 'Error al Guardar SEO', 'No se pudieron guardar las configuraciones de SEO.');
+    } finally {
+      setSavingSeo(false);
     }
   };
 
@@ -701,16 +874,64 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   };
 
-  // WhatsApp Save
+  // ==========================================
+  // 1. GUARDAR: INICIO & MARCA (HERO, PASOS, BANNER)
+  // ==========================================
+  const handleSaveBrand = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setSavingBrand(true);
+    try {
+      await onSaveSettings({
+        agencyName: brandForm.agencyName.trim(),
+        tagline: brandForm.tagline.trim(),
+        logoUrl: brandForm.logoUrl.trim(),
+        heroTitle: brandForm.heroTitle.trim(),
+        heroDescription: brandForm.heroDescription.trim(),
+        heroBadge: brandForm.heroBadge.trim(),
+        heroPrimaryBtnText: brandForm.heroPrimaryBtnText.trim(),
+        heroSecondaryBtnText: brandForm.heroSecondaryBtnText.trim(),
+        bannerNotice: brandForm.bannerNotice.trim(),
+        step1Title: brandForm.step1Title.trim(),
+        step1Description: brandForm.step1Description.trim(),
+        step2Title: brandForm.step2Title.trim(),
+        step2Description: brandForm.step2Description.trim(),
+        step3Title: brandForm.step3Title.trim(),
+        step3Description: brandForm.step3Description.trim(),
+      });
+      showToast('success', 'Inicio & Marca Guardados', 'Los textos del Hero, pasos explicativos y banner se actualizaron en vivo.');
+    } catch (err) {
+      console.error(err);
+      showToast('error', 'Error al Guardar Inicio', String(err));
+    } finally {
+      setSavingBrand(false);
+    }
+  };
+
+  // ==========================================
+  // 6. GUARDAR: CONTACTO, WHATSAPP & REDES SOCIALES
+  // ==========================================
   const [savingWhatsapp, setSavingWhatsapp] = useState(false);
-  const handleSaveWhatsapp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveWhatsapp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setSavingWhatsapp(true);
     try {
-      await onSaveSettings(whatsappForm);
-      showToast('success', 'Datos de WhatsApp Guardados');
+      await onSaveSettings({
+        agencyName: contactForm.agencyName.trim(),
+        whatsappNumber: contactForm.whatsappNumber.replace(/[^0-9]/g, ''),
+        whatsappDefaultMessage: contactForm.whatsappDefaultMessage.trim(),
+        logoUrl: contactForm.logoUrl.trim(),
+        contactEmail: contactForm.contactEmail.trim(),
+        contactLocation: contactForm.contactLocation.trim(),
+        socialLinks: {
+          instagram: contactForm.instagram.trim(),
+          tiktok: contactForm.tiktok.trim(),
+          youtube: contactForm.youtube.trim(),
+          facebook: contactForm.facebook.trim(),
+        },
+      });
+      showToast('success', 'Canales Guardados', 'WhatsApp, redes sociales y datos de contacto actualizados correctamente.');
     } catch (err) {
-      showToast('error', 'Error al guardar WhatsApp', String(err));
+      showToast('error', 'Error al guardar canales', String(err));
     } finally {
       setSavingWhatsapp(false);
     }
@@ -728,41 +949,62 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-zinc-950/80 backdrop-blur-md animate-in fade-in">
       <div className="bg-white border border-zinc-200 rounded-3xl max-w-5xl w-full h-[94vh] flex flex-col shadow-2xl overflow-hidden">
-        {/* Barra Superior */}
-        <div className="px-5 py-3.5 border-b border-zinc-200 flex items-center justify-between bg-zinc-50 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <img
-              src={settings.logoUrl || "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png"}
-              alt="ImpulsaNet Logo"
-              className="w-8 h-8 object-contain rounded-xl shadow-xs border border-zinc-200 bg-white p-0.5"
-            />
+        {/* Barra Superior Profesional con Indicadores en Vivo */}
+        <div className="px-4 sm:px-6 py-3 border-b border-zinc-200/90 flex items-center justify-between bg-gradient-to-r from-zinc-50 via-white to-zinc-50 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <img
+                src={settings.logoUrl || "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png"}
+                alt="ImpulsaNet Logo"
+                className="w-9 h-9 object-contain rounded-xl shadow-xs border border-purple-200 bg-white p-0.5"
+              />
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
+              </span>
+            </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-black text-zinc-950">Centro de Edición de Sistema ImpulsaNet</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
-                  En Vivo
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm sm:text-base font-black text-zinc-950 tracking-tight">Centro de Control ImpulsaNet</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  Firestore Sincronizado
                 </span>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono">
-                IP: {clientIp}
-              </span>
+              <div className="flex items-center gap-2 text-[11px] text-zinc-500">
+                <span className="font-mono text-zinc-600">IP: {clientIp}</span>
+                <span>•</span>
+                <span className="text-[#5e29c8] font-bold">Modo Administrador Propietario</span>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             {isLoggedIn && (
-              <button
-                onClick={onLogout}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-600 hover:text-rose-600 hover:bg-rose-50 flex items-center gap-1 cursor-pointer transition-colors"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-                <span>Salir</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition-colors cursor-pointer border border-zinc-200"
+                  title="Ver tienda en vivo"
+                >
+                  <Eye className="w-3.5 h-3.5 text-[#5e29c8]" />
+                  <span>Ver Tienda</span>
+                </button>
+                <button
+                  onClick={onLogout}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 flex items-center gap-1 cursor-pointer transition-all"
+                  title="Cerrar Sesión Administrativa"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Salir</span>
+                </button>
+              </>
             )}
 
             <button
               onClick={onClose}
-              className="p-1.5 text-zinc-400 hover:text-zinc-700 rounded-lg hover:bg-zinc-200 cursor-pointer"
+              className="p-1.5 text-zinc-400 hover:text-zinc-700 rounded-xl hover:bg-zinc-200/80 cursor-pointer transition-colors"
               title="Cerrar Panel"
             >
               <X className="w-5 h-5" />
@@ -833,69 +1075,173 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           ) : (
             /* Panel Estructurado */
             <>
-              {/* Barra de Navegación Lateral */}
-              <aside className="w-full md:w-64 bg-zinc-50 border-r border-zinc-200 p-3 shrink-0 flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-y-auto">
+              {/* Barra de Navegación Lateral Moderna con Insignias */}
+              <aside className="w-full md:w-64 bg-zinc-50/90 border-r border-zinc-200 p-2.5 sm:p-3 shrink-0 flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-y-auto no-scrollbar">
+                <div className="hidden md:block px-2.5 py-1 text-[10px] font-black uppercase text-zinc-400 tracking-wider">
+                  Módulos de Gestión
+                </div>
+
                 <button
-                  onClick={() => setActiveSection('cards')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
-                    activeSection === 'cards'
-                      ? 'bg-[#5e29c8] text-white shadow-xs'
-                      : 'text-zinc-700 hover:bg-zinc-200/70'
+                  onClick={() => setActiveSection('brand')}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                    activeSection === 'brand'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
                   }`}
                 >
-                  <CreditCard className="w-4 h-4 shrink-0" />
-                  <span>1. Tarjetas Virtuales</span>
+                  <div className="flex items-center gap-2.5">
+                    <Layout className="w-4 h-4 shrink-0 text-amber-400" />
+                    <span>1. Inicio & Marca</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'brand' ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-800'
+                  }`}>
+                    Hero & Pasos
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveSection('cards')}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                    activeSection === 'cards'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <CreditCard className="w-4 h-4 shrink-0" />
+                    <span>2. Tarjetas Virtuales</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'cards' ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700'
+                  }`}>
+                    2 planes
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveSection('social')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
                     activeSection === 'social'
-                      ? 'bg-[#5e29c8] text-white shadow-xs'
-                      : 'text-zinc-700 hover:bg-zinc-200/70'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
                   }`}
                 >
-                  <TrendingUp className="w-4 h-4 shrink-0" />
-                  <span>2. Redes Sociales (Packs)</span>
+                  <div className="flex items-center gap-2.5">
+                    <TrendingUp className="w-4 h-4 shrink-0 text-pink-400" />
+                    <span>3. Redes Sociales</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'social' ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700'
+                  }`}>
+                    {servicesList.length} packs
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveSection('solutions')}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                    activeSection === 'solutions'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Sparkles className="w-4 h-4 shrink-0 text-amber-300" />
+                    <span>4. Soluciones Inicio</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'solutions' ? 'bg-white/20 text-white' : 'bg-purple-100 text-[#5e29c8]'
+                  }`}>
+                    3 tarjetas
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveSection('seo')}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                    activeSection === 'seo'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Globe className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>5. SEO & Metadatos</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'seo' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    Google
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveSection('faqs')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
                     activeSection === 'faqs'
-                      ? 'bg-[#5e29c8] text-white shadow-xs'
-                      : 'text-zinc-700 hover:bg-zinc-200/70'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
                   }`}
                 >
-                  <HelpCircle className="w-4 h-4 shrink-0" />
-                  <span>3. Preguntas Frecuentes</span>
+                  <div className="flex items-center gap-2.5">
+                    <HelpCircle className="w-4 h-4 shrink-0" />
+                    <span>6. Preguntas Frecuentes</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'faqs' ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700'
+                  }`}>
+                    {faqsForm.length} FAQs
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveSection('whatsapp')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
                     activeSection === 'whatsapp'
-                      ? 'bg-[#5e29c8] text-white shadow-xs'
-                      : 'text-zinc-700 hover:bg-zinc-200/70'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
                   }`}
                 >
-                  <MessageCircle className="w-4 h-4 shrink-0" />
-                  <span>4. WhatsApp & Contacto</span>
+                  <div className="flex items-center gap-2.5">
+                    <MessageCircle className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>7. Contacto & Redes</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'whatsapp' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    WA & Redes
+                  </span>
                 </button>
 
                 <button
                   onClick={() => setActiveSection('security')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer shrink-0 ${
                     activeSection === 'security'
-                      ? 'bg-[#5e29c8] text-white shadow-xs'
-                      : 'text-zinc-700 hover:bg-zinc-200/70'
+                      ? 'bg-[#5e29c8] text-white shadow-md shadow-[#5e29c8]/25 ring-1 ring-white/20'
+                      : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950'
                   }`}
                 >
-                  <ShieldCheck className="w-4 h-4 shrink-0" />
-                  <span>5. Seguridad & Acceso</span>
+                  <div className="flex items-center gap-2.5">
+                    <ShieldCheck className="w-4 h-4 shrink-0 text-blue-400" />
+                    <span>8. Seguridad & Acceso</span>
+                  </div>
+                  <span className={`hidden md:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                    activeSection === 'security' ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    Protegido
+                  </span>
                 </button>
 
-                <div className="pt-4 mt-auto border-t border-zinc-200 hidden md:block">
+                <div className="pt-4 mt-auto border-t border-zinc-200/80 hidden md:block space-y-2">
+                  <div className="p-2.5 rounded-xl bg-purple-50/80 border border-purple-100 text-[11px] text-zinc-600">
+                    <div className="font-bold text-[#5e29c8] flex items-center gap-1.5 mb-0.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Sincronización Total</span>
+                    </div>
+                    <span>Cualquier cambio se aplica en vivo en Firestore y en la web al instante.</span>
+                  </div>
+
                   <button
                     onClick={handleReset}
                     className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[11px] font-semibold text-zinc-500 hover:text-zinc-800 hover:bg-zinc-200/60 transition-all cursor-pointer"
@@ -906,10 +1252,404 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </aside>
 
-              {/* Área Principal */}
-              <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-white">
+              {/* Área Principal con Barra Resumen */}
+              <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 bg-white space-y-5">
+                {/* Resumen Métricas Rápidas */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 p-3 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+                  <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-zinc-200/60 shadow-2xs">
+                    <div className="w-8 h-8 rounded-lg bg-purple-100 text-[#5e29c8] flex items-center justify-center shrink-0">
+                      <CreditCard className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase block truncate">Tarjetas</span>
+                      <span className="text-xs font-black text-zinc-900">2 Planes</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-zinc-200/60 shadow-2xs">
+                    <div className="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center shrink-0">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase block truncate">Redes Sociales</span>
+                      <span className="text-xs font-black text-zinc-900">{servicesList.length} Packs Activos</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-zinc-200/60 shadow-2xs">
+                    <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase block truncate">Soluciones</span>
+                      <span className="text-xs font-black text-zinc-900">3 Editables</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-zinc-200/60 shadow-2xs">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                      <Globe className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase block truncate">SEO & Meta</span>
+                      <span className="text-xs font-black text-zinc-900">Indexado</span>
+                    </div>
+                  </div>
+                </div>
                 {/* ======================================================== */}
-                {/* 1. EDITOR COMPLETO: TARJETAS VIRTUALES CON CÓDIGO QR   */}
+                {/* 1. EDITOR: INICIO & IDENTIDAD DE MARCA                   */}
+                {/* ======================================================== */}
+                {activeSection === 'brand' && (
+                  <form onSubmit={handleSaveBrand} className="space-y-6 max-w-4xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
+                      <div>
+                        <h4 className="text-base font-black text-zinc-950 flex items-center gap-2">
+                          <Layout className="w-5 h-5 text-amber-500" />
+                          <span>Editor de "Inicio & Identidad de Marca"</span>
+                        </h4>
+                        <p className="text-xs text-zinc-500">
+                          Personaliza el nombre de tu agencia, eslogan, logo, cintillo de anuncio, títulos del Hero y los 3 pasos de compra.
+                        </p>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={savingBrand}
+                        className="px-5 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 shrink-0"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingBrand ? 'Guardando...' : 'Guardar Cambios de Inicio'}</span>
+                      </button>
+                    </div>
+
+                    {/* Acordeón 1: Identidad de Marca & Logotipo */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 overflow-hidden transition-all shadow-xs">
+                      <div
+                        onClick={() => toggleAccordion('brand-identity')}
+                        className="px-4 py-3.5 flex items-center justify-between cursor-pointer hover:bg-zinc-100/70 select-none transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center text-xs font-bold font-mono">1</span>
+                          <div>
+                            <span className="text-xs font-black uppercase text-zinc-900 block">Identidad de Marca & Logotipo</span>
+                            <span className="text-[11px] text-zinc-500">Nombre comercial, eslogan, banner superior y logo oficial</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-500">
+                            {openSections['brand-identity'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      {openSections['brand-identity'] && (
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-3.5 bg-white">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Nombre Comercial de la Agencia</label>
+                              <input
+                                type="text"
+                                value={brandForm.agencyName}
+                                onChange={(e) => setBrandForm({ ...brandForm, agencyName: e.target.value })}
+                                placeholder="ImpulsaNet"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold bg-white"
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Eslogan Corto / Tagline</label>
+                              <input
+                                type="text"
+                                value={brandForm.tagline}
+                                onChange={(e) => setBrandForm({ ...brandForm, tagline: e.target.value })}
+                                placeholder="Tarjetas Virtuales & Crecimiento en Redes Sociales"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">URL del Logotipo Oficial</label>
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={brandForm.logoUrl || "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png"}
+                                alt="Logo Preview"
+                                className="w-10 h-10 object-contain rounded-xl border border-zinc-200 bg-white p-1 shadow-2xs shrink-0"
+                              />
+                              <input
+                                type="url"
+                                value={brandForm.logoUrl}
+                                onChange={(e) => setBrandForm({ ...brandForm, logoUrl: e.target.value })}
+                                placeholder="https://..."
+                                className="flex-1 px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-mono"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">
+                              Cintillo de Anuncio Superior (Banner informativo en portada)
+                            </label>
+                            <input
+                              type="text"
+                              value={brandForm.bannerNotice}
+                              onChange={(e) => setBrandForm({ ...brandForm, bannerNotice: e.target.value })}
+                              placeholder="Ej: ⚡ Entregas el mismo día en Colombia · Pagos con Nequi y Bancolombia"
+                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-medium text-[#5e29c8]"
+                            />
+                            <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                              Se muestra en la barra superior del sitio como aviso destacado (deja en blanco para ocultar).
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Acordeón 2: Hero de la Portada Principal */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 overflow-hidden transition-all shadow-xs">
+                      <div
+                        onClick={() => toggleAccordion('brand-hero')}
+                        className="px-4 py-3.5 flex items-center justify-between cursor-pointer hover:bg-zinc-100/70 select-none transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-lg bg-purple-100 text-[#5e29c8] flex items-center justify-center text-xs font-bold font-mono">2</span>
+                          <div>
+                            <span className="text-xs font-black uppercase text-zinc-900 block">Hero Principal de la Portada</span>
+                            <span className="text-[11px] text-zinc-500">Insignia, título principal, descripción y textos de botones de acción</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-500">
+                            {openSections['brand-hero'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      {openSections['brand-hero'] && (
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-3.5 bg-white">
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="sm:col-span-1">
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Insignia / Badge Superior</label>
+                              <input
+                                type="text"
+                                value={brandForm.heroBadge}
+                                onChange={(e) => setBrandForm({ ...brandForm, heroBadge: e.target.value })}
+                                placeholder="Ej: Agencia Digital Colombia · Pagos Seguros"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-medium"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-2">
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Título Principal del Hero</label>
+                              <input
+                                type="text"
+                                value={brandForm.heroTitle}
+                                onChange={(e) => setBrandForm({ ...brandForm, heroTitle: e.target.value })}
+                                placeholder="Tu negocio en un QR. Tus redes, en crecimiento."
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-black text-zinc-950 bg-white"
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">Subtítulo / Descripción del Hero</label>
+                            <textarea
+                              rows={2}
+                              value={brandForm.heroDescription}
+                              onChange={(e) => setBrandForm({ ...brandForm, heroDescription: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white text-zinc-800 leading-relaxed"
+                              required
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Texto Botón Primario (Tarjetas)</label>
+                              <input
+                                type="text"
+                                value={brandForm.heroPrimaryBtnText}
+                                onChange={(e) => setBrandForm({ ...brandForm, heroPrimaryBtnText: e.target.value })}
+                                placeholder="Ver tarjetas"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Texto Botón Secundario (Redes)</label>
+                              <input
+                                type="text"
+                                value={brandForm.heroSecondaryBtnText}
+                                onChange={(e) => setBrandForm({ ...brandForm, heroSecondaryBtnText: e.target.value })}
+                                placeholder="Servicios para redes"
+                                className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Acordeón 3: Los 3 Pasos del "¿Cómo funciona?" */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 overflow-hidden transition-all shadow-xs">
+                      <div
+                        onClick={() => toggleAccordion('brand-steps')}
+                        className="px-4 py-3.5 flex items-center justify-between cursor-pointer hover:bg-zinc-100/70 select-none transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-lg bg-pink-100 text-pink-700 flex items-center justify-center text-xs font-bold font-mono">3</span>
+                          <div>
+                            <span className="text-xs font-black uppercase text-zinc-900 block">Sección "¿Cómo funciona?" (3 Pasos)</span>
+                            <span className="text-[11px] text-zinc-500">Paso 01 (Elección), Paso 02 (Envío de datos) y Paso 03 (Entrega y activación)</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-500">
+                            {openSections['brand-steps'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      {openSections['brand-steps'] && (
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-4 bg-white">
+                          {/* Paso 1 */}
+                          <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-2">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                              Paso 01
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="sm:col-span-1">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Título del Paso</label>
+                                <input
+                                  type="text"
+                                  value={brandForm.step1Title}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step1Title: e.target.value })}
+                                  placeholder="Elige lo que necesitas"
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs font-bold bg-white"
+                                />
+                              </div>
+                              <div className="sm:col-span-2">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Descripción</label>
+                                <textarea
+                                  rows={2}
+                                  value={brandForm.step1Description}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step1Description: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Paso 2 */}
+                          <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-2">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                              Paso 02
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="sm:col-span-1">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Título del Paso</label>
+                                <input
+                                  type="text"
+                                  value={brandForm.step2Title}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step2Title: e.target.value })}
+                                  placeholder="Nos envías tus datos"
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs font-bold bg-white"
+                                />
+                              </div>
+                              <div className="sm:col-span-2">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Descripción</label>
+                                <textarea
+                                  rows={2}
+                                  value={brandForm.step2Description}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step2Description: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Paso 3 */}
+                          <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 space-y-2">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                              Paso 03
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="sm:col-span-1">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Título del Paso</label>
+                                <input
+                                  type="text"
+                                  value={brandForm.step3Title}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step3Title: e.target.value })}
+                                  placeholder="Lo recibes"
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs font-bold bg-white"
+                                />
+                              </div>
+                              <div className="sm:col-span-2">
+                                <label className="block text-[10px] font-bold text-zinc-700 mb-0.5">Descripción</label>
+                                <textarea
+                                  rows={2}
+                                  value={brandForm.step3Description}
+                                  onChange={(e) => setBrandForm({ ...brandForm, step3Description: e.target.value })}
+                                  className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Vista Previa Visual del Hero en Vivo */}
+                    <div className="rounded-2xl bg-zinc-900 text-white p-4 sm:p-5 space-y-3 shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Eye className="w-4 h-4 text-emerald-400" />
+                          <span className="text-xs font-black uppercase tracking-wider text-emerald-400">
+                            Vista Previa en Vivo: Portada Principal
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-zinc-400 font-mono">Tiempo Real</span>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-zinc-950/70 border border-zinc-800 text-center space-y-2.5">
+                        {brandForm.bannerNotice && (
+                          <div className="inline-block px-3 py-1 rounded-full bg-[#5e29c8]/50 text-white text-[10px] font-bold border border-[#8B5CF6]/40 mb-1">
+                            {brandForm.bannerNotice}
+                          </div>
+                        )}
+                        <h5 className="text-lg sm:text-2xl font-black text-white leading-tight">
+                          {brandForm.heroTitle}
+                        </h5>
+                        <p className="text-xs sm:text-sm text-zinc-300 max-w-xl mx-auto leading-relaxed">
+                          {brandForm.heroDescription}
+                        </p>
+                        <div className="flex items-center justify-center gap-2.5 pt-2">
+                          <span className="px-3.5 py-1.5 rounded-lg bg-[#5e29c8] text-white text-xs font-bold">
+                            {brandForm.heroPrimaryBtnText}
+                          </span>
+                          <span className="px-3.5 py-1.5 rounded-lg bg-white/10 text-zinc-200 text-xs font-bold border border-white/20">
+                            {brandForm.heroSecondaryBtnText}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={savingBrand}
+                        className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 transition-all"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingBrand ? 'Guardando Todo...' : 'Guardar Todos los Cambios de Inicio & Marca'}</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* ======================================================== */}
+                {/* 2. EDITOR COMPLETO: TARJETAS VIRTUALES CON CÓDIGO QR   */}
                 {/* ======================================================== */}
                 {activeSection === 'cards' && (
                   <form onSubmit={handleSaveCards} className="space-y-6 max-w-4xl">
@@ -1047,6 +1787,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                 Precio de Solución 03 (Tarjeta Pro + 1.000 seguidores de Instagram).
                               </span>
                             </div>
+                          </div>
+
+                          <div className="pt-2 border-t border-zinc-100">
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">
+                              Título de la Solución 01 en la portada de Inicio
+                            </label>
+                            <input
+                              type="text"
+                              value={cardsForm.solution1Title || ''}
+                              onChange={(e) => setCardsForm({ ...cardsForm, solution1Title: e.target.value })}
+                              placeholder="Tarjeta Digital con QR"
+                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                            />
+                            <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                              Título mostrado en la tarjeta de Solución 01 en la portada principal.
+                            </span>
                           </div>
                         </div>
                       )}
@@ -1554,6 +2310,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               Aparece como "desde $___" en la tarjeta de Servicios para Redes Sociales de la página principal.
                             </span>
                           </div>
+
+                          <div className="pt-2 border-t border-zinc-100">
+                            <label className="block text-xs font-bold text-zinc-800 mb-0.5">
+                              Título de la Solución 02 en la portada de Inicio
+                            </label>
+                            <input
+                              type="text"
+                              value={socialHeadersForm.solution2Title || ''}
+                              onChange={(e) => setSocialHeadersForm({ ...socialHeadersForm, solution2Title: e.target.value })}
+                              placeholder="Servicios para Redes Sociales"
+                              className="w-full px-3 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white font-bold"
+                            />
+                            <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                              Título mostrado en la tarjeta de Solución 02 en la portada principal.
+                            </span>
+                          </div>
                         </form>
                       )}
                     </div>
@@ -1640,9 +2412,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                               })}
                             </div>
 
-                            <span className="text-[11px] font-semibold text-zinc-500 bg-purple-50 px-2.5 py-1 rounded-lg border border-purple-100 text-[#5e29c8]">
-                              ✓ Ordenado por cantidad: 1.000 arriba, luego 1.500 o 2.000
-                            </span>
+                            <div className="relative w-full sm:w-64">
+                              <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                              <input
+                                type="text"
+                                value={adminSearchQuery}
+                                onChange={(e) => setAdminSearchQuery(e.target.value)}
+                                placeholder="Buscar paquete o precio..."
+                                className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-zinc-200 text-xs bg-zinc-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#5e29c8]/30"
+                              />
+                            </div>
                           </div>
 
                           {/* Lista Completa de Paquetes Ordenados de Menor a Mayor Cantidad */}
@@ -1650,6 +2429,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             {servicesList
                               .filter((p) => p.platform === selectedPlatform)
                               .filter((p) => adminTypeFilter === 'all' || p.type === adminTypeFilter)
+                              .filter((p) => {
+                                if (!adminSearchQuery.trim()) return true;
+                                const q = adminSearchQuery.toLowerCase();
+                                return (
+                                  p.title.toLowerCase().includes(q) ||
+                                  p.price.toLowerCase().includes(q) ||
+                                  p.quantity.toLowerCase().includes(q) ||
+                                  p.id.toLowerCase().includes(q)
+                                );
+                              })
                               .sort(sortSocialServicePacks)
                               .map((pack) => (
                           <div
@@ -1831,7 +2620,486 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 )}
 
                 {/* ======================================================== */}
-                {/* 3. GESTOR DE PREGUNTAS FRECUENTES (FAQ)                  */}
+                {/* 3. EDITOR: SOLUCIONES PRINCIPALES (PÁGINA DE INICIO)     */}
+                {/* ======================================================== */}
+                {activeSection === 'solutions' && (
+                  <form onSubmit={handleSaveSolutions} className="space-y-6 max-w-4xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
+                      <div>
+                        <h4 className="text-base font-black text-zinc-950 flex items-center gap-2">
+                          <Sparkles className="w-5 h-5 text-[#5e29c8]" />
+                          <span>Editor de "Nuestras Soluciones Principales" (Inicio)</span>
+                        </h4>
+                        <p className="text-xs text-zinc-500">
+                          Edita los títulos, insignias y descripciones de las 3 tarjetas de soluciones de la página de inicio.
+                        </p>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={savingSolutions}
+                        className="px-5 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 shrink-0"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingSolutions ? 'Guardando...' : 'Guardar Soluciones'}</span>
+                      </button>
+                    </div>
+
+                    {/* Encabezado General de la Sección de Soluciones */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 p-4 sm:p-5 space-y-4">
+                      <div className="flex items-center gap-2 pb-2 border-b border-zinc-200/80">
+                        <span className="w-6 h-6 rounded-lg bg-purple-100 text-[#5e29c8] flex items-center justify-center text-xs font-bold">★</span>
+                        <h5 className="text-xs font-black uppercase text-zinc-900 tracking-wider">
+                          Encabezado de la Sección de Soluciones en Inicio
+                        </h5>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Título Principal de la Sección
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solutionsSectionTitle}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solutionsSectionTitle: e.target.value })}
+                            placeholder="Nuestras Soluciones Principales"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Subtítulo de la Sección
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solutionsSectionSubtitle}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solutionsSectionSubtitle: e.target.value })}
+                            placeholder="Explora las demostraciones y los catálogos con precios claros en pesos colombianos."
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tarjeta 1: Solución 01 */}
+                    <div className="rounded-2xl bg-white border-2 border-purple-200 p-4 sm:p-5 space-y-3.5 shadow-2xs">
+                      <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-[#5e29c8] text-white flex items-center justify-center">
+                            <CreditCard className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-black text-[#5e29c8] uppercase block">Solución 01</span>
+                            <span className="text-xs font-bold text-zinc-900">Tarjeta Digital con QR</span>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                          {solutionsForm.solution1Badge || 'Destacado'}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Título de la Solución 01 (Editable)
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution1Title}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution1Title: e.target.value })}
+                            placeholder="Tarjeta Digital con QR"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-black text-zinc-950"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Insignia / Badge
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution1Badge}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution1Badge: e.target.value })}
+                            placeholder="Destacado"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-zinc-800 mb-1">
+                          Descripción Corta
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={solutionsForm.solution1Description}
+                          onChange={(e) => setSolutionsForm({ ...solutionsForm, solution1Description: e.target.value })}
+                          placeholder="Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación."
+                          className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Tarjeta 2: Solución 02 */}
+                    <div className="rounded-2xl bg-white border-2 border-purple-200 p-4 sm:p-5 space-y-3.5 shadow-2xs">
+                      <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-[#5e29c8] text-white flex items-center justify-center">
+                            <TrendingUp className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-black text-[#5e29c8] uppercase block">Solución 02</span>
+                            <span className="text-xs font-bold text-zinc-900">Servicios para Redes Sociales</span>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-[#5e29c8]">
+                          {solutionsForm.solution2Badge || 'Crecimiento'}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Título de la Solución 02 (Editable)
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution2Title}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution2Title: e.target.value })}
+                            placeholder="Servicios para Redes Sociales"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-black text-zinc-950"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Insignia / Badge
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution2Badge}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution2Badge: e.target.value })}
+                            placeholder="Crecimiento"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-zinc-800 mb-1">
+                          Descripción Corta
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={solutionsForm.solution2Description}
+                          onChange={(e) => setSolutionsForm({ ...solutionsForm, solution2Description: e.target.value })}
+                          placeholder="Seguidores, likes y reproducciones para tus redes sin contraseñas."
+                          className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Tarjeta 3: Solución 03 */}
+                    <div className="rounded-2xl bg-white border-2 border-purple-300 p-4 sm:p-5 space-y-3.5 shadow-2xs">
+                      <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#5e29c8] to-pink-600 text-white flex items-center justify-center">
+                            <Sparkles className="w-4 h-4 text-amber-300" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-black text-[#5e29c8] uppercase block">Solución 03</span>
+                            <span className="text-xs font-bold text-zinc-900">Pack Negocio</span>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gradient-to-r from-[#5e29c8] to-pink-600 text-white shadow-2xs">
+                          {solutionsForm.solution3Badge || 'Pack Negocio'}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Título de la Solución 03 (Editable)
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution3Title}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution3Title: e.target.value })}
+                            placeholder="Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-black text-zinc-950"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Insignia / Badge
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.solution3Badge}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution3Badge: e.target.value })}
+                            placeholder="Pack Negocio"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="sm:col-span-2">
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Descripción Corta
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={solutionsForm.solution3Description}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, solution3Description: e.target.value })}
+                            placeholder="El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo."
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-zinc-800 mb-1">
+                            Precio Pack Negocio
+                          </label>
+                          <input
+                            type="text"
+                            value={solutionsForm.packNegocioPrice}
+                            onChange={(e) => setSolutionsForm({ ...solutionsForm, packNegocioPrice: e.target.value })}
+                            placeholder="$80.000 COP"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-bold text-[#5e29c8]"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vista Previa en Vivo de las Soluciones */}
+                    <div className="rounded-2xl bg-zinc-900 text-white p-4 sm:p-5 space-y-3 shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Eye className="w-4 h-4 text-purple-400" />
+                          <span className="text-xs font-black uppercase tracking-wider text-purple-300">
+                            Vista Previa en Vivo (Página de Inicio)
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-zinc-400 font-mono">Actualización instantánea</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                        <div className="p-3 rounded-xl bg-zinc-800/90 border border-zinc-700/80 space-y-1.5">
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-500/30 text-purple-200">
+                            {solutionsForm.solution1Badge || 'Destacado'}
+                          </span>
+                          <h6 className="text-xs font-black text-white line-clamp-2">
+                            {solutionsForm.solution1Title || 'Tarjeta Digital con QR'}
+                          </h6>
+                          <p className="text-[11px] text-zinc-400 line-clamp-2">
+                            {solutionsForm.solution1Description}
+                          </p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-zinc-800/90 border border-zinc-700/80 space-y-1.5">
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-pink-500/30 text-pink-200">
+                            {solutionsForm.solution2Badge || 'Crecimiento'}
+                          </span>
+                          <h6 className="text-xs font-black text-white line-clamp-2">
+                            {solutionsForm.solution2Title || 'Servicios para Redes Sociales'}
+                          </h6>
+                          <p className="text-[11px] text-zinc-400 line-clamp-2">
+                            {solutionsForm.solution2Description}
+                          </p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-zinc-800/90 border border-purple-500/40 space-y-1.5 bg-gradient-to-br from-purple-950/40 to-zinc-900">
+                          <div className="flex items-center justify-between">
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-500 text-white">
+                              {solutionsForm.solution3Badge || 'Pack Negocio'}
+                            </span>
+                            <span className="text-[10px] font-black text-amber-400">
+                              {solutionsForm.packNegocioPrice}
+                            </span>
+                          </div>
+                          <h6 className="text-xs font-black text-white line-clamp-2">
+                            {solutionsForm.solution3Title || 'Pack Negocio'}
+                          </h6>
+                          <p className="text-[11px] text-zinc-400 line-clamp-2">
+                            {solutionsForm.solution3Description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={savingSolutions}
+                        className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingSolutions ? 'Guardando Soluciones...' : 'Guardar Todos los Títulos de Soluciones'}</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* ======================================================== */}
+                {/* 4. GESTOR DE SEO & METADATOS DINÁMICOS                   */}
+                {/* ======================================================== */}
+                {activeSection === 'seo' && (
+                  <form onSubmit={handleSaveSeo} className="space-y-6 max-w-4xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
+                      <div>
+                        <h4 className="text-base font-black text-zinc-950 flex items-center gap-2">
+                          <Globe className="w-5 h-5 text-emerald-600" />
+                          <span>SEO & Posicionamiento Orgánico Dinámico</span>
+                        </h4>
+                        <p className="text-xs text-zinc-500">
+                          Configura las metaetiquetas que se sincronizan desde Firestore para Google, WhatsApp, redes sociales y Schema.org.
+                        </p>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={savingSeo}
+                        className="px-5 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 shrink-0"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingSeo ? 'Guardando SEO...' : 'Guardar SEO'}</span>
+                      </button>
+                    </div>
+
+                    {/* Formulario de Metadatos */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 p-4 sm:p-5 space-y-4">
+                      <div>
+                        <label className="block text-xs font-bold text-zinc-800 mb-1">
+                          Nombre del Negocio / Título SEO Principal
+                        </label>
+                        <input
+                          type="text"
+                          value={seoForm.seoBusinessName}
+                          onChange={(e) => setSeoForm({ ...seoForm, seoBusinessName: e.target.value })}
+                          placeholder="ImpulsaNet - Agencia Digital & Tarjetas Interactivas"
+                          className="w-full px-3 py-2.5 rounded-xl border border-zinc-300 text-xs bg-white font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#5e29c8]/30"
+                          required
+                        />
+                        <span className="text-[11px] text-zinc-500 mt-1 block">
+                          Aparece como título en la pestaña del navegador y como encabezado principal en los resultados de Google.
+                        </span>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-bold text-zinc-800">
+                            Descripción Corta (Meta Description)
+                          </label>
+                          <span className={`text-[11px] font-mono font-bold ${
+                            seoForm.seoDescription.length > 160 ? 'text-amber-600' : 'text-emerald-700'
+                          }`}>
+                            {seoForm.seoDescription.length}/160 caracteres (recomendado: 120-160)
+                          </span>
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={seoForm.seoDescription}
+                          onChange={(e) => setSeoForm({ ...seoForm, seoDescription: e.target.value })}
+                          placeholder="Agencia de servicios digitales en Colombia. Tarjetas interactivas con QR de pago único y servicios de crecimiento para redes sociales con entrega rápida."
+                          className="w-full px-3 py-2.5 rounded-xl border border-zinc-300 text-xs bg-white text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#5e29c8]/30"
+                          required
+                        />
+                        <span className="text-[11px] text-zinc-500 mt-1 block">
+                          El fragmento de texto que describe tu negocio en Google y al compartir el enlace por WhatsApp.
+                        </span>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-zinc-800 mb-1">
+                          Palabras Clave (Keywords para Posicionamiento Orgánico)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={seoForm.seoKeywords}
+                          onChange={(e) => setSeoForm({ ...seoForm, seoKeywords: e.target.value })}
+                          placeholder="tarjetas digitales con QR Colombia, comprar seguidores instagram colombia, tarjetas interactivas nfc, servicios para redes sociales, impulsanet"
+                          className="w-full px-3 py-2.5 rounded-xl border border-zinc-300 text-xs bg-white text-zinc-900 focus:outline-none focus:ring-2 focus:ring-[#5e29c8]/30 font-mono text-[11px]"
+                          required
+                        />
+                        <span className="text-[11px] text-zinc-500 mt-1 block">
+                          Términos de búsqueda separados por comas. Orientan a los motores de búsqueda sobre el contenido de tu web.
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Simulador Interactivo de Búsqueda de Google */}
+                    <div className="rounded-2xl bg-white border-2 border-emerald-200 p-4 sm:p-5 space-y-3 shadow-xs">
+                      <div className="flex items-center justify-between pb-2 border-b border-zinc-100">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-md bg-white border border-zinc-200 flex items-center justify-center p-0.5">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24">
+                              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                          </div>
+                          <span className="text-xs font-black text-zinc-900">
+                            Simulador en Tiempo Real de Google Search
+                          </span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                          Previsualización SERP
+                        </span>
+                      </div>
+
+                      {/* Card estilo Google */}
+                      <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/80 space-y-1">
+                        <div className="flex items-center gap-2 text-xs text-zinc-600">
+                          <img
+                            src={settings.logoUrl || "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png"}
+                            alt=""
+                            className="w-4 h-4 rounded-full"
+                          />
+                          <span className="font-medium text-zinc-800">{settings.agencyName || 'ImpulsaNet'}</span>
+                          <span className="text-zinc-400">›</span>
+                          <span className="text-zinc-500 font-mono text-[11px]">https://impulsanet.digital</span>
+                        </div>
+
+                        <h5 className="text-base font-medium text-[#1a0dab] hover:underline cursor-pointer line-clamp-1">
+                          {seoForm.seoBusinessName || 'ImpulsaNet - Agencia Digital & Tarjetas Interactivas'}
+                        </h5>
+
+                        <p className="text-xs text-zinc-600 line-clamp-2 leading-relaxed">
+                          {seoForm.seoDescription || 'Agencia de servicios digitales en Colombia. Tarjetas interactivas con QR de pago único y servicios de crecimiento para redes sociales con entrega rápida.'}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-1 text-[11px] text-zinc-500">
+                        <span className="flex items-center gap-1 font-bold text-emerald-700">
+                          <Check className="w-3.5 h-3.5" /> Schema.org JSON-LD Activo
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1 font-bold text-emerald-700">
+                          <Check className="w-3.5 h-3.5" /> OpenGraph & Twitter Cards
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={savingSeo}
+                        className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingSeo ? 'Guardando...' : 'Guardar Etiquetas SEO'}</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* ======================================================== */}
+                {/* 5. GESTOR DE PREGUNTAS FRECUENTES (FAQ)                  */}
                 {/* ======================================================== */}
                 {activeSection === 'faqs' && (
                   <div className="space-y-5 max-w-3xl">
@@ -1951,109 +3219,266 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                 )}
                 {/* ======================================================== */}
+                {/* 7. EDITOR: CONTACTO, WHATSAPP & REDES OFICIALES         */}
+                {/* ======================================================== */}
                 {activeSection === 'whatsapp' && (
-                  <div className="space-y-4 max-w-xl">
-                    <div className="pb-3 border-b border-zinc-200">
-                      <h4 className="text-base font-black text-zinc-950 flex items-center gap-2">
-                        <MessageCircle className="w-5 h-5 text-[#5e29c8]" />
-                        <span>Canal WhatsApp & Datos de Contacto</span>
-                      </h4>
-                      <p className="text-xs text-zinc-500">Configura la línea oficial a donde llegan las compras y consultas de clientes.</p>
+                  <form onSubmit={handleSaveWhatsapp} className="space-y-6 max-w-4xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
+                      <div>
+                        <h4 className="text-base font-black text-zinc-950 flex items-center gap-2">
+                          <MessageCircle className="w-5 h-5 text-emerald-500" />
+                          <span>Editor de "Contacto, WhatsApp & Redes Oficiales"</span>
+                        </h4>
+                        <p className="text-xs text-zinc-500">
+                          Configura la línea oficial de WhatsApp para pedidos y todos los enlaces de Instagram, TikTok, YouTube y Facebook.
+                        </p>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={savingWhatsapp}
+                        className="px-5 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 shrink-0"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingWhatsapp ? 'Guardando...' : 'Guardar Todos los Canales'}</span>
+                      </button>
                     </div>
 
+                    {/* Acordeón 1: WhatsApp Oficial */}
                     <div className="rounded-2xl bg-zinc-50 border border-zinc-200 overflow-hidden transition-all shadow-xs">
                       <div 
-                        onClick={() => toggleAccordion('whatsapp-config')}
+                        onClick={() => toggleAccordion('contact-wa')}
                         className="px-4 py-3.5 flex items-center justify-between cursor-pointer hover:bg-zinc-100/70 select-none transition-colors"
                       >
                         <div className="flex items-center gap-2">
                           <span className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold font-mono">WA</span>
                           <div>
-                            <span className="text-xs font-black uppercase text-zinc-900 block">Línea WhatsApp y Mensaje Predeterminado</span>
-                            <span className="text-[11px] text-zinc-500">Número: +{whatsappForm.whatsappNumber} ({whatsappForm.agencyName})</span>
+                            <span className="text-xs font-black uppercase text-zinc-900 block">Línea Oficial de WhatsApp</span>
+                            <span className="text-[11px] text-zinc-500">Número: +{contactForm.whatsappNumber} · Mensaje predeterminado de inicio</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-500">
-                            {openSections['whatsapp-config'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
+                            {openSections['contact-wa'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
                           </div>
                         </div>
                       </div>
 
-                      {openSections['whatsapp-config'] && (
-                        <form onSubmit={handleSaveWhatsapp} className="p-4 pt-3 border-t border-zinc-200 space-y-4 bg-white">
-                          <div>
-                            <label className="block text-xs font-bold text-zinc-700 mb-1">Nombre Comercial de la Agencia</label>
-                            <input
-                              type="text"
-                              value={whatsappForm.agencyName}
-                              onChange={(e) => setWhatsappForm({ ...whatsappForm, agencyName: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
-                              required
-                            />
+                      {openSections['contact-wa'] && (
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-4 bg-white">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">
+                                Número de WhatsApp (código de país sin espacios ni '+')
+                              </label>
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-400 font-mono">+</span>
+                                <input
+                                  type="text"
+                                  placeholder="573212515944"
+                                  value={contactForm.whatsappNumber}
+                                  onChange={(e) => setContactForm({ ...contactForm, whatsappNumber: e.target.value })}
+                                  className="w-full pl-7 pr-3 py-2 rounded-xl border border-zinc-300 text-xs font-mono font-bold text-emerald-700 bg-white"
+                                  required
+                                />
+                              </div>
+                              <span className="text-[10px] text-zinc-500 mt-1 block">
+                                Enlace generado: <code className="text-zinc-700">wa.me/{contactForm.whatsappNumber.replace(/[^0-9]/g, '')}</code>
+                              </span>
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-bold text-zinc-800 mb-1">Correo de Soporte / Atención</label>
+                              <div className="relative">
+                                <AtSign className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                                <input
+                                  type="email"
+                                  placeholder="contacto@impulsanet.digital"
+                                  value={contactForm.contactEmail}
+                                  onChange={(e) => setContactForm({ ...contactForm, contactEmail: e.target.value })}
+                                  className="w-full pl-8 pr-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                                />
+                              </div>
+                            </div>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold text-zinc-700 mb-1">Logo Oficial de ImpulsaNet (URL)</label>
-                            <div className="flex items-center gap-3">
-                              <img
-                                src={whatsappForm.logoUrl || "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png"}
-                                alt="Logo Preview"
-                                className="w-10 h-10 object-contain rounded-xl border border-zinc-200 bg-white p-1 shadow-2xs shrink-0"
-                              />
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">Mensaje Predeterminado de Consulta</label>
+                            <textarea
+                              rows={2}
+                              value={contactForm.whatsappDefaultMessage}
+                              onChange={(e) => setContactForm({ ...contactForm, whatsappDefaultMessage: e.target.value })}
+                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
+                              required
+                            />
+                            <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                              Texto con el que se abre el chat cuando el cliente pulsa el botón de WhatsApp general.
+                            </span>
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-bold text-zinc-800 mb-1">Ubicación / Cobertura de la Agencia</label>
+                            <div className="relative">
+                              <MapPin className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
                               <input
-                                type="url"
-                                value={whatsappForm.logoUrl || ''}
-                                onChange={(e) => setWhatsappForm({ ...whatsappForm, logoUrl: e.target.value })}
-                                placeholder="https://..."
-                                className="flex-1 px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white font-mono"
+                                type="text"
+                                placeholder="Colombia · Envíos digitales a todo el país"
+                                value={contactForm.contactLocation}
+                                onChange={(e) => setContactForm({ ...contactForm, contactLocation: e.target.value })}
+                                className="w-full pl-8 pr-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
                               />
                             </div>
-                            <p className="text-[10px] text-zinc-500 mt-1">
-                              Enlace CDN activo del logotipo oficial de la marca.
-                            </p>
                           </div>
-
-                          <div>
-                            <label className="block text-xs font-bold text-zinc-700 mb-1">Número de WhatsApp (con código de país sin espacios)</label>
-                            <input
-                              type="text"
-                              placeholder="573212515944"
-                              value={whatsappForm.whatsappNumber}
-                              onChange={(e) => setWhatsappForm({ ...whatsappForm, whatsappNumber: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-mono font-bold text-emerald-700 bg-white"
-                              required
-                            />
-                            <p className="text-[10px] text-zinc-500 mt-1">
-                              Número oficial actual de ImpulsaNet: <strong className="text-zinc-800">573212515944</strong> (+57 321 2515944)
-                            </p>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-bold text-zinc-700 mb-1">Mensaje Predeterminado de Consulta</label>
-                            <textarea
-                              rows={3}
-                              value={whatsappForm.whatsappDefaultMessage}
-                              onChange={(e) => setWhatsappForm({ ...whatsappForm, whatsappDefaultMessage: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs bg-white"
-                              required
-                            />
-                          </div>
-
-                          <div className="flex justify-end pt-2">
-                            <button
-                              type="submit"
-                              disabled={savingWhatsapp}
-                              className="px-5 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-[#5e29c8]/25"
-                            >
-                              <Save className="w-3.5 h-3.5" />
-                              <span>{savingWhatsapp ? 'Guardando...' : 'Guardar Datos WhatsApp'}</span>
-                            </button>
-                          </div>
-                        </form>
+                        </div>
                       )}
                     </div>
-                  </div>
+
+                    {/* Acordeón 2: Redes Sociales Oficiales */}
+                    <div className="rounded-2xl bg-zinc-50 border border-zinc-200 overflow-hidden transition-all shadow-xs">
+                      <div 
+                        onClick={() => toggleAccordion('contact-social')}
+                        className="px-4 py-3.5 flex items-center justify-between cursor-pointer hover:bg-zinc-100/70 select-none transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-lg bg-pink-100 text-pink-700 flex items-center justify-center text-xs font-bold font-mono">IG</span>
+                          <div>
+                            <span className="text-xs font-black uppercase text-zinc-900 block">Redes Sociales Oficiales</span>
+                            <span className="text-[11px] text-zinc-500">Instagram, TikTok, YouTube y Facebook vinculados a la tienda</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-500">
+                            {openSections['contact-social'] ? <ChevronDown className="w-4 h-4 text-[#5e29c8]" /> : <ChevronRight className="w-4 h-4" />}
+                          </div>
+                        </div>
+                      </div>
+
+                      {openSections['contact-social'] && (
+                        <div className="p-4 pt-3 border-t border-zinc-200 space-y-3.5 bg-white">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                            {/* Instagram */}
+                            <div className="p-3 rounded-xl bg-pink-50/50 border border-pink-100 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-pink-900 flex items-center gap-1.5">
+                                  <span>Instagram Oficial</span>
+                                </label>
+                                {contactForm.instagram && (
+                                  <a
+                                    href={contactForm.instagram}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-bold text-pink-600 hover:underline flex items-center gap-0.5"
+                                  >
+                                    <span>Ver</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                              </div>
+                              <input
+                                type="url"
+                                value={contactForm.instagram}
+                                onChange={(e) => setContactForm({ ...contactForm, instagram: e.target.value })}
+                                placeholder="https://instagram.com/tu_cuenta"
+                                className="w-full px-3 py-1.5 rounded-lg border border-pink-200 text-xs bg-white font-mono"
+                              />
+                            </div>
+
+                            {/* TikTok */}
+                            <div className="p-3 rounded-xl bg-zinc-100/60 border border-zinc-200 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                                  <span>TikTok Oficial</span>
+                                </label>
+                                {contactForm.tiktok && (
+                                  <a
+                                    href={contactForm.tiktok}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-bold text-zinc-700 hover:underline flex items-center gap-0.5"
+                                  >
+                                    <span>Ver</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                              </div>
+                              <input
+                                type="url"
+                                value={contactForm.tiktok}
+                                onChange={(e) => setContactForm({ ...contactForm, tiktok: e.target.value })}
+                                placeholder="https://tiktok.com/@tu_cuenta"
+                                className="w-full px-3 py-1.5 rounded-lg border border-zinc-300 text-xs bg-white font-mono"
+                              />
+                            </div>
+
+                            {/* YouTube */}
+                            <div className="p-3 rounded-xl bg-red-50/50 border border-red-100 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-red-900 flex items-center gap-1.5">
+                                  <span>Canal de YouTube</span>
+                                </label>
+                                {contactForm.youtube && (
+                                  <a
+                                    href={contactForm.youtube}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-bold text-red-600 hover:underline flex items-center gap-0.5"
+                                  >
+                                    <span>Ver</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                              </div>
+                              <input
+                                type="url"
+                                value={contactForm.youtube}
+                                onChange={(e) => setContactForm({ ...contactForm, youtube: e.target.value })}
+                                placeholder="https://youtube.com/@tu_canal"
+                                className="w-full px-3 py-1.5 rounded-lg border border-red-200 text-xs bg-white font-mono"
+                              />
+                            </div>
+
+                            {/* Facebook */}
+                            <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
+                                  <span>Página de Facebook</span>
+                                </label>
+                                {contactForm.facebook && (
+                                  <a
+                                    href={contactForm.facebook}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-0.5"
+                                  >
+                                    <span>Ver</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </a>
+                                )}
+                              </div>
+                              <input
+                                type="url"
+                                value={contactForm.facebook}
+                                onChange={(e) => setContactForm({ ...contactForm, facebook: e.target.value })}
+                                placeholder="https://facebook.com/tu_pagina"
+                                className="w-full px-3 py-1.5 rounded-lg border border-blue-200 text-xs bg-white font-mono"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-2 flex justify-end">
+                      <button
+                        type="submit"
+                        disabled={savingWhatsapp}
+                        className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#5e29c8] hover:bg-[#4f21ab] text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-[#5e29c8]/25 disabled:opacity-50 transition-all"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>{savingWhatsapp ? 'Guardando Canales...' : 'Guardar Todos los Canales de Contacto'}</span>
+                      </button>
+                    </div>
+                  </form>
                 )}
 
                 {/* ======================================================== */}

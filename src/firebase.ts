@@ -99,9 +99,22 @@ testConnection();
 export interface AgencySettings {
   agencyName: string;
   tagline: string;
+  heroTitle?: string;
   heroDescription: string;
+  heroBadge?: string;
+  heroPrimaryBtnText?: string;
+  heroSecondaryBtnText?: string;
+  bannerNotice?: string;
+  step1Title?: string;
+  step1Description?: string;
+  step2Title?: string;
+  step2Description?: string;
+  step3Title?: string;
+  step3Description?: string;
   whatsappNumber: string;
   whatsappDefaultMessage: string;
+  contactEmail?: string;
+  contactLocation?: string;
   logoUrl?: string;
 
   // 1. SECCIÓN: Tarjetas Virtuales con Código QR & Enlace Web
@@ -146,6 +159,24 @@ export interface AgencySettings {
 
   // Pack Negocio
   packNegocioPrice?: string;
+
+  // 4. SECCIÓN: Nuestras Soluciones Principales (Inicio)
+  solutionsSectionTitle?: string;
+  solutionsSectionSubtitle?: string;
+  solution1Title?: string;
+  solution1Badge?: string;
+  solution1Description?: string;
+  solution2Title?: string;
+  solution2Badge?: string;
+  solution2Description?: string;
+  solution3Title?: string;
+  solution3Badge?: string;
+  solution3Description?: string;
+
+  // 5. SEO & Metadatos Dinámicos
+  seoBusinessName?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
 
   // Otros
   socialLinks?: {
@@ -196,9 +227,22 @@ export interface DigitalCardData {
 export const DEFAULT_SETTINGS: AgencySettings = {
   agencyName: "ImpulsaNet",
   tagline: "Tarjetas Virtuales & Crecimiento en Redes Sociales",
-  heroDescription: "Crea tu tarjeta virtual profesional con QR y haz crecer tus redes en Instagram, TikTok, YouTube y Facebook con seguidores, likes y vistas de entrega rápida.",
+  heroTitle: "Tu negocio en un QR. Tus redes, en crecimiento.",
+  heroDescription: "Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.",
+  heroBadge: "Agencia Digital Colombia · Pagos Seguros",
+  heroPrimaryBtnText: "Ver tarjetas",
+  heroSecondaryBtnText: "Servicios para redes",
+  bannerNotice: "⚡ Entregas el mismo día en Colombia · Pagos con Nequi, Daviplata y Bancolombia",
+  step1Title: "Elige lo que necesitas",
+  step1Description: "Una tarjeta digital con QR para tu negocio, un impulso para tus redes (seguidores, likes o vistas), o ambos en un paquete.",
+  step2Title: "Nos envías tus datos",
+  step2Description: "Para la tarjeta, nombre, logo, WhatsApp y ubicación; para redes, solo tu usuario o enlace (nunca contraseñas). Pagas por Nequi o transferencia.",
+  step3Title: "Lo recibes",
+  step3Description: "Tu tarjeta lista el mismo día, con enlace y QR en PNG y PDF; tu impulso de redes entre 1 y 4 horas con garantía de 30 días.",
   whatsappNumber: "573212515944",
   whatsappDefaultMessage: "Hola, vi su web y quiero información",
+  contactEmail: "contacto@impulsanet.digital",
+  contactLocation: "Colombia · Envíos digitales a todo el país",
   logoUrl: "https://cdn.phototourl.com/member/2026-10-08-92ac8cdb-f316-40bc-ad16-3f22cb980788.png",
 
   // 1. Tarjetas Virtuales
@@ -251,6 +295,24 @@ export const DEFAULT_SETTINGS: AgencySettings = {
 
   // Pack Negocio
   packNegocioPrice: "$80.000 COP",
+
+  // 4. Nuestras Soluciones Principales (Inicio)
+  solutionsSectionTitle: "Nuestras Soluciones Principales",
+  solutionsSectionSubtitle: "Explora las demostraciones y los catálogos con precios claros en pesos colombianos.",
+  solution1Title: "Tarjeta Digital con QR",
+  solution1Badge: "Destacado",
+  solution1Description: "Perfiles interactivos con QR permanente, WhatsApp, catálogo y ubicación.",
+  solution2Title: "Servicios para Redes Sociales",
+  solution2Badge: "Crecimiento",
+  solution2Description: "Seguidores, likes y reproducciones para tus redes sin contraseñas.",
+  solution3Title: "Pack Negocio: Tarjeta Pro + 1.000 seguidores de Instagram",
+  solution3Badge: "Pack Negocio",
+  solution3Description: "El paquete integral para presentar tu marca y acelerar tu Instagram al mismo tiempo.",
+
+  // 5. SEO Dinámico
+  seoBusinessName: "ImpulsaNet - Agencia Digital & Tarjetas Interactivas",
+  seoDescription: "Agencia de servicios digitales en Colombia. Tarjetas interactivas con QR de pago único y servicios de crecimiento para redes sociales con entrega rápida.",
+  seoKeywords: "tarjetas digitales con QR Colombia, comprar seguidores instagram colombia, tarjetas interactivas nfc, servicios para redes sociales, impulsanet",
 
   socialLinks: {
     instagram: "https://instagram.com/impulsanet.digital",
@@ -437,6 +499,40 @@ export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
     whatsappDefaultMessage: raw.whatsappDefaultMessage && !raw.whatsappDefaultMessage.includes('¡Hola ImpulsaNet!')
       ? raw.whatsappDefaultMessage
       : 'Hola, vi su web y quiero información',
+    heroTitle: raw.heroTitle || DEFAULT_SETTINGS.heroTitle,
+    heroDescription: raw.heroDescription || DEFAULT_SETTINGS.heroDescription,
+    heroBadge: raw.heroBadge || DEFAULT_SETTINGS.heroBadge,
+    heroPrimaryBtnText: raw.heroPrimaryBtnText || DEFAULT_SETTINGS.heroPrimaryBtnText,
+    heroSecondaryBtnText: raw.heroSecondaryBtnText || DEFAULT_SETTINGS.heroSecondaryBtnText,
+    bannerNotice: raw.bannerNotice ?? DEFAULT_SETTINGS.bannerNotice,
+    step1Title: raw.step1Title || DEFAULT_SETTINGS.step1Title,
+    step1Description: raw.step1Description || DEFAULT_SETTINGS.step1Description,
+    step2Title: raw.step2Title || DEFAULT_SETTINGS.step2Title,
+    step2Description: raw.step2Description || DEFAULT_SETTINGS.step2Description,
+    step3Title: raw.step3Title || DEFAULT_SETTINGS.step3Title,
+    step3Description: raw.step3Description || DEFAULT_SETTINGS.step3Description,
+    contactEmail: raw.contactEmail || DEFAULT_SETTINGS.contactEmail,
+    contactLocation: raw.contactLocation || DEFAULT_SETTINGS.contactLocation,
+    socialLinks: {
+      instagram: raw.socialLinks?.instagram || DEFAULT_SETTINGS.socialLinks?.instagram || 'https://instagram.com/impulsanet.digital',
+      tiktok: raw.socialLinks?.tiktok || DEFAULT_SETTINGS.socialLinks?.tiktok || 'https://tiktok.com/@impulsanet.digital',
+      youtube: raw.socialLinks?.youtube || DEFAULT_SETTINGS.socialLinks?.youtube || 'https://youtube.com/@impulsanet',
+      facebook: raw.socialLinks?.facebook || DEFAULT_SETTINGS.socialLinks?.facebook || 'https://facebook.com/impulsanet',
+    },
+    solutionsSectionTitle: raw.solutionsSectionTitle || DEFAULT_SETTINGS.solutionsSectionTitle,
+    solutionsSectionSubtitle: raw.solutionsSectionSubtitle || DEFAULT_SETTINGS.solutionsSectionSubtitle,
+    solution1Title: raw.solution1Title || DEFAULT_SETTINGS.solution1Title,
+    solution1Badge: raw.solution1Badge || DEFAULT_SETTINGS.solution1Badge,
+    solution1Description: raw.solution1Description || DEFAULT_SETTINGS.solution1Description,
+    solution2Title: raw.solution2Title || DEFAULT_SETTINGS.solution2Title,
+    solution2Badge: raw.solution2Badge || DEFAULT_SETTINGS.solution2Badge,
+    solution2Description: raw.solution2Description || DEFAULT_SETTINGS.solution2Description,
+    solution3Title: raw.solution3Title || DEFAULT_SETTINGS.solution3Title,
+    solution3Badge: raw.solution3Badge || DEFAULT_SETTINGS.solution3Badge,
+    solution3Description: raw.solution3Description || DEFAULT_SETTINGS.solution3Description,
+    seoBusinessName: raw.seoBusinessName || DEFAULT_SETTINGS.seoBusinessName,
+    seoDescription: raw.seoDescription || DEFAULT_SETTINGS.seoDescription,
+    seoKeywords: raw.seoKeywords || DEFAULT_SETTINGS.seoKeywords,
     faqs: Array.isArray(raw.faqs) && raw.faqs.length > 0 ? raw.faqs : DEFAULT_SETTINGS.faqs,
   };
 }
