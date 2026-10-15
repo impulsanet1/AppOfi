@@ -102,7 +102,7 @@ export const HomePage: React.FC<HomePageProps> = ({ settings, onNavigate }) => {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           {/* Badge superior opcional del hero */}
-          {settings.heroBadge && (
+          {settings.heroBadge && !/agencia digital colombia/i.test(settings.heroBadge) && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}

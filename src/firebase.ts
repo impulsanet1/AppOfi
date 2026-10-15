@@ -229,7 +229,7 @@ export const DEFAULT_SETTINGS: AgencySettings = {
   tagline: "Tarjetas Virtuales & Crecimiento en Redes Sociales",
   heroTitle: "Tu negocio en un QR. Tus redes, en crecimiento.",
   heroDescription: "Tarjeta digital con tu WhatsApp, catálogo y ubicación, y servicios para impulsar tus redes con seguidores, likes y vistas.",
-  heroBadge: "Agencia Digital Colombia · Pagos Seguros",
+  heroBadge: "",
   heroPrimaryBtnText: "Ver tarjetas",
   heroSecondaryBtnText: "Servicios para redes",
   bannerNotice: "⚡ Entregas el mismo día en Colombia · Pagos con Nequi, Daviplata y Bancolombia",
@@ -480,6 +480,11 @@ export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
     return n.trim();
   };
 
+  const cleanHeroBadge = (b?: string) => {
+    if (!b || /agencia digital colombia/i.test(b.trim())) return '';
+    return b.trim();
+  };
+
   return {
     ...raw,
     tagline: cleanTagline(raw.tagline),
@@ -501,7 +506,7 @@ export function sanitizeAgencySettings(raw: AgencySettings): AgencySettings {
       : 'Hola, vi su web y quiero información',
     heroTitle: raw.heroTitle || DEFAULT_SETTINGS.heroTitle,
     heroDescription: raw.heroDescription || DEFAULT_SETTINGS.heroDescription,
-    heroBadge: raw.heroBadge || DEFAULT_SETTINGS.heroBadge,
+    heroBadge: cleanHeroBadge(raw.heroBadge),
     heroPrimaryBtnText: raw.heroPrimaryBtnText || DEFAULT_SETTINGS.heroPrimaryBtnText,
     heroSecondaryBtnText: raw.heroSecondaryBtnText || DEFAULT_SETTINGS.heroSecondaryBtnText,
     bannerNotice: raw.bannerNotice ?? DEFAULT_SETTINGS.bannerNotice,
